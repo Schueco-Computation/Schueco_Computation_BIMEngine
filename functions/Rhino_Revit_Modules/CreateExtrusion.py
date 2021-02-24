@@ -26,7 +26,8 @@ from RevitServices.Transactions import TransactionManager
 ##########################################
 #Get Mullion length
 
-def NewProfile(newfamily, rvtlines):
+def NewProfile(newfamily, rvtlines, vertical):
+    
     bip = BuiltInParameter.DIM_LABEL
     provider = ParameterValueProvider(ElementId(bip))
     evaluator = FilterStringEquals()
@@ -59,9 +60,16 @@ def NewProfile(newfamily, rvtlines):
     rule2 = FilterStringRule(provider, evaluator, "bottom", False)
     filter2 = ElementParameterFilter(rule2)
     planebase = FilteredElementCollector(newfamily).OfClass(ReferencePlane).WherePasses(filter2).FirstElement()
-
+    
     t1 = TransactionManager.Instance
     t1.EnsureInTransaction(newfamily)
+    
+    VertOrHor = newfamily.OwnerFamily.get_Parameter(BuiltInParameter.FAMILY_ALWAYS_VERTICAL).Set(vertical)
+    output = []
+    if vertical == 0:
+        output.append(newfamily.OwnerFamily.get_Parameter(BuiltInParameter.FAMILY_WORK_PLANE_BASED).Set(1))
+    else:
+        output.append(newfamily.OwnerFamily.get_Parameter(BuiltInParameter.FAMILY_WORK_PLANE_BASED).Set(0))
 
     #Creating SketchPlane
     sketchplane = SketchPlane.Create(newfamily, planebase.Id)
@@ -96,8 +104,5 @@ def NewProfile(newfamily, rvtlines):
     #End Transaction
     TransactionManager.ForceCloseTransaction(t1)
     
-    doc = Revit.ActiveDBDocument
-    loadfamily = newfamily.LoadFamily(doc)
-    
     # Assign your output to the OUT variable.
-    return loadfamily
+    return solid

@@ -36,7 +36,6 @@ def simplify():
     
     bound_l = []
     
-    
     bound_pl=[]
     for i in (rc.BoundingBox.GetEdges(bound)[0:4]):
         bound_l.append(rc.Line.ToNurbsCurve(i))

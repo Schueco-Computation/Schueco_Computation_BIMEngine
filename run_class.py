@@ -1,5 +1,5 @@
-import SchuecoBim as s 
+import schuecobim as s
 
-prof=s.Profile.Profile()
+prof=s.profileschueco.schuecoprofile()
+
 print prof.articles
-

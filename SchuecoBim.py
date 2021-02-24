@@ -1,14 +1,15 @@
 import sys
-sys.path.append("Modules\\Rhino_modules")
-sys.path.append("Modules\\Rhino_Revit_Modules")
-sys.path.append("Objects")
-import blockorg
-import corners
-import simplify
+sys.path.append("C:\\Users\\tomas\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMengine\\objects")
+sys.path.append("C:\\Users\\tomas\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMengine\\functions\\Rhino_modules")
+sys.path.append("C:\\Users\\tomas\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMengine\\functions\\Rhino_Revit_Modules")
+import profileschueco
 # import ConvertPoly
 # import CreateExtrusion
 # import CreateFamily
-import Profile
+# import Create
+# import Place
+# import Select 
+
 # def __reverse_modulesearch(func_name):
 #     if func_name is None: return None
 #     if not isinstance(func_name, basestring): return None
@@ -23,4 +24,5 @@ import Profile
 #             except:
 #                 return None
 # if __name__== "main":
-#     from Profile import Profile
+#     pass'
+    #from Profile import Profile

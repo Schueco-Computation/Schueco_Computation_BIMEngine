@@ -83,7 +83,7 @@ def corners():
             rs.ObjectLayer(i,"Joined_prof")
     rs.LayerVisible("Joined_prof",True)
     sc.doc.Objects.Delete(rs.ObjectsByLayer("0"), True)
-return join_prof
+    return join_prof
 
 if __name__ == '__main__':
     corners()
