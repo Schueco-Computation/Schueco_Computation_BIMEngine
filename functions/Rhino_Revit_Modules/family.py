@@ -27,7 +27,6 @@ from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
 
-#Document = Revit.ActiveDBDocument
 
 def NewHorizontalProfileInstace(Document, TypeName, LocationKey, EndRefPlane, MirrorBoolean):
     
