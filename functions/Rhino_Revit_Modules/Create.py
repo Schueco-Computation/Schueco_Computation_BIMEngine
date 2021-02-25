@@ -27,7 +27,7 @@ clr.AddReference("RevitServices")
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
-#import schueco
+import schueco
 
 doc = Revit.ActiveDBDocument
 
@@ -117,7 +117,7 @@ def DetailItems(objectname, famtypename, DetailItemsAllDOC, detailitemtemp):
 
     loadfamily = newfam.LoadFamily(DetailItemsAllDOC)
     # Assign your output to the OUT variable.
-    return newfam
+    return loadfamily
 
 def FamilyNew(TemplateFilePath, TypeName):
     doc = Revit.ActiveDBDocument
@@ -267,7 +267,7 @@ def NewAlignment(newfamily, refPlane, solid):
     
     return align
 
-def NewDimension(newfamily,newrefname):
+def NewDimension(newfamily):
     obj = rs.ObjectsByName("a_ref-line1")
 
     profile1 = []
@@ -332,7 +332,7 @@ def NewDimension(newfamily,newrefname):
     bip = BuiltInParameter.DATUM_TEXT
     provider = ParameterValueProvider(ElementId(bip))
     evaluator = FilterStringEquals()
-    rule = FilterStringRule(provider, evaluator, newrefname, False)
+    rule = FilterStringRule(provider, evaluator, "Reference line 1", False)
     filter = ElementParameterFilter(rule)
     refplancenter = FilteredElementCollector(newfamily).OfClass(ReferencePlane).WherePasses(filter).FirstElement()
     ref2 = refplancenter.GetReference()
