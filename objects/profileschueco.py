@@ -49,10 +49,11 @@ class Schuecoprofile():
     typename(str): "Name of the family type"
     famproftempath(str): "Family profile template path"
     contournm(str): "Name of the contour polyline in the rhino file" ** this is temporary
+
     """ 
     
 
-    def __init__(self,dtemplpath,famname,famdetname,typename,famproftempath,contournm,reflinerh,refplane):
+    def __init__(self,dtemplpath,famname,famdetname,typename,famproftempath,contournm,reflinerh,refplane,extlocation):
         # self.articles=blockorg.block_org()
         # self.corners=corners.corners()
         # self.polyline=simplify.simplify()
@@ -75,7 +76,7 @@ class Schuecoprofile():
         self.proffile=self.famload(self.newfamdoc,self.proffamil) #Family
         self.proffiledet=self.placedetail(self.proffamil)
         self.revitcontour=self.revitlines(self.contour)
-        self.revitextrusion=self.revit_extrusion(self.proffamil,self.revitcontour)
+        self.revitextrusion=self.revit_extrusion(self.proffamil,self.revitcontour,extlocation)
         self.reflinervt=self.refline(self.proffamil,reflinerh,refplane)
         self.lockrvt=self.lock(self.proffamil,self.reflinervt,self.revitextrusion)
         self.ndimension=self.dimension(self.proffamil,refplane)
@@ -139,10 +140,10 @@ class Schuecoprofile():
         #prof_contour=self.contour
         return ConvertPoly.ToRvtline(prof_contour)
     # :) Success :)
-    def revit_extrusion(self,famprof,lines):
+    def revit_extrusion(self,famprof,lines,locationref):
         # famprof=prof_fam()
         # lines=revitlines()
-        return CreateExtrusion.NewProfile(famprof,lines,0)
+        return CreateExtrusion.NewProfile(famprof,lines,locationref,0)
     # :) Success 
     def refline(self,famprof,refl,refpl):
         return Create.ReferenceLine(famprof,refl,refpl)

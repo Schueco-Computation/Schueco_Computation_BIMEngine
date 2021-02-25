@@ -26,7 +26,7 @@ from RevitServices.Transactions import TransactionManager
 ##########################################
 #Get Mullion length
 
-def NewProfile(newfamily, rvtlines, vertical):
+def NewProfile(newfamily, rvtlines,  locationref, vertical):
     
     bip = BuiltInParameter.DIM_LABEL
     provider = ParameterValueProvider(ElementId(bip))
@@ -100,6 +100,11 @@ def NewProfile(newfamily, rvtlines, vertical):
     frontview = FilteredElementCollector(newfamily).OfClass(ViewSection).WherePasses(filter).FirstElement()
 
     align = newfamily.FamilyCreate.NewAlignment(frontview, topface, ref2)
+
+    # Add Location reference
+
+    locationreference= newfamily.FamilyManager.get_Parameter("LocationRef")
+    locationreferenceset= newfamily.FamilyManager.Set(locationreference,locationref)
 
     #End Transaction
     TransactionManager.ForceCloseTransaction(t1)
