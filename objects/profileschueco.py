@@ -37,7 +37,7 @@ from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
     
 doc = Revit.ActiveDBDocument
-#dtemplpath,famname,famdetname,typename,famproftempath,contour
+
 class Schuecoprofile():
     """ 
     This class creates nested generic families in Revit containing detail items from detail cad drawings and creates an extrusion to represent a 3d profile inside a mother family unit
@@ -50,7 +50,9 @@ class Schuecoprofile():
     famproftempath(str): "Family profile template path"
     contournm(str): "Name of the contour polyline in the rhino file" ** this is temporary
     """ 
-    def __init__(self,dtemplpath,famname,famdetname,typename,famproftempath,contournm):
+    
+
+    def __init__(self,dtemplpath,famname,famdetname,typename,famproftempath,contournm,reflinerh,refplane):
         # self.articles=blockorg.block_org()
         # self.corners=corners.corners()
         # self.polyline=simplify.simplify()
@@ -61,71 +63,95 @@ class Schuecoprofile():
         self.typename= typename
         self.newfam_prof_temp_path= famproftempath
         self.contour= contournm
-        ############## automatic functions ###########
-        self.objects(self.objs)
-        self.newfam(dtemplpath,famname)
-        self.detailitem(self.objects(self.objs))
-        self.place_detailitem(self.newfam(famproftempath,famdetname))
-        self.prof_fam(famproftempath,typename)
-        self.famload(self.prof_fam(famproftempath,typename))
+        self.reflinerh= reflinerh
+        self.refplane= refplane
+        self.docr=Revit.ActiveDBDocument
+        ############## Variables  ###########
+        self.articles= self.objects(self.objs)
+        self.newfamdoc=self.newfam(dtemplpath,famname)
+        self.nesteddetitem=self.detailitem(self.objects(self.objs))
+        self.newdetfaminst=self.place_detailitem(self.newfamdoc)
+        self.proffamil=self.prof_fam(famproftempath,typename)
+        self.proffile=self.famload(self.newfamdoc,self.proffamil) #Family
+        self.proffiledet=self.placedetail(self.proffamil)
+        self.revitcontour=self.revitlines(self.contour)
+        self.revitextrusion=self.revit_extrusion(self.proffamil,self.revitcontour)
+        self.reflinervt=self.refline(self.proffamil,reflinerh,refplane)
+        self.lockrvt=self.lock(self.proffamil,self.reflinervt,self.revitextrusion)
+        self.ndimension=self.dimension(self.proffamil,refplane)
+        self.famprofload=self.famload(self.proffamil,self.docr)
     
     
-    
-    
+  
+
+    # success :)
+
     def objects (self,obj):    
         objsfam = [x for x in obj if not "a_" in x]
         return objsfam
-       
-    def newfam (self,temp,name): #always self in object methods. 
-        temp=self.newfam_det_temp_path #self missing
-        name=self.newfam_name #self missing
-        return Create.FamilyNew(temp,name)
 
-    def detailitem (self,familyobjects):
+    # success :)   
+
+    def newfam (self,temp,name): #always self in object methods.  # this should create a new family doc that hosts the detail family list 
+        # temp=self.newfam_det_temp_path #self missing
+        # name=self.newfam_name #self missing
+        return Create.FamilyNew(temp,name)
+    
+    #newdetfaminst=newfam(dtemplpath,famname)
+    
+    # sucess :)
+    # delete gaskets and isolation in rhino file
+    def detailitem (self,familyobjects): # this should create a list of families 
+
         familyobjects=self.objects(self.objs)
         detailname=self.newfam_detail_name #self missing
         temppath=self.newfam_det_temp_path #self missing
-        famnew=self.newfam(temppath,detailname)
+        famnew=self.newfamdoc 
+        #print famnew
         output=[]
         for i,j in enumerate(familyobjects,1):
             output.append(Create.DetailItems(j,detailname+str(i),famnew,temppath))
         return output
-    
-    def place_detailitem(self,fam):
-        fam=self.newfam(self.newfam_det_temp_path,self.newfam_detail_name)
+
+    #newdetailfamilydoc=self.newfam()
+    # :)  succeess 
+
+    def place_detailitem(self,fam): # this places the detail item files in their place . Outputs a family instances list
+        #print fam
         return Place.DetailItems(fam)
     
-    def prof_fam(self,path,name_type):
-        path=self.newfam_prof_temp_path #self missing
-        name_type=self.typename #self missing
+    # :) Success ' can be replaced by newfam()
+    def prof_fam(self,path,name_type):### Error
+        # path=self.newfam_prof_temp_path #self missing
+        # name_type=self.typename #self missing
         return Create.FamilyNew(path,name_type)
 
-    def famload (self,famprof):
+    # :) Success 
+    def famload (self,detaildoc,famprof):
         #famprof=prof_fam()
-        return self.newfam(self.newfam_det_temp_path,self.newfam_name).LoadFamily(famprof)
-
-    def placedetail (famprof):
-        famprof=self.prof_fam()
+        return detaildoc.LoadFamily(famprof)
+    # :) Success
+    def placedetail (self,famprof):
+        #famprof=self.prof_fam(self.newfam_prof_temp_path,self.typename)
         return Place.DetailItemInprof(famprof)
-    
-    def revitlines(prof_contour):
-        prof_contour=self.contour
+    # :) Success
+    def revitlines(self,prof_contour):
+        #prof_contour=self.contour
         return ConvertPoly.ToRvtline(prof_contour)
-
-    def revit_extrusion(famprof,lines):
-        famprof=prof_fam()
-        lines=revitlines()
-        return CreateExtrusion(famprof,lines,0)
-
-    # def ref1 ():
-
-
-    # def art():
-    #     s.blockorg.block_org()
-
-
-# profA=Profile()
-# print profA.articles,profA.corners,profA.polyline
+    # :) Success :)
+    def revit_extrusion(self,famprof,lines):
+        # famprof=prof_fam()
+        # lines=revitlines()
+        return CreateExtrusion.NewProfile(famprof,lines,0)
+    # :) Success 
+    def refline(self,famprof,refl,refpl):
+        return Create.ReferenceLine(famprof,refl,refpl)
+    # :) Success
+    def lock(self,famprof,refline,prof):
+        return Create.NewAlignment(famprof,refline,prof)
+    #:) :) :)
+    def dimension(self,famprof,nrefname):
+        return Create.NewDimension(famprof,nrefname)
 
 if __name__ == '__main__':
     pass
