@@ -9,8 +9,8 @@ class SchuecoFamily():
     """" Schueco Family """
 
     def __init__(self,Document, TypeName, LocationKeyV, EndRefPlaneV,LocationKeyH,EndRefPlaneH, MirrorBoolean):
-        self.instanceplacementV=family.NewVerticalProfileInstace(Document,TypeName,LocationKeyV,EndRefPlaneV,MirrorBoolean)
-        self.instanceplacementH=family.NewHorizontalProfileInstace(Document,TypeName,LocationKeyH,EndRefPlaneH,MirrorBoolean)
+        self.instanceplacementV=Family.NewVerticalProfileInstace(Document,TypeName,LocationKeyV,EndRefPlaneV,MirrorBoolean)
+        self.instanceplacementH=Family.NewHorizontalProfileInstace(Document,TypeName,LocationKeyH,EndRefPlaneH,MirrorBoolean)
     
 if __name__ == '__main__':
     pass
