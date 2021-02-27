@@ -1,7 +1,7 @@
-**Shueco Computation BIM Engine**
+<h1>Shueco Computation BIM Engine<h1>
 
 This is the last version of the Schueco BIM Engine developed by Computation at Engineering Services. 
-Tomás Mena and Jhosangela Ramirez
+by Tomás Mena and Jhosangela Ramirez
 
 Editing from Schueco laptop
 
