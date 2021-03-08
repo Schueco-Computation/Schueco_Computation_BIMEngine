@@ -1,6 +1,6 @@
 import sys
-sys.path.append("C:\\Users\\tomas\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMengine\\functions\\Rhino_Modules")
-sys.path.append("C:\\Users\\tomas\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMengine\\functions\\Rhino_Revit_Modules")
+sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Modules")
+sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Revit_Modules")
 import blockorg
 import corners
 import simplify
@@ -143,7 +143,7 @@ class Schuecoprofile():
     def revit_extrusion(self,famprof,lines,locationref):
         # famprof=prof_fam()
         # lines=revitlines()
-        return CreateExtrusion.NewProfile(famprof,lines,locationref,0)
+        return CreateExtrusion.NewProfile(famprof,lines,locationref,1)
     # :) Success 
     def refline(self,famprof,refl,refpl):
         return Create.ReferenceLine(famprof,refl,refpl)

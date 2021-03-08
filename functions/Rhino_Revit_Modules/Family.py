@@ -123,7 +123,10 @@ def NewHorizontalProfileInstace(Document, TypeName, LocationKey, EndRefPlane, Mi
     ##################New Family Instance
     t1 = TransactionManager.Instance
     t1.EnsureInTransaction(Document)
-
+    
+    notVert = collector.Family.get_Parameter(BuiltInParameter.FAMILY_ALWAYS_VERTICAL).Set(0)
+    horizontal = collector.Family.get_Parameter(BuiltInParameter.FAMILY_WORK_PLANE_BASED).Set(1)
+    
     collector.Activate()
 
     startsloc = ptsdi[LocationKey]
