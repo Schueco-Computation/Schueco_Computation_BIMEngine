@@ -143,7 +143,7 @@ class Schuecoprofile():
     def revit_extrusion(self,famprof,lines,locationref):
         # famprof=prof_fam()
         # lines=revitlines()
-        return CreateExtrusion.NewProfile(famprof,lines,locationref,0)
+        return CreateExtrusion.NewProfile(famprof,lines,locationref,1)
     # :) Success 
     def refline(self,famprof,refl,refpl):
         return Create.ReferenceLine(famprof,refl,refpl)
