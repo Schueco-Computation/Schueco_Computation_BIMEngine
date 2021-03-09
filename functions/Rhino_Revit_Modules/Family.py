@@ -340,8 +340,8 @@ def NewVerticalProfileInstace(Document, TypeName, LocationKey, EndRefPlane, Mirr
     
     return instance[0]
 
-def NewPanel(Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidthRefPlane):
-    
+def NewPanel(doc, Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidthRefPlane):
+
     #First: Dictionaries
     
     listverticalplanes = ("A", "A.01", "B", "B.01", "B.02", "C", "C.01", "Center")
@@ -433,6 +433,10 @@ def NewPanel(Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidthRefPl
     t1 = TransactionManager.Instance
     t1.EnsureInTransaction(doc)
     
+    splitname = paneldi[Typepanel].split("_")
+    rename = splitname[0]+ str("_")+str(Thickness)+str("mm")
+    panel.Name = rename
+
     value = Thickness/304.80
     param = getparam[0].Set(value)
     
