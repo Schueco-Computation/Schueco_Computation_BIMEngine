@@ -68,7 +68,8 @@ class Schuecoprofile():
         self.refplane= refplane
         self.docr=Revit.ActiveDBDocument
         ############## Variables  ###########
-        self.articles= self.objects(self.objs)
+
+        self.articles= self.objects(self.objs)  
         self.newfamdoc=self.newfam(dtemplpath,famname)
         self.nesteddetitem=self.detailitem(self.objects(self.objs))
         self.newdetfaminst=self.place_detailitem(self.newfamdoc)
