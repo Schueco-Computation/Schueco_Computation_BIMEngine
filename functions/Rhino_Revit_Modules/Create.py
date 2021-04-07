@@ -165,8 +165,8 @@ def ReferenceLine(newfamily, objname, NewreflineName):
 
     #########Start Transaction
     #t.Start()
-    t5 = TransactionManager.Instance
-    t5.EnsureInTransaction(newfamily)
+    t1 = TransactionManager.Instance
+    t1.EnsureInTransaction(newfamily)
 
     bubblend = rvtpts[0]
     freend = rvtpts [1]
@@ -178,7 +178,7 @@ def ReferenceLine(newfamily, objname, NewreflineName):
 
     #End Transaction
     #t.Commit()
-    TransactionManager.ForceCloseTransaction(t5)
+    TransactionManager.ForceCloseTransaction(t1)
 
     return refp1
 
@@ -210,13 +210,18 @@ def NewAlignment(newfamily, refPlane, solid):
         fc = i.FaceNormal
         normal.append(fc)
 
-    indexes = []
+    indexesOne = []
     for i,j in enumerate(normal,0):
         if j.DotProduct(n0)==1:
-            indexes.append(i)
+            indexesOne.append(i)
+    indexesTwo = []
+    for i,j in enumerate(normal,0):
+        if j.DotProduct(n0)==-1:
+            indexesTwo.append(i)
+    indexes = indexesOne+indexesTwo
 
-    pfaces = [fac[x] for x in indexes]
-
+    pfaces = [fac[x] for x in sorted(indexes)]
+    
     edgeloops = []
     for i in pfaces:
         loops = i.EdgeLoops
@@ -237,15 +242,15 @@ def NewAlignment(newfamily, refPlane, solid):
     
     sameplane = []
     for i,j in enumerate(ppt,0):
-        if round(n0.DotProduct(j-bubblend),2)==0:
+        if round(n0.DotProduct(j-bubblend),4)==0:
             sameplane.append(i)
-
+    
     idx = indexes[sameplane[0]]
     theface = allfaces[idx]
     facere = theface.Reference
-
+    
     #Finding the view
-
+    
     bip = BuiltInParameter.VIEW_NAME
     provider = ParameterValueProvider(ElementId(bip))
     evaluator = FilterStringEquals()
@@ -267,7 +272,7 @@ def NewAlignment(newfamily, refPlane, solid):
     
     return align
 
-def NewDimension(newfamily,newrefname):
+def NewDimension(newfamily, newrefname, FrameOrProf):
     obj = rs.ObjectsByName("a_ref-line1")
 
     profile1 = []
@@ -344,9 +349,15 @@ def NewDimension(newfamily,newrefname):
 
     dimension = newfamily.FamilyCreate.NewLinearDimension(plane, line, refarray)
 
-    widthparameter = newfamily.FamilyManager.get_Parameter("Profile width")
+    parameter = []
+    if FrameOrProf == "Frame":
+        widthparameter = newfamily.FamilyManager.get_Parameter("Visible frame width")
+        parameter.append(widthparameter)
+    else:
+        widthparam = newfamily.FamilyManager.get_Parameter("Profile width")
+        parameter.append(widthparam)
 
-    dimension.FamilyLabel = widthparameter
+    dimension.FamilyLabel = parameter[0]
 
     #End Transaction
     #t.Commit()

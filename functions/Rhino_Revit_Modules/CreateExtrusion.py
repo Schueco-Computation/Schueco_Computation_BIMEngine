@@ -26,17 +26,35 @@ from RevitServices.Transactions import TransactionManager
 ##########################################
 #Get Mullion length
 
-def NewProfile(newfamily, rvtlines,  locationref, vertical):
-    
-    bip = BuiltInParameter.DIM_LABEL
-    provider = ParameterValueProvider(ElementId(bip))
-    evaluator = FilterStringEquals()
-    rule = FilterStringRule(provider, evaluator, "Mullion length", False)
-    filter = ElementParameterFilter(rule)
-    mullionlength = FilteredElementCollector(newfamily).OfClass(Dimension).WherePasses(filter).FirstElement()
+def NewProfile(newfamily, rvtlines, locationref, FrameOrProf):
+    #CONDITIONAL FRAME OR PROFILE
+    dim = []
+    if FrameOrProf == "Frame":
+        bip = BuiltInParameter.DIM_LABEL
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, "Length", False)
+        filter = ElementParameterFilter(rule)
+        mullionlength = FilteredElementCollector(newfamily).OfClass(Dimension).WherePasses(filter).FirstElement()
 
-    name = mullionlength.get_Parameter(BuiltInParameter.DIM_VALUE_LENGTH)
-    paramvalue = name.AsDouble()
+        name = mullionlength.get_Parameter(BuiltInParameter.DIM_VALUE_LENGTH)
+        paramvalue = name.AsDouble()
+    
+        value = paramvalue+(24/304.80)
+        dim.append(value)
+    else:
+        bip = BuiltInParameter.DIM_LABEL
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, "Mullion length", False)
+        filter = ElementParameterFilter(rule)
+        mullionlength = FilteredElementCollector(newfamily).OfClass(Dimension).WherePasses(filter).FirstElement()
+
+        name = mullionlength.get_Parameter(BuiltInParameter.DIM_VALUE_LENGTH)
+        paramvalue = name.AsDouble()
+        dim.append(paramvalue)
+        
+    #CONDITIONAL FINISH
     
     #Create Curve Array
     carray = CurveArray()
@@ -64,18 +82,11 @@ def NewProfile(newfamily, rvtlines,  locationref, vertical):
     t1 = TransactionManager.Instance
     t1.EnsureInTransaction(newfamily)
     
-    VertOrHor = newfamily.OwnerFamily.get_Parameter(BuiltInParameter.FAMILY_ALWAYS_VERTICAL).Set(vertical)
-    output = []
-    if vertical == 0:
-        output.append(newfamily.OwnerFamily.get_Parameter(BuiltInParameter.FAMILY_WORK_PLANE_BASED).Set(1))
-    else:
-        output.append(newfamily.OwnerFamily.get_Parameter(BuiltInParameter.FAMILY_WORK_PLANE_BASED).Set(0))
-
     #Creating SketchPlane
     sketchplane = SketchPlane.Create(newfamily, planebase.Id)
     
     #Creating extrusion
-    solid = newfamily.FamilyCreate.NewExtrusion(True, carrarray, sketchplane, paramvalue)
+    solid = newfamily.FamilyCreate.NewExtrusion(True, carrarray, sketchplane, dim[0])
 
     opt = Options()
     opt.ComputeReferences = True
