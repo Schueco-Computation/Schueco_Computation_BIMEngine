@@ -12,23 +12,15 @@ class SchuecoFamily():
 
     def __init__(self):
       
-        self.panel=()
+        pass
 
-    
-    @staticmethod
-
-    def instanceplacementV(Document,TypeName,LocationKeyV,EndRefPlaneV,MirrorBoolean):
+    def instanceplacementV(self,Document,TypeName,LocationKeyV,EndRefPlaneV,MirrorBoolean):
         return Family.NewVerticalProfileInstace(Document,TypeName,LocationKeyV,EndRefPlaneV,MirrorBoolean)
     
-    @staticmethod
-
-    def instanceplacementH(Document,TypeName,LocationKeyH,EndRefPlaneH,MirrorBoolean):
+    def instanceplacementH(self,Document,TypeName,LocationKeyH,EndRefPlaneH,MirrorBoolean):
         return Family.NewHorizontalProfileInstace(Document,TypeName,LocationKeyH,EndRefPlaneH,MirrorBoolean)
     
-    @staticmethod
-
-    def panelplacement(Document,Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidthRefPlane):
-
+    def panelplacement(self,Document,Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidthRefPlane):
         return Family.NewPanel(Document,Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidthRefPlane)
 
 
