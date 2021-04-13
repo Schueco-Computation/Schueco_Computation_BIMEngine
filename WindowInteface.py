@@ -34,8 +34,8 @@ import schueco
 
 doc = Revit.ActiveDBDocument
 files = ["Schueco_UDC-80-UZB_Frame_H01","Schueco_UDC-80-UZB_Frame_H02","Schueco_UDC-80-UZB_Frame_V01","Schueco_UDC-80-UZB_Frame_V02"]
-wtypename = "Schueco_UDC-80-UZB_Win-in_Family01"
-famwindow = schueco.Create.FamilyNew("D:\F_Window.rft", wtypename)
+wtypename = "Schueco_UDC-80-UZB_Win-in_Family01" 
+famwindow = schueco.Create.FamilyNew("D:\F_Window.rft", wtypename) #windowtemplate
 
 for a in files:
     path = "C:\\Users\\ramijc\\Desktop\\New folder\\{}".format(a) ### Change path!!!
@@ -104,6 +104,11 @@ framehTwo = schueco.Window.NewHorizontalFrameInstance(famwindow, "Schueco_UDC-80
 #New: NewPanel Instance
 
 window = schueco.Window.NewPanel(famwindow, "Glz", 41)
+
+
+
+
+### interface #### 
 
 load = famwindow.LoadFamily(doc)
 

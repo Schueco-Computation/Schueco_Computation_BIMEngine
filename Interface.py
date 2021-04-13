@@ -5,10 +5,10 @@ from RhinoInside.Revit import Revit, Convert
 ##### //// PROFILE CREATION PARAMETERS //// ##### 
 
 files=("V02_75mm","V04_75mm","V04_270mm","H01-2_75mm", "H01-1_75mm","H02_147mm")
-detpth= "E:\Schueco\Programming\Revit_Templates\Detail Item.rft" #automate
+detpth= "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Revit Templates\\Detail Item.rft" #automate
 fname= "schueco_det_prof"
 fdname = "Schueco_ USC-Cust_ Det_ H02_"
-proftmplpth= "E:\Schueco\Programming\Revit_Templates\A_Profile.rft" #automate
+proftmplpth= "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Revit Templates\\A_Profile.rft" #automate
 contour= "a_simp-prof" # atomate
 refline="a_ref-line1" # automate
 refpl="Reference line 1"
@@ -54,15 +54,15 @@ widthsp="C.01"
 ###### Profile Creation ####
 
 
-#for i in files:
-#    path = "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Rhino_files\\Renamed_files\\{}".format(i) ### Change path!!!
-#    #print (path)
-#    rs.DocumentModified(False)
-#    rs.Command("! _-New None")
-#    rs.Command('-Open "{}" _Enter'.format(path))
-#    fdname="Schueco_ USC-Cust_ Det_{}".format(i)
-#    s.profileschueco.Schuecoprofile(detpth,fname,fdname,i,proftmplpth,contour,refline,refpl,extrloc)
-#    rs.Command("! _-New None")
+for i in files:
+    path = "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Rhino_files\\Renamed_files\\{}".format(i) ### Change path!!!
+    #print (path)
+    rs.DocumentModified(False)
+    rs.Command("! _-New None")
+    rs.Command('-Open "{}" _Enter'.format(path))
+    fdname="Schueco_ USC-Cust_ Det_{}".format(i)
+    s.profileschueco.Schuecoprofile(detpth,fname,fdname,i,proftmplpth,contour,refline,refpl,extrloc)
+    rs.Command("! _-New None")
 
 
 ##### Profile Placement #####

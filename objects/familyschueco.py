@@ -23,6 +23,9 @@ class SchuecoFamily():
     def panelplacement(self,Document,Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidthRefPlane):
         return Family.NewPanel(Document,Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidthRefPlane)
 
+    def windowinstace(self,Document,wtypename,LocationKey,Higrefplane,EndWidthRefPlane):
+        return Family.NewWindowInstance(Document,wtypename,LocationKey,Higrefplane,EndWidthRefPlane)
+
 
 if __name__ == '__main__':
     pass

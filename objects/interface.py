@@ -3,10 +3,13 @@ import schuecobim as s
 from RhinoInside.Revit import Revit, Convert
 
 class unit ():
+
     def __init__(self):
         
     #### //// PROFILE FILES //// ####
     files=("V02_75mm","V04_75mm","V04_270mm","H01-2_75mm", "H01-1_75mm","H02_147mm")
+    
+    
     ##### //// PROFILE CREATION PARAMETERS //// ##### 
     detpth= "E:\Schueco\Programming\Revit_Templates\Detail Item.rft" #automate
     fname= "schueco_det_prof"
@@ -18,7 +21,22 @@ class unit ():
     extrloc="Axis" # inside class
     doc= Revit.ActiveDBDocument
 
+    ##### /// WINDOW CREATON PARAMETERS /// ####
 
+    famwindow= ()
+    wtypename= () #  is repeated
+
+    ##### //// FRAME CREATION PARAMETERS //// #####
+
+    files=()
+    wtypename= ()
+
+    
+
+
+
+    ################################# //// FAMILY OBJECTS PARAMETERS //// ############################
+    
     ## //// VERTICAL PROFILES PLACEMENT PARAMETERS  ///###
     ### no mirror profiles##
     nmirrpv=("V02_75mm","V04_270mm")

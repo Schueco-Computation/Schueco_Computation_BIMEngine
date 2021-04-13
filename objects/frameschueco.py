@@ -11,6 +11,7 @@ import CreateExtrusion
 import Parameter
 import Place
 import Select
+import Window
 
 # Enable Python support and load DesignScript library
 import clr
@@ -38,9 +39,9 @@ from RevitServices.Transactions import TransactionManager
     
 doc = Revit.ActiveDBDocument
 
-class Schuecoprofile():
+class Schuecoframe():
     """ 
-    This class creates nested generic families in Revit containing detail items from detail cad drawings and creates an extrusion to represent a 3d profile inside a mother family unit
+    This class creates nested generic families in Revit containing detail items from detail cad drawings and creates an extrusion to represent a 3d window frame  inside a window family file
     It uses Revit family templates to create the type of families. 
     Parameters:
     dtemplpath(str):"Family detail template path"
@@ -53,49 +54,46 @@ class Schuecoprofile():
     """ 
     
 
-    def __init__(self,dtemplpath,famname,famdetname,typename,famproftempath,contournm,reflinerh,refplane,extlocation):
-        # self.articles=blockorg.block_org()
-        # self.corners=corners.corners()
-        # self.polyline=simplify.simplify()
-        self.objs= Select.AllObjectsName()
-        # self.newfam_det_temp_path= dtemplpath
-        # self.newfam_name= famname
-        # self.newfam_detail_name= famdetname
-        # self.typename= typename
-        # self.newfam_prof_temp_path= famproftempath
-        # self.contour= contournm
-        # self.reflinerh= reflinerh
-        # self.refplane= refplane
-        self.docr=Revit.ActiveDBDocument
+    def __init__(self,dtemplpath,famname,famdetname,typename,famframetempath,contournm,reflinerh,refplane,extlocation,famwindow):
         ############## Variables  ###########
+        
+        self.objs= Select.AllObjectsName()
+        
+        self.docr=Revit.ActiveDBDocument
+        
+        ############## Function Calling ##############
 
-        #self.articles= self.objects(self.objs)  
+        #self.objects(self.objs)  # 1 select all profile polylines from Rhino file _ consider erase the variable *** done (self.articles=) erased
 
-        self.newfamdoc=self.newfam(dtemplpath,famname) # 2 Create detail 
+        self.newfamdoc=self.newfam(dtemplpath,famname) # 2 Create a detail family doc for each detail inside the drawing
 
-        self.detailitem(self.objects(self.objs),famdetname,dtemplpath,self.newfamdoc) # 3 Create a detail family doc for each item
+        self.detailitem(self.objects(self.objs),famdetname,dtemplpath) # 3 Creates a lists of detail families_Consider erease the variable *** done (self.nesteddetitem=) erased
 
-        self.place_detailitem(self.newfamdoc) # 4 Places the detail items in their place
+        self.place_detailitem(self.newfamdoc) # 4 places the detail items in their place _ Consider erase the variable *** done (self.newdetfaminst=) erased
 
-        self.proffamil=self.prof_fam(famproftempath,typename)
+        self.famframe=self.prof_fam(famframetempath,typename) # famframe # 5 ------ ??? temp_path window template path?_  can be raplaced for other function-?
 
-        self.reflinervt=self.refline(self.proffamil,reflinerh,refplane)
+        self.reflinervt=self.refline(self.famframe,reflinerh,refplane) # 6 What should we do with this then?
+
+        self.famload(self.newfamdoc,self.famframe) # 7 loads detail family to the frame family _Consider erase the variable *** done (self.proffile=) erased
         
-        self.famload(self.newfamdoc,self.proffamil) #Family
+        self.proffiledet=self.placedetail(self.famframe) # 8 ------- ???? _Consider erase the variable
+
+        self.revitcontour=self.revitlines(contournm) # 9 converts rhino polyline contour into revit contour
+
+        self.revitextrusion=self.revit_extrusion(self.famframe,self.revitcontour,extlocation) # 10 Creates Profile extrusion inside revit profile family
+
+        self.cornervoids(self.famframe,contournm)  # 11 Creates voids
         
-        self.proffiledet=self.placedetail(self.proffamil)
-        
-        self.revitcontour=self.revitlines(contournm)
-        
-        self.revitextrusion=self.revit_extrusion(self.proffamil,self.revitcontour,extlocation)
-        
-        #self.lockrvt=self.lock(self.proffamil,self.reflinervt,self.revitextrusion)
-        
-        self.dimension(self.proffamil,refplane)
-        
-        self.famload(self.proffamil,self.docr)
+        #self.lockrvt=self.lock(self.proffamil,self.reflinervt,self.revitextrusion) 
+
+        self.dimension(self.famframe,refplane) # 11 Creates dimension parameter in profile family _ Consider erase the variable 
+
+        self.famload(self.famframe,famwindow) # 12 Loads profile family into mother family _ Consider erase the variable
+
+        #self.load_frame() ## Variable?
     
-    
+        self.windowdim(famwindow)
   
 
     # success :)
@@ -115,12 +113,12 @@ class Schuecoprofile():
     
     # sucess :)
     # delete gaskets and isolation in rhino file
-    def detailitem (self,familyobjects,famdetname,dtemplpath,famnew): # this should create a list of families 
+    def detailitem (self,familyobjects,famdetname,dtemplpath): # this should create a list of families 
 
-        # familyobjects=self.objects(self.objs)
-        # detailname=self.newfam_detail_name #self missing
-        # temppath=self.newfam_det_temp_path #self missing
-        # famnew=self.newfamdoc 
+        #familyobjects=self.objects(self.objs)
+        #detailname=self.newfam_detail_name #self missing
+        #temppath=self.newfam_det_temp_path #self missing
+        famnew=self.newfamdoc 
         #print famnew
         output=[]
         for i,j in enumerate(familyobjects,1):
@@ -134,14 +132,13 @@ class Schuecoprofile():
         #print fam
         return Place.DetailItems(fam)
     
-    # :) Success ' can be replaced by newfam()
+    # :) Success 
     def prof_fam(self,path,name_type):### Error
         # path=self.newfam_prof_temp_path #self missing
         # name_type=self.typename #self missing
         return Create.FamilyNew(path,name_type)
-
     # :) Success 
-    def famload (self,detaildoc,famprof):
+    def famload (self,detaildoc,famprof): 
         #famprof=prof_fam()
         return detaildoc.LoadFamily(famprof)
     # :) Success
@@ -156,16 +153,25 @@ class Schuecoprofile():
     def revit_extrusion(self,famprof,lines,locationref):
         # famprof=prof_fam()
         # lines=revitlines()
-        return CreateExtrusion.NewProfile(famprof,lines,locationref,"Profile")
+        return CreateExtrusion.NewProfile(famprof,lines,locationref,"Frame")
+
+    def cornervoids(self,famframe,prof_contour): # new
+        return Window.FrameCornerVoids(famframe,prof_contour)
+
     # :) Success 
     def refline(self,famprof,refl,refpl):
         return Create.ReferenceLine(famprof,refl,refpl)
-    # :) Success
-    # def lock(self,famprof,refline,prof):
-    #     return Create.NewAlignment(famprof,refline,prof)
+    
     #:) :) :)
     def dimension(self,famprof,nrefname):
-        return Create.NewDimension(famprof,nrefname,"Profile")
+        return Create.NewDimension(famprof,nrefname,"Frame")
+
+    def load_frame(self,famframe,famwindow): 
+        return famframe.LoadFamily(famwindow)
+
+    def windowdim(self,famwindow):
+        return Window.Dimensions(famwindow)
+    
 
 if __name__ == '__main__':
     pass
