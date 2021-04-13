@@ -54,7 +54,7 @@ class Schuecoframe():
     """ 
     
 
-    def __init__(self,dtemplpath,famname,famdetname,typename,famframetempath,contournm,reflinerh,refplane,extlocation,famwindow):
+    def __init__(self,dtemplpath,famname,famdetname,typename,famframetempath,contournm,extlocation,famwindow):
         ############## Variables  ###########
         
         self.objs= Select.AllObjectsName()
@@ -73,7 +73,7 @@ class Schuecoframe():
 
         self.famframe=self.prof_fam(famframetempath,typename) # famframe # 5 ------ ??? temp_path window template path?_  can be raplaced for other function-?
 
-        self.reflinervt=self.refline(self.famframe,reflinerh,refplane) # 6 What should we do with this then?
+        self.reflinervt=self.refline(self.famframe) # 6 What should we do with this then?
 
         self.famload(self.newfamdoc,self.famframe) # 7 loads detail family to the frame family _Consider erase the variable *** done (self.proffile=) erased
         
@@ -87,7 +87,7 @@ class Schuecoframe():
         
         #self.lockrvt=self.lock(self.proffamil,self.reflinervt,self.revitextrusion) 
 
-        self.dimension(self.famframe,refplane) # 11 Creates dimension parameter in profile family _ Consider erase the variable 
+        self.dimension(self.famframe) # 11 Creates dimension parameter in profile family _ Consider erase the variable 
 
         self.famload(self.famframe,famwindow) # 12 Loads profile family into mother family _ Consider erase the variable
 
@@ -159,12 +159,12 @@ class Schuecoframe():
         return Window.FrameCornerVoids(famframe,prof_contour)
 
     # :) Success 
-    def refline(self,famprof,refl,refpl):
-        return Create.ReferenceLine(famprof,refl,refpl)
+    def refline(self,famprof):
+        return Create.ReferenceLines(famprof,"Frame")
     
     #:) :) :)
-    def dimension(self,famprof,nrefname):
-        return Create.NewDimension(famprof,nrefname,"Frame")
+    def dimension(self,famprof):
+        return Create.NewWidthDimension(famprof,"Frame")
 
     def load_frame(self,famframe,famwindow): 
         return famframe.LoadFamily(famwindow)

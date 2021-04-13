@@ -50,14 +50,14 @@ famwindow=window.famwindow(wtemppth,wtypename)
 
 #famwindow=s.windowschueco.Schuecowindow()
 
-files = ["Schueco_UDC-80-UZB_Frame_H01","Schueco_UDC-80-UZB_Frame_H02","Schueco_UDC-80-UZB_Frame_V01","Schueco_UDC-80-UZB_Frame_V02"]
+files = ["Schueco_UDC-80-UZB_Frame_H01"]#,"Schueco_UDC-80-UZB_Frame_H02","Schueco_UDC-80-UZB_Frame_V01","Schueco_UDC-80-UZB_Frame_V02"]
 detpth= "D:\\Schueco\\Programming\\Develping_projects_local\\Revit Templates\\Detail Item.rft" #automate
 fname= "schueco_det_prof"
 fdname = "Schueco_ USC-Cust_ Det"
 frametmplpth= "D:\\Schueco\\Programming\\Develping_projects_local\\Revit Templates\\D_Frame_Window.rft" #automate
 contour= "a_simp-prof" # atomate
-refline="a_ref-line1" # automate
-refpl="Reference line 1"
+#refline="a_ref-line1" # automate
+#refpl="Reference line 1"
 extrloc="Axis" # inside class
 doc= Revit.ActiveDBDocument
 
@@ -67,12 +67,12 @@ for a in files:
     rs.DocumentModified(False)
     rs.Command("! _-New None")
     rs.Command('-Open "{}" _Enter'.format(path))
-    s.frameschueco.Schuecoframe(detpth,fname,fdname,a,frametmplpth,contour,refline,refpl,extrloc,famwindow)
+    s.frameschueco.Schuecoframe(detpth,fname,fdname,a,frametmplpth,contour,extrloc,famwindow)
     rs.Command("! _-New None")
 
 window.windowpanel(famwindow)
 
-frplaces=["Bottom","Top","Right","Left"]
+frplaces=["Bottom"]#,"Top","Right","Left"]
 
 for i,j in enumerate(files):
     if "H" in j:
@@ -84,7 +84,7 @@ for i,j in enumerate(files):
 
 famwindow.LoadFamily(doc)
 
-#
+
 family=s.familyschueco.SchuecoFamily()
 
 family.windowinstace(doc,wtypename,"A.01,Axis,1.01","2.01","B.01")

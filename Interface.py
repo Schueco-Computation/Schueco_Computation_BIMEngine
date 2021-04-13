@@ -4,19 +4,20 @@ from RhinoInside.Revit import Revit, Convert
 
 ##### //// PROFILE CREATION PARAMETERS //// ##### 
 
-files=("V02_75mm","V04_75mm","V04_270mm","H01-2_75mm", "H01-1_75mm","H02_147mm")
+files=["V02_75mm"]#,"V04_75mm","V04_270mm","H01-2_75mm", "H01-1_75mm","H02_147mm")
 detpth= "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Revit Templates\\Detail Item.rft" #automate
 fname= "schueco_det_prof"
 fdname = "Schueco_ USC-Cust_ Det_ H02_"
 proftmplpth= "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Revit Templates\\A_Profile.rft" #automate
 contour= "a_simp-prof" # atomate
-refline="a_ref-line1" # automate
-refpl="Reference line 1"
+#refline="a_ref-line1" # automate
+#refpl="Reference line 1"
 extrloc="Axis" # inside class
 doc= Revit.ActiveDBDocument
 
-
+"""
 ## //// VERTICAL PROFILES PLACEMENT PARAMETERS  ///###
+
 ### no mirror profiles##
 nmirrpv=("V02_75mm","V04_270mm")
 vnmirrk=("C,Axis,1","B,Axis,1.01")
@@ -47,7 +48,7 @@ lckkeysp= "A.01,Ext. Axis 1,2.01"
 heightsp="3.01"
 widthsp="C.01"
 
-
+"""
 
 
 
@@ -61,10 +62,10 @@ for i in files:
     rs.Command("! _-New None")
     rs.Command('-Open "{}" _Enter'.format(path))
     fdname="Schueco_ USC-Cust_ Det_{}".format(i)
-    s.profileschueco.Schuecoprofile(detpth,fname,fdname,i,proftmplpth,contour,refline,refpl,extrloc)
+    s.profileschueco.Schuecoprofile(detpth,fname,fdname,i,proftmplpth,contour,extrloc)
     rs.Command("! _-New None")
 
-
+"""
 ##### Profile Placement #####
 
 for i,j in enumerate(nmirrpv):
@@ -82,3 +83,4 @@ for i,j in enumerate(Hp):
 
 panelgl.panelplacement(doc,"Glz",54,lckkeyp,hegihtpnl,widthpnl)
 panelsp.panelplacement(doc,"Spandrel",276,lckkeysp,heightsp,widthsp)
+"""

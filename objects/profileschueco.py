@@ -53,7 +53,7 @@ class Schuecoprofile():
     """ 
     
 
-    def __init__(self,dtemplpath,famname,famdetname,typename,famproftempath,contournm,reflinerh,refplane,extlocation):
+    def __init__(self,dtemplpath,famname,famdetname,typename,famproftempath,contournm,extlocation):
         # self.articles=blockorg.block_org()
         # self.corners=corners.corners()
         # self.polyline=simplify.simplify()
@@ -79,7 +79,7 @@ class Schuecoprofile():
 
         self.proffamil=self.prof_fam(famproftempath,typename)
 
-        self.reflinervt=self.refline(self.proffamil,reflinerh,refplane)
+        self.reflinervt=self.refline(self.proffamil)
         
         self.famload(self.newfamdoc,self.proffamil) #Family
         
@@ -91,7 +91,7 @@ class Schuecoprofile():
         
         #self.lockrvt=self.lock(self.proffamil,self.reflinervt,self.revitextrusion)
         
-        self.dimension(self.proffamil,refplane)
+        self.dimension(self.proffamil)
         
         self.famload(self.proffamil,self.docr)
     
@@ -158,14 +158,14 @@ class Schuecoprofile():
         # lines=revitlines()
         return CreateExtrusion.NewProfile(famprof,lines,locationref,"Profile")
     # :) Success 
-    def refline(self,famprof,refl,refpl):
-        return Create.ReferenceLine(famprof,refl,refpl)
+    def refline(self,famprof):
+        return Create.ReferenceLines(famprof,"Profile")
     # :) Success
     # def lock(self,famprof,refline,prof):
     #     return Create.NewAlignment(famprof,refline,prof)
     #:) :) :)
-    def dimension(self,famprof,nrefname):
-        return Create.NewDimension(famprof,nrefname,"Profile")
+    def dimension(self,famprof):
+        return Create.NewWidthDimension(famprof,"Profile")
 
 if __name__ == '__main__':
     pass
