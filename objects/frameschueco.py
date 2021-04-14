@@ -98,16 +98,12 @@ class Schuecoframe():
         return detaildoc.LoadFamily(famprof)
    
     def placedetail (self,famprof):
-        #famprof=self.prof_fam(self.newfam_prof_temp_path,self.typename)
         return Place.DetailItemInprof(famprof)
     
     def revitlines(self,prof_contour):
-        #prof_contour=self.contour
         return ConvertPoly.ToRvtline(prof_contour)
     
     def revit_extrusion(self,famprof,lines,locationref):
-        # famprof=prof_fam()
-        # lines=revitlines()
         return CreateExtrusion.NewProfile(famprof,lines,locationref,"Frame")
 
     def cornervoids(self,famframe,prof_contour): 
