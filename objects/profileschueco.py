@@ -53,35 +53,47 @@ class Schuecoprofile():
     """ 
     
 
-    def __init__(self,dtemplpath,famname,famdetname,typename,famproftempath,contournm,reflinerh,refplane,extlocation):
+    def __init__(self,dtemplpath,famname,famdetname,typename,famproftempath,contournm,extlocation):
         # self.articles=blockorg.block_org()
         # self.corners=corners.corners()
         # self.polyline=simplify.simplify()
         self.objs= Select.AllObjectsName()
-        self.newfam_det_temp_path= dtemplpath
-        self.newfam_name= famname
-        self.newfam_detail_name= famdetname
-        self.typename= typename
-        self.newfam_prof_temp_path= famproftempath
-        self.contour= contournm
-        self.reflinerh= reflinerh
-        self.refplane= refplane
+        # self.newfam_det_temp_path= dtemplpath
+        # self.newfam_name= famname
+        # self.newfam_detail_name= famdetname
+        # self.typename= typename
+        # self.newfam_prof_temp_path= famproftempath
+        # self.contour= contournm
+        # self.reflinerh= reflinerh
+        # self.refplane= refplane
         self.docr=Revit.ActiveDBDocument
         ############## Variables  ###########
 
-        self.articles= self.objects(self.objs)  
-        self.newfamdoc=self.newfam(dtemplpath,famname)
-        self.nesteddetitem=self.detailitem(self.objects(self.objs))
-        self.newdetfaminst=self.place_detailitem(self.newfamdoc)
+        #self.articles= self.objects(self.objs)  
+
+        self.newfamdoc=self.newfam(dtemplpath,famname) # 2 Create detail 
+
+        self.detailitem(self.objects(self.objs),famdetname,dtemplpath,self.newfamdoc) # 3 Create a detail family doc for each item
+
+        self.place_detailitem(self.newfamdoc) # 4 Places the detail items in their place
+
         self.proffamil=self.prof_fam(famproftempath,typename)
-        self.proffile=self.famload(self.newfamdoc,self.proffamil) #Family
+
+        self.reflinervt=self.refline(self.proffamil)
+        
+        self.famload(self.newfamdoc,self.proffamil) #Family
+        
         self.proffiledet=self.placedetail(self.proffamil)
-        self.revitcontour=self.revitlines(self.contour)
+        
+        self.revitcontour=self.revitlines(contournm)
+        
         self.revitextrusion=self.revit_extrusion(self.proffamil,self.revitcontour,extlocation)
-        self.reflinervt=self.refline(self.proffamil,reflinerh,refplane)
-        self.lockrvt=self.lock(self.proffamil,self.reflinervt,self.revitextrusion)
-        self.ndimension=self.dimension(self.proffamil,refplane)
-        self.famprofload=self.famload(self.proffamil,self.docr)
+        
+        #self.lockrvt=self.lock(self.proffamil,self.reflinervt,self.revitextrusion)
+        
+        self.dimension(self.proffamil)
+        
+        self.famload(self.proffamil,self.docr)
     
     
   
@@ -103,16 +115,16 @@ class Schuecoprofile():
     
     # sucess :)
     # delete gaskets and isolation in rhino file
-    def detailitem (self,familyobjects): # this should create a list of families 
+    def detailitem (self,familyobjects,famdetname,dtemplpath,famnew): # this should create a list of families 
 
-        familyobjects=self.objects(self.objs)
-        detailname=self.newfam_detail_name #self missing
-        temppath=self.newfam_det_temp_path #self missing
-        famnew=self.newfamdoc 
+        # familyobjects=self.objects(self.objs)
+        # detailname=self.newfam_detail_name #self missing
+        # temppath=self.newfam_det_temp_path #self missing
+        # famnew=self.newfamdoc 
         #print famnew
         output=[]
         for i,j in enumerate(familyobjects,1):
-            output.append(Create.DetailItems(j,detailname+str(i),famnew,temppath))
+            output.append(Create.DetailItems(j,famdetname+str(i),famnew,dtemplpath))
         return output
 
     #newdetailfamilydoc=self.newfam()
@@ -144,16 +156,16 @@ class Schuecoprofile():
     def revit_extrusion(self,famprof,lines,locationref):
         # famprof=prof_fam()
         # lines=revitlines()
-        return CreateExtrusion.NewProfile(famprof,lines,locationref,0)
+        return CreateExtrusion.NewProfile(famprof,lines,locationref,"Profile")
     # :) Success 
-    def refline(self,famprof,refl,refpl):
-        return Create.ReferenceLine(famprof,refl,refpl)
+    def refline(self,famprof):
+        return Create.ReferenceLines(famprof,"Profile")
     # :) Success
-    def lock(self,famprof,refline,prof):
-        return Create.NewAlignment(famprof,refline,prof)
+    # def lock(self,famprof,refline,prof):
+    #     return Create.NewAlignment(famprof,refline,prof)
     #:) :) :)
-    def dimension(self,famprof,nrefname):
-        return Create.NewDimension(famprof,nrefname)
+    def dimension(self,famprof):
+        return Create.NewWidthDimension(famprof,"Profile")
 
 if __name__ == '__main__':
     pass

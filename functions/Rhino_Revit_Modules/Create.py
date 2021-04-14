@@ -165,8 +165,8 @@ def ReferenceLine(newfamily, objname, NewreflineName):
 
     #########Start Transaction
     #t.Start()
-    t5 = TransactionManager.Instance
-    t5.EnsureInTransaction(newfamily)
+    t1 = TransactionManager.Instance
+    t1.EnsureInTransaction(newfamily)
 
     bubblend = rvtpts[0]
     freend = rvtpts [1]
@@ -178,7 +178,76 @@ def ReferenceLine(newfamily, objname, NewreflineName):
 
     #End Transaction
     #t.Commit()
-    TransactionManager.ForceCloseTransaction(t5)
+    TransactionManager.ForceCloseTransaction(t1)
+
+    return refp1
+
+def ReferenceLines(newfamily, FrameOrProf):
+
+    object = rs.ObjectsByName("a_simp-prof")
+    pts = rs.BoundingBox(object)
+    
+    subtract = []
+    if FrameOrProf == "Frame":
+        subtract.append(0)
+    else:
+        subtract.append(pts[0][0] * pts[1][0])
+    
+    lst = []
+    if -1 <= subtract[0] <= 1:
+        refone = ["a_ref-line1"]
+        lst.append(refone)
+    else:
+        reftwo = ["a_ref-line1","a_ref-line2"]
+        lst.append(reftwo)
+    
+    objnames =lst[0]
+    reflines = []
+    for i,j in enumerate(objnames, 1):
+        obj = rs.ObjectsByName(j)
+
+        profile = []
+
+        rs.SelectObjects(obj)
+        ObjId = rs.SelectedObjects(include_lights=False, include_grips=False)
+        for obj in ObjId:
+            lines = rs.coercecurve(obj)
+            profile.append(lines)
+
+        puntos = rs.PolylineVertices(obj)
+    
+        unselect = rs.UnselectObjects(ObjId)
+    
+        rvtpts = []
+
+        for pp in puntos:
+            e = ri.Revit.Convert.Geometry.GeometryEncoder.ToXYZ(pp)
+            rvtpts.append(e)
+
+        bip = BuiltInParameter.VIEW_NAME
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, "Ref. Level", False)
+        filter = ElementParameterFilter(rule)
+        refplan = FilteredElementCollector(newfamily).OfClass(ViewPlan).WherePasses(filter).FirstElement()
+
+        #########Start Transaction
+        #t.Start()
+        t1 = TransactionManager.Instance
+        t1.EnsureInTransaction(newfamily)
+
+        bubblend = rvtpts[0]
+        freend = rvtpts [1]
+        direc = XYZ(0, 0, 1)
+
+        refp1 = newfamily.FamilyCreate.NewReferencePlane(bubblend, freend, direc, refplan)
+    
+        refp1.Name = "Reference line "+ str(i)
+
+        #End Transaction
+        #t.Commit()
+        TransactionManager.ForceCloseTransaction(t1)
+        reflines.append(refp1)
 
     return refp1
 
@@ -210,13 +279,18 @@ def NewAlignment(newfamily, refPlane, solid):
         fc = i.FaceNormal
         normal.append(fc)
 
-    indexes = []
+    indexesOne = []
     for i,j in enumerate(normal,0):
         if j.DotProduct(n0)==1:
-            indexes.append(i)
+            indexesOne.append(i)
+    indexesTwo = []
+    for i,j in enumerate(normal,0):
+        if j.DotProduct(n0)==-1:
+            indexesTwo.append(i)
+    indexes = indexesOne+indexesTwo
 
-    pfaces = [fac[x] for x in indexes]
-
+    pfaces = [fac[x] for x in sorted(indexes)]
+    
     edgeloops = []
     for i in pfaces:
         loops = i.EdgeLoops
@@ -237,15 +311,15 @@ def NewAlignment(newfamily, refPlane, solid):
     
     sameplane = []
     for i,j in enumerate(ppt,0):
-        if round(n0.DotProduct(j-bubblend),2)==0:
+        if round(n0.DotProduct(j-bubblend),4)==0:
             sameplane.append(i)
-
+    
     idx = indexes[sameplane[0]]
     theface = allfaces[idx]
     facere = theface.Reference
-
+    
     #Finding the view
-
+    
     bip = BuiltInParameter.VIEW_NAME
     provider = ParameterValueProvider(ElementId(bip))
     evaluator = FilterStringEquals()
@@ -267,7 +341,7 @@ def NewAlignment(newfamily, refPlane, solid):
     
     return align
 
-def NewDimension(newfamily,newrefname):
+def NewWidthDimension(newfamily, FrameOrProf):
     obj = rs.ObjectsByName("a_ref-line1")
 
     profile1 = []
@@ -305,9 +379,10 @@ def NewDimension(newfamily,newrefname):
     for i in puntos2:
         e2 = ri.Revit.Convert.Geometry.GeometryEncoder.ToXYZ(i)
         rvtpts2.append(e2)
-
-    line = Line.CreateBound(rvtpts1[0], rvtpts2[0])
-
+    
+    newrvtpt = XYZ(rvtpts2[0].X, rvtpts1[0].Y, rvtpts2[0].Z)
+    line = Line.CreateBound(rvtpts1[0], newrvtpt)
+    
     #########Start Transaction
     #t = Transaction(newfam, 'PolyLine')
     #t.Start()
@@ -321,18 +396,23 @@ def NewDimension(newfamily,newrefname):
     filter = ElementParameterFilter(rule)
     plane = FilteredElementCollector(newfamily).OfClass(ViewPlan).WherePasses(filter).FirstElement()
 
-    bip = BuiltInParameter.DATUM_TEXT
-    provider = ParameterValueProvider(ElementId(bip))
-    evaluator = FilterStringEquals()
-    rule = FilterStringRule(provider, evaluator, "Center (Left/Right)", False)
-    filter = ElementParameterFilter(rule)
-    refplancenter = FilteredElementCollector(newfamily).OfClass(ReferencePlane).WherePasses(filter).FirstElement()
-    ref1 = refplancenter.GetReference()
+    lst = ["Reference line 2","Center (Left/Right)"]
+    firstref = []
+    for x in lst:
+        bip = BuiltInParameter.DATUM_TEXT
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, x, False)
+        filter = ElementParameterFilter(rule)
+        refplancenter = FilteredElementCollector(newfamily).OfClass(ReferencePlane).WherePasses(filter).FirstElement()
+        firstref.append(refplancenter)
+    firstrefclean = [i for i in firstref if i]
+    ref1 = firstrefclean[0].GetReference()
 
     bip = BuiltInParameter.DATUM_TEXT
     provider = ParameterValueProvider(ElementId(bip))
     evaluator = FilterStringEquals()
-    rule = FilterStringRule(provider, evaluator, newrefname, False)
+    rule = FilterStringRule(provider, evaluator, "Reference line 1", False)
     filter = ElementParameterFilter(rule)
     refplancenter = FilteredElementCollector(newfamily).OfClass(ReferencePlane).WherePasses(filter).FirstElement()
     ref2 = refplancenter.GetReference()
@@ -341,12 +421,17 @@ def NewDimension(newfamily,newrefname):
 
     refarray.Append(ref1)
     refarray.Append(ref2)
-
+    
     dimension = newfamily.FamilyCreate.NewLinearDimension(plane, line, refarray)
+    parameter = []
+    if FrameOrProf == "Frame":
+        widthparameter = newfamily.FamilyManager.get_Parameter("Visible frame width")
+        parameter.append(widthparameter)
+    else:
+        widthparam = newfamily.FamilyManager.get_Parameter("Profile width")
+        parameter.append(widthparam)
 
-    widthparameter = newfamily.FamilyManager.get_Parameter("Profile width")
-
-    dimension.FamilyLabel = widthparameter
+    dimension.FamilyLabel = parameter[0]
 
     #End Transaction
     #t.Commit()
