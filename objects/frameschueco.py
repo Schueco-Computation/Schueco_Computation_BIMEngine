@@ -82,10 +82,10 @@ class Schuecoframe():
         return Create.FamilyNew(temp,name)
     
     def detailitem (self,familyobjects,famdetname,dtemplpath,famnew):  
-        output=[]
-        for i,j in enumerate(familyobjects,1):
-            output.append(Create.DetailItems(j,famdetname+str(i),famnew,dtemplpath))
-        return output
+            output=[]
+            for i,j in enumerate(familyobjects,1):
+                output.append(Create.DetailItems(j,famdetname+str(i),famnew,dtemplpath))
+            return output
 
     def place_detailitem(self,fam):
         return Place.DetailItems(fam)
