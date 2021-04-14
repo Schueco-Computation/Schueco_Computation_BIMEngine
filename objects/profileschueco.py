@@ -21,12 +21,16 @@ from Rhino import Geometry as rg
 import RhinoInside as ri
 clr.AddReference('ProtoGeometry')
 from Autodesk.DesignScript.Geometry import *
+#Import RevitAPI
 clr.AddReference("RevitAPI")
+#import Autodesk.Revit.DB as re
 from Autodesk.Revit.DB import*
 import Autodesk.Revit.Creation as oCreate
 import Autodesk.Revit.ApplicationServices.Application 
+# rhino.inside utilities
 from RhinoInside.Revit import Revit, Convert
 clr.ImportExtensions(Convert.Geometry)
+# Import DocumentManager and TransactionManager
 clr.AddReference("RevitServices")
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
@@ -38,6 +42,7 @@ class Schuecoprofile():
     
     def __init__(self,dtemplpath,famname,famdetname,typename,famproftempath,contournm,extlocation):
         ############## Variables  ###########
+
         self.objs= Select.AllObjectsName()
        
         self.docr=Revit.ActiveDBDocument
@@ -67,8 +72,6 @@ class Schuecoprofile():
         self.famload(self.proffamil,self.docr)
     
     
-  
-
     def objects (self,obj):    
         objsfam = [x for x in obj if not "a_" in x]
         return objsfam
