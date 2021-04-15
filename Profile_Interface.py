@@ -19,10 +19,13 @@ doc= Revit.ActiveDBDocument
 ## //// VERTICAL PROFILES PLACEMENT PARAMETERS  ///###
 
 ### no mirror profiles##
+
 nmirrpv=("V02_75mm","V04_270mm")
 vnmirrk=("C,Axis,1","B,Axis,1.01")
 vnmirrenpl=("3.01","2.01")
+
 ### mirror profiles ###
+
 mirrpv=("V04_75mm","V02_75mm")
 vmirrk=("A,Axis,1","A,Axis,2.01")
 vmirrenpl=("2.01","3.01")
@@ -30,27 +33,31 @@ Vplace=s.familyschueco.SchuecoFamily()
 
 
 ### /// HORIZONTAL PROFILES PLACEMENT PARAMETERS /// ###
+
 Hp=("H02_147mm", "H01-2_75mm", "H01-1_75mm")
 hk=("A.01,Axis,2", "A,Axis,1", "A,Axis,3" )
 henpl=("C.01", "C", "C")
 
 Hplace=s.familyschueco.SchuecoFamily()
+
 ###### /// panels/// ####
+
 panelgl=s.familyschueco.SchuecoFamily()
 
 ####cglazong
+
 lckkeyp="A.01,Axis,1.01"
 hegihtpnl="2.01"
 widthpnl="B.01"
+
 ##### spandrell
+
 panelsp=s.familyschueco.SchuecoFamily()
 lckkeysp= "A.01,Ext. Axis 1,2.01"
 heightsp="3.01"
 widthsp="C.01"
 
 """
-
-
 
 ###### Profile Creation ####
 
@@ -65,7 +72,10 @@ for i in files:
     s.profileschueco.Schuecoprofile(detpth,fname,fdname,i,proftmplpth,contour,extrloc)
     rs.Command("! _-New None")
 
+
 """
+
+
 ##### Profile Placement #####
 
 for i,j in enumerate(nmirrpv):
@@ -79,7 +89,6 @@ for i,j in enumerate(Hp):
 
 
 #### Panel Placement #####
-
 
 panelgl.panelplacement(doc,"Glz",54,lckkeyp,hegihtpnl,widthpnl)
 panelsp.panelplacement(doc,"Spandrel",276,lckkeysp,heightsp,widthsp)

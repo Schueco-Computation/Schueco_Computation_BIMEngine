@@ -84,7 +84,6 @@ for i,j in enumerate(files):
 
 famwindow.LoadFamily(doc)
 
-
 family=s.familyschueco.SchuecoFamily()
 
 family.windowinstace(doc,wtypename,"A.01,Axis,1.01","2.01","B.01")
