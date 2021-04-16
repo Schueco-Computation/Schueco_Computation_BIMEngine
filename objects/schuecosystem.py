@@ -97,7 +97,7 @@ class Unit():
 
         self.detpth=() #"C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Revit Templates\\Detail Item.rft" # 01 --- shared 
         
-        self.fname=()#"schueco_det_prof" # 02 --- shared
+        self.fname="schueco_det_prof" # 02 --- shared
         
         self.fdname=()# "Schueco_ USC-Cust_ Det" # 03 --- shared
         
@@ -189,12 +189,10 @@ class Unit():
         for i in prof_files:
             path = (path_prof_files+"{}").format(i) 
             rs.DocumentModified(False)
-            rs.Command("! _-New None")
             rs.Command('-Open "{}" _Enter'.format(path))
             filedname=(fdname+"{}").format(i)
             profileschueco.Schuecoprofile(detpth,filedname,fdname,i,proftmplpth,contour,extrloc)
-            rs.Command("! _-New None")
-            
+           
 
     def create_profile(self):
         self.profile_creation(self.path_prof_files,self.prof_files,self.detpth,self.fdname,self.fname,self.proftmplpth,self.contour,self.extrloc)
@@ -204,13 +202,10 @@ class Unit():
     def frame_creation(self,path_frame_files,frame_files,detpth,fdname,fname,frametmplpth,contour,extrloc,famwindow):
         for i in frame_files:
             path = (path_frame_files+"{}").format(i)
-            #print (path)
             rs.DocumentModified(False)
-            rs.Command("! _-New None")
             rs.Command('-Open "{}" _Enter'.format(path))
             filedname=(fdname+"{}").format(i)
             frameschueco.Schuecoframe(detpth,fname,filedname,i,frametmplpth,contour,extrloc,famwindow)
-            rs.Command("! _-New None")
         
 
     def frame_placement(self,frame_files,famwindow,window):
@@ -245,9 +240,6 @@ class Unit():
 
 
     """
-
-    
-
 
     ##### Family Functions ####
 
