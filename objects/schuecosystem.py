@@ -5,10 +5,9 @@ import profileschueco
 import frameschueco
 import windowschueco
 import familyschueco
-#import schuecobim as s
 from RhinoInside.Revit import Revit, Convert
 
-class unit():
+class Unit():
     """
                     ###### Shared Creation Parameters #####
 
@@ -114,31 +113,24 @@ class unit():
         
         self.proftmplpth=""# "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Revit Templates\\A_Profile.rft" #automate
         
-        #self.profile_creation(self.path_prof_files,self.prof_files,self.detpth,self.fdname,self.fname,self.proftmplpth,self.contour,self.extrloc)
-
-
-        #self.doc=()# Revit.ActiveDBDocument ### should be given
-
-
-
-
         ###### Window Creation Parameters #####
 
+        self.path_frame_files =""# "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Rhino_files\\FrameFiles\\"
+        
+        self.wtypename=""#"Schueco_UDC-80-UZB_Win-in_Family01"
+
+        self.wtemppth=""#"D:\Schueco\Programming\Develping_projects_local\Revit Templates\F_Window.rft"
+
+
+
+            ##### Frame Creation  Parameters #####
+
+        self.frame_files = ["Schueco_UDC-80-UZB_Frame_H01"]#,"Schueco_UDC-80-UZB_Frame_H02","Schueco_UDC-80-UZB_Frame_V01","Schueco_UDC-80-UZB_Frame_V02"]
+        
+        self.frametmplpth= "D:\\Schueco\\Programming\\Develping_projects_local\\Revit Templates\\D_Frame_Window.rft" #automate
+
+    
     """
-            self.wtypename=""#"Schueco_UDC-80-UZB_Win-in_Family01"
-
-            self.wtemppth=""#"D:\Schueco\Programming\Develping_projects_local\Revit Templates\F_Window.rft"
-
-
-
-                ##### Frame Creation  Parameters #####
-
-            
-            self.frame_files = ["Schueco_UDC-80-UZB_Frame_H01"]#,"Schueco_UDC-80-UZB_Frame_H02","Schueco_UDC-80-UZB_Frame_V01","Schueco_UDC-80-UZB_Frame_V02"]
-            
-            self.frametmplpth= "D:\\Schueco\\Programming\\Develping_projects_local\\Revit Templates\\D_Frame_Window.rft" #automate
-
-
             ###### Family Parameters #####
             
             ###### Profile placement parameters ####
@@ -187,11 +179,11 @@ class unit():
             self.heightw= Window panel placement height end-plane
             self.widthw= Window panel placement width end-plane
         
-        ##### Profile Creation Functions ####
+        
 
     """
 
-    
+    ##### Profile Creation Functions ####
 
     def profile_creation(self,path_prof_files,prof_files,detpth,fdname,fname,proftmplpth,contour,extrloc):
         for i in prof_files:
@@ -203,26 +195,58 @@ class unit():
             profileschueco.Schuecoprofile(detpth,filedname,fdname,i,proftmplpth,contour,extrloc)
             rs.Command("! _-New None")
             
-            ##### Window Creation Functions ####
-
-            # window=s.windowschueco.Schuecowindow()
-            # famwindow=window.famwindow(wtemppth,wtypename)
-
 
     def create_profile(self):
-        return self.profile_creation(self.path_prof_files,self.prof_files,self.detpth,self.fdname,self.fname,self.proftmplpth,self.contour,self.extrloc)
-            #### Frame Creation Functions 
-    """
-    def frame_creation(self,path,dname,detpth,fname,frametmplpth,extrloc,famwindow):
-        for i in files:
-            #path = "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Rhino_files\\Renamed_files\\{}".format(i) ### Change path!!!
+        self.profile_creation(self.path_prof_files,self.prof_files,self.detpth,self.fdname,self.fname,self.proftmplpth,self.contour,self.extrloc)
+
+    ##### Window Creation Functions ####
+
+    def frame_creation(self,path_frame_files,frame_files,detpth,fdname,fname,frametmplpth,contour,extrloc,famwindow):
+        for i in frame_files:
+            path = (path_frame_files+"{}").format(i)
             #print (path)
             rs.DocumentModified(False)
             rs.Command("! _-New None")
             rs.Command('-Open "{}" _Enter'.format(path))
-            fdname=(dname+"{}").format(i)
-            frameschueco.Schuecoframe(detpth,fname,fdname,i,frametmplpth,contour,extrloc,famwindow)
+            filedname=(fdname+"{}").format(i)
+            frameschueco.Schuecoframe(detpth,fname,filedname,i,frametmplpth,contour,extrloc,famwindow)
             rs.Command("! _-New None")
+        
+
+    def frame_placement(self,frame_files,famwindow,window):
+
+        frplaces=["Bottom","Top","Right","Left"]
+
+        for i,j in enumerate(frame_files):
+            if "H" in j:
+        #print j
+                window.placefrhor(famwindow,j,frplaces[i])
+            else:
+                window.placefrvert(famwindow,j,frplaces[i])
+
+
+    def create_window(self):
+
+        window= windowschueco.Schuecowindow()
+
+        famwindow= window.famwindow(self.wtemppth,self.wtypename)
+
+        self.frame_creation(self.path_frame_files,self.frame_files,self.detpth,self.fdname,self.fname,self.frametmplpth,self.contour,self.extrloc,famwindow)
+
+        self.frame_placement(self.frame_files,famwindow,window)
+
+        window.windowpanel(famwindow)
+
+        window.loadwindow(famwindow)
+
+        #return (window,famwindow)
+        
+        #### Frame Creation Functions 
+
+
+    """
+
+    
 
 
     ##### Family Functions ####
