@@ -7,7 +7,7 @@ import windowschueco
 import familyschueco
 from RhinoInside.Revit import Revit, Convert
 
-class unit():
+class Unit():
     """
                     ###### Shared Creation Parameters #####
 
