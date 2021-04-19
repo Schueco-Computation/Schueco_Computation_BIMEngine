@@ -133,7 +133,7 @@ class Unit():
     
             ###### Family Parameters #####
 
-        self.faminstance=()
+        self.faminstance=() 
 
         self.doc= Revit.ActiveDBDocument
             ###### Profile placement parameters ####
@@ -141,11 +141,11 @@ class Unit():
                     ##  VERTICAL 
 
                         ### no mirror profiles ##
-
+        """
         self.nmirrpv=("V02_75mm","V04_270mm")
         self.vnmirrk= ("C,Axis,1","B,Axis,1.01")
         self.vnmirrenpl= ("3.01","2.01")
-    """
+        
                     ### mirror profiles ###
 
         self.mirrpv= Mirror vertical profiles names ("V04_75mm","V02_75mm")
@@ -159,24 +159,25 @@ class Unit():
         self.hk= Horizontal profiles placement location keys ("A.01,Axis,2", "A,Axis,1", "A,Axis,3" )
         self.henpl= Horizontal profiles placement end-planes ("C.01", "C", "C")
 
-        
+
+        """
                 ###### Panel placement parameters ####
 
     
                     #### Glazing placement
-
-        self.lckkeyp= Glazing panel placement location key "A.01,Axis,1.01"
-        self.hegihtpnl= Glazing panel placement height end-plane "2.01"
-        self.widthpnl= Glazing panel placement width end-plane"B.01"
-
+        
+        self.lckkeyp= "A.01,Axis,1.01"
+        self.hegihtpnl= "2.01"
+        self.widthpnl="B.01"
+        
                     ##### Spandrel placement
-
-        self.lckkeysp= Spandrel panel placement location key "A.01,Ext. Axis 1,2.01"
-        self.heightsp= Spandrel panel placement height end-plane"3.01"
-        self.widthsp= Spandrel panel placement width end-plane"C.01"
-
+        
+        self.lckkeysp="A.01,Ext. Axis 1,2.01"
+        self.heightsp= "3.01"
+        self.widthsp= "C.01"
+        
             ##### Window Placement Parameters #####
-    """
+        
         self.lckkeyw= "A.01,Axis,1.01"
         self.heightw="2.01"
         self.widthw= "B.01"
@@ -246,8 +247,8 @@ class Unit():
 
 
     def create_family(self):
-        
-        familyschueco.SchuecoFamily()
+
+        return familyschueco.SchuecoFamily()
 
     def family_profile_placement(self):
 
@@ -278,18 +279,22 @@ class Unit():
     def family_panel_placement(self):
 
         doc=self.doc
-        lckkeyp=self.lckkeyp
-        hegihtpnl=self.hegihtpnl
-        widthpnl=self.widthpnl
-
-        self.faminstance.panelplacement(doc,"Glz",54,lckkeyp,hegihtpnl,widthpnl)
-
+        
         lckkeysp=self.lckkeysp
         heightsp=self.heightsp
         widthsp=self.widthsp
 
 
         self.faminstance.panelplacement(doc,"Spandrel",276,lckkeysp,heightsp,widthsp)
+
+        
+        lckkeyp=self.lckkeyp
+        hegihtpnl=self.hegihtpnl
+        widthpnl=self.widthpnl
+
+        self.faminstance.panelplacement(doc,"Glz",54,lckkeyp,hegihtpnl,widthpnl)
+
+        
 
     def family_window_placement(self):
         
