@@ -129,10 +129,11 @@ class Unit():
         
         self.frametmplpth= "D:\\Schueco\\Programming\\Develping_projects_local\\Revit Templates\\D_Frame_Window.rft" #automate
 
-    
+
     
             ###### Family Parameters #####
 
+        self.faminstance=()
 
         self.doc= Revit.ActiveDBDocument
             ###### Profile placement parameters ####
@@ -141,46 +142,46 @@ class Unit():
 
                         ### no mirror profiles ##
 
-            self.nmirrpv=("V02_75mm","V04_270mm")
-            self.vnmirrk= ("C,Axis,1","B,Axis,1.01")
-            self.vnmirrenpl= ("3.01","2.01")
+        self.nmirrpv=("V02_75mm","V04_270mm")
+        self.vnmirrk= ("C,Axis,1","B,Axis,1.01")
+        self.vnmirrenpl= ("3.01","2.01")
     """
-                        ### mirror profiles ###
+                    ### mirror profiles ###
 
-            self.mirrpv= Mirror vertical profiles names ("V04_75mm","V02_75mm")
-            self.vmirrk= Mirror vertical profiles placement location keys ("A,Axis,1","A,Axis,2.01")
-            self.vmirrenpl= Mirror vertical profiles placement end-planes("2.01","3.01")
-            
-            
-                    ## HORIZONTAL 
+        self.mirrpv= Mirror vertical profiles names ("V04_75mm","V02_75mm")
+        self.vmirrk= Mirror vertical profiles placement location keys ("A,Axis,1","A,Axis,2.01")
+        self.vmirrenpl= Mirror vertical profiles placement end-planes("2.01","3.01")
+        
+        
+                ## HORIZONTAL 
 
-            self.Hp= Horizontal profiles names ("H02_147mm", "H01-2_75mm", "H01-1_75mm")
-            self.hk= Horizontal profiles placement location keys ("A.01,Axis,2", "A,Axis,1", "A,Axis,3" )
-            self.henpl= Horizontal profiles placement end-planes ("C.01", "C", "C")
-
-            
-                    ###### Panel placement parameters ####
+        self.Hp= Horizontal profiles names ("H02_147mm", "H01-2_75mm", "H01-1_75mm")
+        self.hk= Horizontal profiles placement location keys ("A.01,Axis,2", "A,Axis,1", "A,Axis,3" )
+        self.henpl= Horizontal profiles placement end-planes ("C.01", "C", "C")
 
         
-                        #### Glazing placement
+                ###### Panel placement parameters ####
 
-            self.lckkeyp= Glazing panel placement location key "A.01,Axis,1.01"
-            self.hegihtpnl= Glazing panel placement height end-plane "2.01"
-            self.widthpnl= Glazing panel placement width end-plane"B.01"
+    
+                    #### Glazing placement
 
-                        ##### Spandrel placement
+        self.lckkeyp= Glazing panel placement location key "A.01,Axis,1.01"
+        self.hegihtpnl= Glazing panel placement height end-plane "2.01"
+        self.widthpnl= Glazing panel placement width end-plane"B.01"
 
-            self.lckkeysp= Spandrel panel placement location key "A.01,Ext. Axis 1,2.01"
-            self.heightsp= Spandrel panel placement height end-plane"3.01"
-            self.widthsp= Spandrel panel placement width end-plane"C.01"
+                    ##### Spandrel placement
 
-                ##### Window Placement Parameters #####
+        self.lckkeysp= Spandrel panel placement location key "A.01,Ext. Axis 1,2.01"
+        self.heightsp= Spandrel panel placement height end-plane"3.01"
+        self.widthsp= Spandrel panel placement width end-plane"C.01"
 
-            self.lckkeyw= Window placement location key "A.01,Axis,1.01"
-            self.heightw= Window panel placement height end-plane "2.01"
-            self.widthw= Window panel placement width end-plane "B.01"
-        
+            ##### Window Placement Parameters #####
     """
+        self.lckkeyw= "A.01,Axis,1.01"
+        self.heightw="2.01"
+        self.widthw= "B.01"
+        
+    
 
     ##### Profile Creation Functions ####
 
@@ -220,6 +221,8 @@ class Unit():
 
 
     def create_window(self):
+        
+        doc=self.doc
 
         window= windowschueco.Schuecowindow()
 
@@ -231,7 +234,8 @@ class Unit():
 
         window.windowpanel(famwindow)
 
-        window.loadwindow(famwindow)
+        window.loadwindow(doc,famwindow)
+
 
         #return (window,famwindow)
         
@@ -241,8 +245,9 @@ class Unit():
     ##### Family Functions ####
 
 
-    def family_creation(self):
-        return familyschueco.SchuecoFamily()
+    def create_family(self):
+        
+        familyschueco.SchuecoFamily()
 
     def family_profile_placement(self):
 
@@ -260,14 +265,14 @@ class Unit():
         vmirrk=self.vmirrk
         vmirrenpl=self.vmirrenpl
 
-        for i,j in enumerate(mirrpv)
+        for i,j in enumerate(mirrpv):
             self.faminstance.instanceplacementH(doc,j,vmirrk[i],vmirrenpl[i],0)
         
         Hp=self.Hp
         hk=self.hk
         henpl=self.henpl
 
-        for i,j in enumerate(Hp)
+        for i,j in enumerate(Hp):
             self.faminstance.instanceplacementH(doc,j,hk[i],henpl[i],0)
     
     def family_panel_placement(self):

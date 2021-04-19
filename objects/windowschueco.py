@@ -70,6 +70,8 @@ class Schuecowindow():
     def placefrvert(self,famwindow,frame,place):
         return Window.NewVerticalFrameInstance(famwindow,frame,place,False)
    
+    def loadwindow(self,doc,famwindow):
+        famwindow.LoadFamily(doc)
 
     
 
