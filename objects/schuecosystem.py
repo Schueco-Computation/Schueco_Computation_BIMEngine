@@ -130,19 +130,21 @@ class Unit():
         self.frametmplpth= "D:\\Schueco\\Programming\\Develping_projects_local\\Revit Templates\\D_Frame_Window.rft" #automate
 
     
-    """
+    
             ###### Family Parameters #####
-            
+
+
+        self.doc= Revit.ActiveDBDocument
             ###### Profile placement parameters ####
 
                     ##  VERTICAL 
 
                         ### no mirror profiles ##
 
-            self.nmirrpv= Non mirror vertical profiles names ("V02_75mm","V04_270mm")
-            self.vnmirrk= Non mirror vertical profiles placement location keys ("C,Axis,1","B,Axis,1.01")
-            self.vnmirrenpl= Non mirror vertical profiles placement end-planes ("3.01","2.01")
-
+            self.nmirrpv=("V02_75mm","V04_270mm")
+            self.vnmirrk= ("C,Axis,1","B,Axis,1.01")
+            self.vnmirrenpl= ("3.01","2.01")
+    """
                         ### mirror profiles ###
 
             self.mirrpv= Mirror vertical profiles names ("V04_75mm","V02_75mm")
@@ -168,19 +170,16 @@ class Unit():
 
                         ##### Spandrel placement
 
-            
             self.lckkeysp= Spandrel panel placement location key "A.01,Ext. Axis 1,2.01"
             self.heightsp= Spandrel panel placement height end-plane"3.01"
             self.widthsp= Spandrel panel placement width end-plane"C.01"
 
                 ##### Window Placement Parameters #####
 
-            self.lckkeyw= Window placement location key
-            self.heightw= Window panel placement height end-plane
-            self.widthw= Window panel placement width end-plane
+            self.lckkeyw= Window placement location key "A.01,Axis,1.01"
+            self.heightw= Window panel placement height end-plane "2.01"
+            self.widthw= Window panel placement width end-plane "B.01"
         
-        
-
     """
 
     ##### Profile Creation Functions ####
@@ -239,13 +238,60 @@ class Unit():
         #### Frame Creation Functions 
 
 
-    """
-
     ##### Family Functions ####
 
-    # Vplace=s.familyschueco.SchuecoFamily()
-    # Hplace=s.familyschueco.SchuecoFamily()
-    # panelgl=s.familyschueco.SchuecoFamily()
-    # panelsp=s.familyschueco.SchuecoFamily()
 
-   """
+    def family_creation(self):
+        return familyschueco.SchuecoFamily()
+
+    def family_profile_placement(self):
+
+        doc=self.doc
+
+        nmirrpv=self.mirrpv
+        vnmirrk=self.vnmirrk
+        vnmirrenpl=self.vnmirrenpl
+        
+        for i,j in enumerate(nmirrpv):
+
+            self.faminstance.instanceplacementV(doc,j,vnmirrk[i],vnmirrenpl[i],1)
+
+        mirrpv=self.mirrpv
+        vmirrk=self.vmirrk
+        vmirrenpl=self.vmirrenpl
+
+        for i,j in enumerate(mirrpv)
+            self.faminstance.instanceplacementH(doc,j,vmirrk[i],vmirrenpl[i],0)
+        
+        Hp=self.Hp
+        hk=self.hk
+        henpl=self.henpl
+
+        for i,j in enumerate(Hp)
+            self.faminstance.instanceplacementH(doc,j,hk[i],henpl[i],0)
+    
+    def family_panel_placement(self):
+
+        doc=self.doc
+        lckkeyp=self.lckkeyp
+        hegihtpnl=self.hegihtpnl
+        widthpnl=self.widthpnl
+
+        self.faminstance.panelplacement(doc,"Glz",54,lckkeyp,hegihtpnl,widthpnl)
+
+        lckkeysp=self.lckkeysp
+        heightsp=self.heightsp
+        widthsp=self.widthsp
+
+
+        self.faminstance.panelplacement(doc,"Spandrel",276,lckkeysp,heightsp,widthsp)
+
+    def family_window_placement(self):
+        
+        doc=self.doc
+        wtypename=self.wtypename
+        lckkeyw=self.lckkeyw
+        heightw=self.heightw
+        widthw=self.widthw
+        
+        self.faminstance.windowinstace(doc,wtypename,lckkeyw,heightw,widthw)
