@@ -141,26 +141,26 @@ class Unit():
                     ##  VERTICAL 
 
                         ### no mirror profiles ##
-        """
-        self.nmirrpv=("V02_75mm","V04_270mm")
-        self.vnmirrk= ("C,Axis,1","B,Axis,1.01")
-        self.vnmirrenpl= ("3.01","2.01")
+        
+        self.nmirrpv=["V02_75mm","V04_270mm"]
+        self.vnmirrk= ["C,Axis,1","B,Axis,1.01"]
+        self.vnmirrenpl= ["3.01","2.01"]
         
                     ### mirror profiles ###
 
-        self.mirrpv= Mirror vertical profiles names ("V04_75mm","V02_75mm")
-        self.vmirrk= Mirror vertical profiles placement location keys ("A,Axis,1","A,Axis,2.01")
-        self.vmirrenpl= Mirror vertical profiles placement end-planes("2.01","3.01")
+        self.mirrpv= ["V04_75mm","V02_75mm"]
+        self.vmirrk= ["A,Axis,1","A,Axis,2.01"]
+        self.vmirrenpl= ["2.01","3.01"] 
         
         
                 ## HORIZONTAL 
+        
+        self.Hp= ["H02_147mm", "H01-2_75mm", "H01-1_75mm"]
+        self.hk= ["A.01,Axis,2", "A,Axis,1", "A,Axis,3"]
+        self.henpl= ["C.01", "C", "C"]
 
-        self.Hp= Horizontal profiles names ("H02_147mm", "H01-2_75mm", "H01-1_75mm")
-        self.hk= Horizontal profiles placement location keys ("A.01,Axis,2", "A,Axis,1", "A,Axis,3" )
-        self.henpl= Horizontal profiles placement end-planes ("C.01", "C", "C")
 
-
-        """
+        
                 ###### Panel placement parameters ####
 
     
@@ -254,7 +254,7 @@ class Unit():
 
         doc=self.doc
 
-        nmirrpv=self.mirrpv
+        nmirrpv=self.nmirrpv
         vnmirrk=self.vnmirrk
         vnmirrenpl=self.vnmirrenpl
         
@@ -267,7 +267,8 @@ class Unit():
         vmirrenpl=self.vmirrenpl
 
         for i,j in enumerate(mirrpv):
-            self.faminstance.instanceplacementH(doc,j,vmirrk[i],vmirrenpl[i],0)
+
+            self.faminstance.instanceplacementV(doc,j,vmirrk[i],vmirrenpl[i],0)
         
         Hp=self.Hp
         hk=self.hk
@@ -275,6 +276,7 @@ class Unit():
 
         for i,j in enumerate(Hp):
             self.faminstance.instanceplacementH(doc,j,hk[i],henpl[i],0)
+
     
     def family_panel_placement(self):
 
