@@ -7,12 +7,12 @@ def block_org():
     names=[]
 
     ###### First explode #####
-
+    """
     a=rs.ObjectsByType(4096)
 
     for i in a:
         rs.ExplodeBlockInstance(i)
-
+    """
     ###### Nested explode #####
 
     y=rs.ObjectsByType(4096)
@@ -43,10 +43,46 @@ def block_org():
             names.pop(names.index(i))
 
     qtty=[]
+
     for i in names:
          qtty.append(names.count(i))
 
+
+    #### Reduce Polylines points #####
+    
+    degrees=(rs.AllObjects())
+    for i in degrees:
+        rs.SelectObject(i)
+        rs.Command('-ChangeDegree _Deformable=Yes 1 _Enter')
+        
+    reduced=(rs.AllObjects())
+
+    for i in reduced:
+        rs.SelectObject(i)
+        rs.Command('-ReducePolyline  0.8 _Enter')
+
+   
+    ##### Naming reference lines and simplified profile #####
+
+    curvelist=["a_simp-prof","a_ref-line1","a_ref-line2"]
+    for i in curvelist:
+        rs.ObjectName(rs.ObjectsByLayer(i),i)
+
+
+    ##### Cleaning file ####
+
+    rest=rs.AllObjects()
+
+    for i in rest:
+        if rs.ObjectName(i) == None:
+            #print (rs.ObjectName(i))
+            rs.DeleteObjects(i)
+        elif rs.CurveLength(i) < float(0.8):
+            rs.DeleteObjects(i)
+
     ##### Article numbers Dictionaries #####
+
+
 
     articles={}
     keys=range(len(names))
@@ -54,6 +90,9 @@ def block_org():
         if "guiding" not in names[i]:
             articles[names[i]]=(qtty[i])
         
+    
+    rs.UnselectObjects(rs.AllObjects())
+
     ##### Article Number String ####
     articles_str= ''
     

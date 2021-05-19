@@ -30,7 +30,34 @@ from RevitServices.Transactions import TransactionManager
 
 def NewHorizontalProfileInstace(Document, TypeName, LocationKey, EndRefPlane, MirrorBoolean):
     
-    listverticalplanes = ("A", "A.01", "B", "B.01", "B.02", "C", "C.01", "Center")
+    all = FilteredElementCollector(Document).OfClass(ReferencePlane).ToElements()
+    output = []
+    for x in all:
+        output.append(x.Name)
+
+
+
+    listverticalplanes = []# ("A", "A.01", "B", "B.01", "B.02", "C", "C.01", "Center")
+    listhorizontalplanes =[]# ("Axis", "Ext. Axis 1", "Ext. Axis 2", "Ext. Axis 3")
+    intviewlisthorizontalplanes =[] #("1", "1.01", "2", "2.01","2.02", "3", "3.01")
+    
+    firstchar = []
+
+    for x in output:
+        firstchar.append(x[0])
+    
+    letras = [] 
+    for i,j in enumerate(firstchar):
+        if j.isnumeric():
+            intviewlisthorizontalplanes.append(output[i])
+        else:
+            letras.append(output[i])
+    for x in letras:
+        if "Axis" in x:
+            listhorizontalplanes.append(x)
+        else:
+            listverticalplanes.append(x)
+
 
     verticalref = []
 
@@ -45,7 +72,7 @@ def NewHorizontalProfileInstace(Document, TypeName, LocationKey, EndRefPlane, Mi
     
 
 
-    listhorizontalplanes = ("Axis", "Ext. Axis 1", "Ext. Axis 2", "Ext. Axis 3")
+    
 
     horizontalref = []
 
@@ -60,7 +87,7 @@ def NewHorizontalProfileInstace(Document, TypeName, LocationKey, EndRefPlane, Mi
 
     horizontallines = []
 
-    intviewlisthorizontalplanes = ("1", "1.01", "2", "2.01","2.02", "3", "3.01")
+    
 
     intviewhorizontalref = []
 
@@ -135,7 +162,7 @@ def NewHorizontalProfileInstace(Document, TypeName, LocationKey, EndRefPlane, Mi
     endsloc = refplanedi[EndRefPlane]
 
     ref = refplanedi[txt[0]].GetReference()
-    scpoint = XYZ(0, 0 , 0)
+    scpoint = XYZ(0, 0 , -1)
     newobj = Document.FamilyCreate.NewFamilyInstance(ref, startsloc, scpoint, collector)
 
     instance = []
@@ -186,8 +213,34 @@ def NewHorizontalProfileInstace(Document, TypeName, LocationKey, EndRefPlane, Mi
     return instance[0]
 
 def NewVerticalProfileInstace(Document, TypeName, LocationKey, EndRefPlane, MirrorBoolean):
-   
-    listverticalplanes = ("A", "A.01", "B", "B.01", "B.02", "C", "C.01", "Center")
+
+    
+    all = FilteredElementCollector(Document).OfClass(ReferencePlane).ToElements()
+    output = []
+    for x in all:
+        output.append(x.Name)
+
+    listverticalplanes = []# ("A", "A.01", "B", "B.01", "B.02", "C", "C.01", "Center")
+    listhorizontalplanes =[]# ("Axis", "Ext. Axis 1", "Ext. Axis 2", "Ext. Axis 3")
+    intviewlisthorizontalplanes =[] #("1", "1.01", "2", "2.01","2.02", "3", "3.01")
+    
+    firstchar = []
+
+    for x in output:
+        firstchar.append(x[0])
+    
+    letras = [] 
+    for i,j in enumerate(firstchar):
+        if j.isnumeric():
+            intviewlisthorizontalplanes.append(output[i])
+        else:
+            letras.append(output[i])
+    for x in letras:
+        if "Axis" in x:
+            listhorizontalplanes.append(x)
+        else:
+            listverticalplanes.append(x)
+
     
     verticalref = []
     
@@ -202,7 +255,7 @@ def NewVerticalProfileInstace(Document, TypeName, LocationKey, EndRefPlane, Mirr
          
     # ref = C.GetReference()
     
-    listhorizontalplanes = ("Axis", "Ext. Axis 1", "Ext. Axis 2", "Ext. Axis 3")
+   
     
     horizontalref = []
 
@@ -217,7 +270,7 @@ def NewVerticalProfileInstace(Document, TypeName, LocationKey, EndRefPlane, Mirr
     
     horizontallines = []
     
-    intviewlisthorizontalplanes = ("1", "1.01", "2", "2.01","2.02", "3", "3.01")
+    
     
     intviewhorizontalref = []
     
@@ -340,11 +393,258 @@ def NewVerticalProfileInstace(Document, TypeName, LocationKey, EndRefPlane, Mirr
     
     return instance[0]
 
-def NewPanel(doc, Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidthRefPlane):
+
+    
+    all = FilteredElementCollector(Document).OfClass(ReferencePlane).ToElements()
+    output = []
+    for x in all:
+        output.append(x.Name)
+    
+    test = []
+    for x in output:
+        test.append(x[0])
+    
+    listverticalplanes = []
+    listhorizontalplanes = []
+    intviewlisthorizontalplanes = []
+    
+    letras = [] 
+    for i,j in enumerate(test):
+        if j.isnumeric():
+            intviewlisthorizontalplanes.append(output[i])
+        else:
+            letras.append(output[i])
+    
+    for x in letras:
+        if "Axis" in x:
+            listhorizontalplanes.append(x)
+        else:
+            listverticalplanes.append(x)
+    
+    #First: Dictionaries
+    
+    verticalref = []
+    
+    for x in listverticalplanes:
+        bip = BuiltInParameter.DATUM_TEXT
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, x, False)
+        filter = ElementParameterFilter(rule)
+        all = FilteredElementCollector(Document).OfClass(ReferencePlane).WherePasses(filter).FirstElement()
+        verticalref.append(all)
+    
+    horizontalref = []
+
+    for x in listhorizontalplanes:
+        bip = BuiltInParameter.DATUM_TEXT
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, x, False)
+        filter = ElementParameterFilter(rule)
+        hall = FilteredElementCollector(Document).OfClass(ReferencePlane).WherePasses(filter).FirstElement()
+        horizontalref.append(hall)
+    
+    horizontallines = []
+    intviewhorizontalref = []
+    
+    for x in intviewlisthorizontalplanes:
+        bip = BuiltInParameter.DATUM_TEXT
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, x, False)
+        filter = ElementParameterFilter(rule)
+        intvhall = FilteredElementCollector(Document).OfClass(ReferencePlane).WherePasses(filter).FirstElement()
+        intviewhorizontalref.append(intvhall)
+    
+    pts = []
+    for i in verticalref:
+        equis = (i.BubbleEnd).X
+        for j in horizontalref:
+            ye = (j.BubbleEnd).Y
+            for k in intviewhorizontalref:
+                zeta = (k.BubbleEnd).Z
+                pts.append(XYZ(equis,ye,zeta))
+    
+    keys = []
+    for i in listverticalplanes:
+        for j in listhorizontalplanes:
+            for k in intviewlisthorizontalplanes:
+                keys.append(''.join([i,',',j,',',k]))
+    
+    ################ Dictionary ptsdi
+    ptsdi = {keys[i]:pts[i] for i in range(len(keys))}
+    ################
+    
+    keysname = listverticalplanes+listhorizontalplanes+intviewlisthorizontalplanes
+    refall = verticalref+horizontalref+intviewhorizontalref
+    
+    ################ Dictionary refplanedi
+    refplanedi = {keysname[i]:refall[i] for i in range(len(keysname))}
+    
+    ################ Panel
+    
+    keysname = ("Glz","Panel","Spandrel")
+    lst = ("Glz_40mm", "Panel_2mm", "Spandrel-Panel_100mm")
+    
+    paneldi = {keysname[i]:lst[i] for i in range(len(keysname))}
+    
+    panelpicked = paneldi[Typepanel]
+    
+    bip = BuiltInParameter.SYMBOL_NAME_PARAM
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEquals()
+    rule = FilterStringRule(provider, evaluator, panelpicked, False)
+    filter = ElementParameterFilter(rule)
+    panel = FilteredElementCollector(Document).OfCategory(BuiltInCategory.OST_GenericModel).OfClass(FamilySymbol).WherePasses(filter).FirstElement()
+
+    splitname = paneldi[Typepanel].split("_")
+    rename = splitname[0]+ str("_")+str(Thickness)+str("mm")
+    
+    bip = BuiltInParameter.SYMBOL_NAME_PARAM
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEquals()
+    rule = FilterStringRule(provider, evaluator, rename, False)
+    filter = ElementParameterFilter(rule)
+    panelnew = FilteredElementCollector(Document).OfCategory(BuiltInCategory.OST_GenericModel).OfClass(FamilySymbol).WherePasses(filter).FirstElement()
+    
+    conditional = []
+    if panelnew == None:
+        ########################################################
+        familyDocument = panel.Family
+        edit = Document.EditFamily(familyDocument)
+        manager = edit.FamilyManager
+        
+        tsub = TransactionManager.Instance
+        tsub.EnsureInTransaction(edit)
+        
+        newt = manager.NewType(rename)
+        getparam = manager.get_Parameter("Panel thickness")
+        
+        value = Thickness/304.80
+        param = manager.Set(getparam, value)
+        
+        #End Transaction
+        TransactionManager.ForceCloseTransaction(tsub)
+        
+        class FamilyOption(IFamilyLoadOptions):
+    	    def OnFamilyFound(self, familyInUse, overwriteParameterValues):
+    		    overwriteParameterValues = True
+    		    return True
+    
+    	    def OnSharedFamilyFound(self, sharedFamily, familyInUse, source, overwriteParameterValues):
+    		    return True
+        load = edit.LoadFamily(Document, FamilyOption())
+        conditional.append(rename)
+
+    else:
+        conditional.append(rename)
+    ###############################################################
+    
+    t1 = TransactionManager.Instance
+    t1.EnsureInTransaction(Document)
+    
+    startsloc = ptsdi[LocationKey]
+    txt = LocationKey.split(",")
+
+    endsheigthloc = refplanedi[EndHeigthRefPlane]
+    endswidthloc = refplanedi[EndWidthRefPlane]
+    
+    bip = BuiltInParameter.SYMBOL_NAME_PARAM
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEquals()
+    rule = FilterStringRule(provider, evaluator, conditional[0], False)
+    filter = ElementParameterFilter(rule)
+    newpanel = FilteredElementCollector(Document).OfCategory(BuiltInCategory.OST_GenericModel).OfClass(FamilySymbol).WherePasses(filter).FirstElement()
+    newpanel.Activate()
+    
+    newobj = Document.FamilyCreate.NewFamilyInstance(startsloc, newpanel, 0)
+    
+    starts = (refplanedi[txt[2]].BubbleEnd).Z
+    ends = (endsheigthloc.BubbleEnd).Z
+    heigthpanel = ends - starts
+    
+    parameter = newobj.GetParameters("Panel height")
+    setheight = parameter[0].Set(heigthpanel)
+    
+    start = (refplanedi[txt[0]].BubbleEnd).X
+    end = (endswidthloc.BubbleEnd).X
+    widthpanel = end - start
+    
+    param = newobj.GetParameters("Panel width")
+    setwidth = param[0].Set(widthpanel)
+    
+    #End Transaction
+    TransactionManager.ForceCloseTransaction(t1)
+    
+    bip = BuiltInParameter.VIEW_NAME
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEquals()
+    rule = FilterStringRule(provider, evaluator, "Ref. Level", False)
+    filter = ElementParameterFilter(rule)
+    reflevel = FilteredElementCollector(Document).OfClass(ViewPlan).WherePasses(filter).FirstElement()
+
+    bip = BuiltInParameter.VIEW_NAME
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEquals()
+    rule = FilterStringRule(provider, evaluator, "Interior", False)
+    filter = ElementParameterFilter(rule)
+    interior = FilteredElementCollector(Document).OfClass(ViewSection).WherePasses(filter).FirstElement()
+
+    centerref = newobj.GetReferenceByName("Center (Left/Right)")
+    hcenterref = newobj.GetReferenceByName("Center (Front/Back)")
+    heightref = newobj.GetReferenceByName("top")
+    baseref = newobj.GetReferenceByName("bottom")
+    widthref = newobj.GetReferenceByName("right")
+    
+    firstref = refplanedi[txt[0]].GetReference()
+    scnref = refplanedi[txt[1]].GetReference()
+    thirdref = endsheigthloc.GetReference()
+    fourthref = refplanedi[txt[2]].GetReference()
+    fifthref = endswidthloc.GetReference()
+    
+    t2 = TransactionManager.Instance
+    t2.EnsureInTransaction(Document)
+    
+    align = Document.FamilyCreate.NewAlignment(reflevel, firstref, centerref)
+    align2 = Document.FamilyCreate.NewAlignment(reflevel, scnref, hcenterref)
+    align3 = Document.FamilyCreate.NewAlignment(interior, thirdref, heightref)
+    align4 = Document.FamilyCreate.NewAlignment(interior, fourthref, baseref)
+    align5 = Document.FamilyCreate.NewAlignment(reflevel, fifthref, widthref)
+    
+    #End Transaction
+    TransactionManager.ForceCloseTransaction(t2)
+    
+    return newpanel
+    
+    all = FilteredElementCollector(doc).OfClass(ReferencePlane).ToElements()
+    output = []
+    for x in all:
+        output.append(x.Name)
 
     #First: Dictionaries
     
-    listverticalplanes = ("A", "A.01", "B", "B.01", "B.02", "C", "C.01", "Center")
+    listverticalplanes = []# ("A", "A.01", "B", "B.01", "B.02", "C", "C.01", "Center")
+    listhorizontalplanes =[]# ("Axis", "Ext. Axis 1", "Ext. Axis 2", "Ext. Axis 3")
+    intviewlisthorizontalplanes =[] #("1", "1.01", "2", "2.01","2.02", "3", "3.01")
+    
+    firstchar = []
+
+    for x in output:
+        firstchar.append(x[0])
+    
+    letras = [] 
+    for i,j in enumerate(firstchar):
+        if j.isnumeric():
+            intviewlisthorizontalplanes.append(output[i])
+        else:
+            letras.append(output[i])
+    for x in letras:
+        if "Axis" in x:
+            listhorizontalplanes.append(x)
+        else:
+            listverticalplanes.append(x)
+
     
     verticalref = []
     
@@ -359,7 +659,7 @@ def NewPanel(doc, Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidth
          
     # ref = C.GetReference()
     
-    listhorizontalplanes = ("Axis", "Ext. Axis 1", "Ext. Axis 2", "Ext. Axis 3")
+    
     
     horizontalref = []
 
@@ -374,7 +674,7 @@ def NewPanel(doc, Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidth
     
     horizontallines = []
     
-    intviewlisthorizontalplanes = ("1", "1.01", "2", "2.01","2.02", "3", "3.01")
+    
     
     intviewhorizontalref = []
     
@@ -435,7 +735,7 @@ def NewPanel(doc, Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidth
     
     splitname = paneldi[Typepanel].split("_")
     rename = splitname[0]+ str("_")+str(Thickness)+str("mm")
-    panel.Name = rename
+    #panel.Name = rename
 
     value = Thickness/304.80
     param = getparam[0].Set(value)
@@ -512,10 +812,261 @@ def NewPanel(doc, Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidth
     
     return newobj
 
-def NewWindowInstance(Document, TypeName, LocationKey, EndHeigthRefPlane, EndWidthRefPlane):
+def NewPanel(Document, Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidthRefPlane):
+    
+    all = FilteredElementCollector(Document).OfClass(ReferencePlane).ToElements()
+    output = []
+    for x in all:
+        output.append(x.Name)
+    
+    test = []
+    for x in output:
+        test.append(x[0])
+    
+    listverticalplanes = []
+    listhorizontalplanes = []
+    intviewlisthorizontalplanes = []
+    
+    letras = [] 
+    for i,j in enumerate(test):
+        if j.isnumeric():
+            intviewlisthorizontalplanes.append(output[i])
+        else:
+            letras.append(output[i])
+    
+    for x in letras:
+        if "Axis" in x:
+            listhorizontalplanes.append(x)
+        else:
+            listverticalplanes.append(x)
+    
     #First: Dictionaries
     
-    listverticalplanes = ("A", "A.01", "B", "B.01", "B.02", "C", "C.01", "Center")
+    verticalref = []
+    
+    for x in listverticalplanes:
+        bip = BuiltInParameter.DATUM_TEXT
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, x, False)
+        filter = ElementParameterFilter(rule)
+        all = FilteredElementCollector(Document).OfClass(ReferencePlane).WherePasses(filter).FirstElement()
+        verticalref.append(all)
+    
+    horizontalref = []
+
+    for x in listhorizontalplanes:
+        bip = BuiltInParameter.DATUM_TEXT
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, x, False)
+        filter = ElementParameterFilter(rule)
+        hall = FilteredElementCollector(Document).OfClass(ReferencePlane).WherePasses(filter).FirstElement()
+        horizontalref.append(hall)
+    
+    horizontallines = []
+    intviewhorizontalref = []
+    
+    for x in intviewlisthorizontalplanes:
+        bip = BuiltInParameter.DATUM_TEXT
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, x, False)
+        filter = ElementParameterFilter(rule)
+        intvhall = FilteredElementCollector(Document).OfClass(ReferencePlane).WherePasses(filter).FirstElement()
+        intviewhorizontalref.append(intvhall)
+    
+    pts = []
+    for i in verticalref:
+        equis = (i.BubbleEnd).X
+        for j in horizontalref:
+            ye = (j.BubbleEnd).Y
+            for k in intviewhorizontalref:
+                zeta = (k.BubbleEnd).Z
+                pts.append(XYZ(equis,ye,zeta))
+    
+    keys = []
+    for i in listverticalplanes:
+        for j in listhorizontalplanes:
+            for k in intviewlisthorizontalplanes:
+                keys.append(''.join([i,',',j,',',k]))
+    
+    ################ Dictionary ptsdi
+    ptsdi = {keys[i]:pts[i] for i in range(len(keys))}
+    ################
+    
+    keysname = listverticalplanes+listhorizontalplanes+intviewlisthorizontalplanes
+    refall = verticalref+horizontalref+intviewhorizontalref
+    
+    ################ Dictionary refplanedi
+    refplanedi = {keysname[i]:refall[i] for i in range(len(keysname))}
+    
+    ################ Panel
+    
+    keysname = ("Glz","Panel","Spandrel")
+    lst = ("Glz_40mm", "Panel_2mm", "Spandrel-Panel_100mm")
+    
+    paneldi = {keysname[i]:lst[i] for i in range(len(keysname))}
+    
+    panelpicked = paneldi[Typepanel]
+    
+    bip = BuiltInParameter.SYMBOL_NAME_PARAM
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEquals()
+    rule = FilterStringRule(provider, evaluator, panelpicked, False)
+    filter = ElementParameterFilter(rule)
+    panel = FilteredElementCollector(Document).OfCategory(BuiltInCategory.OST_GenericModel).OfClass(FamilySymbol).WherePasses(filter).FirstElement()
+
+    splitname = paneldi[Typepanel].split("_")
+    rename = splitname[0]+ str("_")+str(Thickness)+str("mm")
+    
+    bip = BuiltInParameter.SYMBOL_NAME_PARAM
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEquals()
+    rule = FilterStringRule(provider, evaluator, rename, False)
+    filter = ElementParameterFilter(rule)
+    panelnew = FilteredElementCollector(Document).OfCategory(BuiltInCategory.OST_GenericModel).OfClass(FamilySymbol).WherePasses(filter).FirstElement()
+    
+    conditional = []
+    
+    if panelnew == None:
+        ########################################################
+        familyDocument = panel.Family
+        edit = Document.EditFamily(familyDocument)
+        manager = edit.FamilyManager
+        
+        tsub = TransactionManager.Instance
+        tsub.EnsureInTransaction(edit)
+        
+        newt = manager.NewType(rename)
+        getparam = manager.get_Parameter("Panel thickness")
+        
+        value = Thickness/304.80
+        param = manager.Set(getparam, value)
+        
+        #End Transaction
+        TransactionManager.ForceCloseTransaction(tsub)
+        
+        class FamilyOption(IFamilyLoadOptions):
+    	    def OnFamilyFound(self, familyInUse, overwriteParameterValues):
+    		    overwriteParameterValues = True
+    		    return True
+    
+    	    def OnSharedFamilyFound(self, sharedFamily, familyInUse, source, overwriteParameterValues):
+    		    return True
+        load = edit.LoadFamily(Document, FamilyOption())
+        
+        conditional.append(rename)
+
+    else:
+        conditional.append(rename)
+    ###############################################################
+    
+    t1 = TransactionManager.Instance
+    t1.EnsureInTransaction(Document)
+    
+    startsloc = ptsdi[LocationKey]
+    txt = LocationKey.split(",")
+
+    endsheigthloc = refplanedi[EndHeigthRefPlane]
+    endswidthloc = refplanedi[EndWidthRefPlane]
+    
+    bip = BuiltInParameter.SYMBOL_NAME_PARAM
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEquals()
+    rule = FilterStringRule(provider, evaluator, conditional[0], False)
+    filter = ElementParameterFilter(rule)
+    newpanel = FilteredElementCollector(Document).OfCategory(BuiltInCategory.OST_GenericModel).OfClass(FamilySymbol).WherePasses(filter).FirstElement()
+    newpanel.Activate()
+    
+    newobj = Document.FamilyCreate.NewFamilyInstance(startsloc, newpanel, 0)
+    
+    starts = (refplanedi[txt[2]].BubbleEnd).Z
+    ends = (endsheigthloc.BubbleEnd).Z
+    heigthpanel = ends - starts
+    
+    parameter = newobj.GetParameters("Panel height")
+    setheight = parameter[0].Set(heigthpanel)
+    
+    start = (refplanedi[txt[0]].BubbleEnd).X
+    end = (endswidthloc.BubbleEnd).X
+    widthpanel = end - start
+    
+    param = newobj.GetParameters("Panel width")
+    setwidth = param[0].Set(widthpanel)
+    
+    #End Transaction
+    TransactionManager.ForceCloseTransaction(t1)
+    
+    bip = BuiltInParameter.VIEW_NAME
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEquals()
+    rule = FilterStringRule(provider, evaluator, "Ref. Level", False)
+    filter = ElementParameterFilter(rule)
+    reflevel = FilteredElementCollector(Document).OfClass(ViewPlan).WherePasses(filter).FirstElement()
+
+    bip = BuiltInParameter.VIEW_NAME
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEquals()
+    rule = FilterStringRule(provider, evaluator, "Interior", False)
+    filter = ElementParameterFilter(rule)
+    interior = FilteredElementCollector(Document).OfClass(ViewSection).WherePasses(filter).FirstElement()
+
+    centerref = newobj.GetReferenceByName("Center (Left/Right)")
+    hcenterref = newobj.GetReferenceByName("Center (Front/Back)")
+    heightref = newobj.GetReferenceByName("top")
+    baseref = newobj.GetReferenceByName("bottom")
+    widthref = newobj.GetReferenceByName("right")
+    
+    firstref = refplanedi[txt[0]].GetReference()
+    scnref = refplanedi[txt[1]].GetReference()
+    thirdref = endsheigthloc.GetReference()
+    fourthref = refplanedi[txt[2]].GetReference()
+    fifthref = endswidthloc.GetReference()
+    
+    t2 = TransactionManager.Instance
+    t2.EnsureInTransaction(Document)
+    
+    align = Document.FamilyCreate.NewAlignment(reflevel, firstref, centerref)
+    align2 = Document.FamilyCreate.NewAlignment(reflevel, scnref, hcenterref)
+    align3 = Document.FamilyCreate.NewAlignment(interior, thirdref, heightref)
+    align4 = Document.FamilyCreate.NewAlignment(interior, fourthref, baseref)
+    align5 = Document.FamilyCreate.NewAlignment(reflevel, fifthref, widthref)
+    
+    #End Transaction
+    TransactionManager.ForceCloseTransaction(t2)
+    
+    return newpanel
+
+def NewWindowInstance(Document, TypeName, LocationKey, EndHeigthRefPlane, EndWidthRefPlane):
+    
+    all = FilteredElementCollector(doc).OfClass(ReferencePlane).ToElements()
+    output = []
+    for x in all:
+        output.append(x.Name)
+    #First: Dictionaries
+    
+    listverticalplanes = []# ("A", "A.01", "B", "B.01", "B.02", "C", "C.01", "Center")
+    listhorizontalplanes =[]# ("Axis", "Ext. Axis 1", "Ext. Axis 2", "Ext. Axis 3")
+    intviewlisthorizontalplanes =[] #("1", "1.01", "2", "2.01","2.02", "3", "3.01")
+    
+    firstchar = []
+
+    for x in output:
+        firstchar.append(x[0])
+    
+    letras = [] 
+    for i,j in enumerate(firstchar):
+        if j.isnumeric():
+            intviewlisthorizontalplanes.append(output[i])
+        else:
+            letras.append(output[i])
+    for x in letras:
+        if "Axis" in x:
+            listhorizontalplanes.append(x)
+        else:
+            listverticalplanes.append(x)
+
     
     verticalref = []
     
@@ -530,7 +1081,7 @@ def NewWindowInstance(Document, TypeName, LocationKey, EndHeigthRefPlane, EndWid
          
     # ref = C.GetReference()
     
-    listhorizontalplanes = ("Axis", "Ext. Axis 1", "Ext. Axis 2", "Ext. Axis 3")
+    
     
     horizontalref = []
 
@@ -545,7 +1096,7 @@ def NewWindowInstance(Document, TypeName, LocationKey, EndHeigthRefPlane, EndWid
     
     horizontallines = []
     
-    intviewlisthorizontalplanes = ("1", "1.01", "2", "2.01","2.02", "3", "3.01")
+    
     
     intviewhorizontalref = []
     
