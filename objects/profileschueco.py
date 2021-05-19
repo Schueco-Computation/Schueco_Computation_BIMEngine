@@ -42,12 +42,16 @@ class Schuecoprofile():
     
     def __init__(self,dtemplpath,famname,famdetname,typename,famproftempath,contournm,extlocation):
         ############## Variables  ###########
+        
+        self.blockorg()
+        
+        self.docr=Revit.ActiveDBDocument
 
         self.objs= Select.AllObjectsName()
        
-        self.docr=Revit.ActiveDBDocument
-
+    
         ############## Function Calling ##############
+        
 
         self.newfamdoc=self.newfam(dtemplpath,famname) # 2 Create detail 
 
@@ -72,8 +76,15 @@ class Schuecoprofile():
         self.famload(self.proffamil,self.docr)
     
     
-    def objects (self,obj):    
-        objsfam = [x for x in obj if not "a_" in x]
+    def blockorg(self):
+        return blockorg.block_org()
+
+    def objects (self,obj):   
+        #objsfam = [x for x in obj if not "a_" or "Ref" in x]
+        objsfam =[]
+        for i in obj:
+            if not "a_" in i:
+                objsfam.append(i)
         return objsfam
 
     def newfam (self,temp,name): 

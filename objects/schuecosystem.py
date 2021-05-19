@@ -133,7 +133,7 @@ class Unit():
     
             ###### Family Parameters #####
 
-        self.faminstance=() 
+        self.faminstance=()
 
         self.doc= Revit.ActiveDBDocument
             ###### Profile placement parameters ####
@@ -142,22 +142,22 @@ class Unit():
 
                         ### no mirror profiles ##
         
-        self.nmirrpv=["V02_75mm","V04_270mm"]
-        self.vnmirrk= ["C,Axis,1","B,Axis,1.01"]
-        self.vnmirrenpl= ["3.01","2.01"]
+        self.nmirrpv=["Schueco_AWS75_Prof_H1_445mm","Schueco_AWS75_Prof_H2_296mm","Schueco_AWS75_Prof_H3_299mm"]
+        self.vnmirrk= ["A,Axis,2","B,Axis,2.02","A,Axis,1"]
+        self.vnmirrenpl= ["3","3.01","2"]
         
                     ### mirror profiles ###
 
-        self.mirrpv= ["V04_75mm","V02_75mm"]
-        self.vmirrk= ["A,Axis,1","A,Axis,2.01"]
-        self.vmirrenpl= ["2.01","3.01"] 
+        self.mirrpv= ["Schueco_AWS75_Prof_H1_445mm", "Schueco_AWS75_Prof_H3_299mm"]
+        self.vmirrk= ["C,Axis,2", "C,Axis,1"]
+        self.vmirrenpl= ["3", "2"] 
         
         
                 ## HORIZONTAL 
         
-        self.Hp= ["H02_147mm", "H01-2_75mm", "H01-1_75mm"]
-        self.hk= ["A.01,Axis,2", "A,Axis,1", "A,Axis,3"]
-        self.henpl= ["C.01", "C", "C"]
+        self.Hp= ["Schueco_AWS75_Prof_V1_476mm","Schueco_AWS75_Prof_V2_256mm","Schueco_AWS75_Prof_V1_476mm","Schueco_AWS75_Prof_V2_256mm"]
+        self.hk= ["A.01,Axis,3","A.01,Axis,2","C.03,Axis,3","C.03,Axis,2"]
+        self.henpl= ["C.02","C.02","D.02","D.02"]
 
 
         
@@ -166,16 +166,16 @@ class Unit():
     
                     #### Glazing placement
         
-        self.lckkeyp= "A.01,Axis,1.01"
-        self.hegihtpnl= "2.01"
-        self.widthpnl="B.01"
+        self.lckkeyp= ["C.04,Axis,2.02","B.02,Axis,2.02","A.02,Axis,2.02","A.01,Ext. Axis 1,1.01"]
+        self.hegihtpnl=["3.01","3.01","3.01","3"]
+        self.widthpnl=["D.01","C.01","B.01","C.02"]
+        self.thckpnl= [55.5,55.5,55.5,16.74]
+                ##### Spandrel placement
         
-                    ##### Spandrel placement
-        
-        self.lckkeysp="A.01,Ext. Axis 1,2.01"
-        self.heightsp= "3.01"
-        self.widthsp= "C.01"
-        
+        self.lckkeysp=["C.03,Axis,1.01","A.01,Axis,1.01"]
+        self.heightsp= ["2.01","2.01"]
+        self.widthsp= ["D.02","C.02"]
+        self.thckspnd=74.8
             ##### Window Placement Parameters #####
         
         self.lckkeyw= "A.01,Axis,1.01"
@@ -188,19 +188,24 @@ class Unit():
 
     def profile_creation(self,path_prof_files,prof_files,detpth,fdname,fname,proftmplpth,contour,extrloc):
         for i in prof_files:
-            path = (path_prof_files+"{}").format(i) 
-            rs.DocumentModified(False)
-            rs.Command('-Open "{}" _Enter'.format(path))
-            filedname=(fdname+"{}").format(i)
-            profileschueco.Schuecoprofile(detpth,filedname,fdname,i,proftmplpth,contour,extrloc)
+            if ".3dm" in i:
+                path = (path_prof_files+"{}").format(i)
+                dname=i.split(".")[0]
+                rs.DocumentModified(False)
+                rs.Command('-Open "{}" _Enter'.format(path))
+                filedname=(fdname+"{}").format(dname)
+                profileschueco.Schuecoprofile(detpth,filedname,fdname,dname,proftmplpth,contour,extrloc)# i was replaced
            
 
     def create_profile(self):
-        self.profile_creation(self.path_prof_files,self.prof_files,self.detpth,self.fdname,self.fname,self.proftmplpth,self.contour,self.extrloc)
+        return self.profile_creation(self.path_prof_files,self.prof_files,self.detpth,self.fdname,self.fname,self.proftmplpth,self.contour,self.extrloc)
 
     ##### Window Creation Functions ####
 
     def frame_creation(self,path_frame_files,frame_files,detpth,fdname,fname,frametmplpth,contour,extrloc,famwindow):
+        
+        
+        
         for i in frame_files:
             path = (path_frame_files+"{}").format(i)
             rs.DocumentModified(False)
@@ -277,7 +282,6 @@ class Unit():
         for i,j in enumerate(Hp):
             self.faminstance.instanceplacementH(doc,j,hk[i],henpl[i],0)
 
-    
     def family_panel_placement(self):
 
         doc=self.doc
@@ -285,18 +289,19 @@ class Unit():
         lckkeysp=self.lckkeysp
         heightsp=self.heightsp
         widthsp=self.widthsp
+        thckspn=self.thckspnd
 
-
-        self.faminstance.panelplacement(doc,"Spandrel",276,lckkeysp,heightsp,widthsp)
+        for i,j in enumerate(lckkeysp):
+            self.faminstance.panelplacement(doc,"Spandrel",thckspn,j,heightsp[i],widthsp[i])
 
         
         lckkeyp=self.lckkeyp
         hegihtpnl=self.hegihtpnl
         widthpnl=self.widthpnl
+        thckpn=self.thckpnl
 
-        self.faminstance.panelplacement(doc,"Glz",54,lckkeyp,hegihtpnl,widthpnl)
-
-        
+        for i,j in enumerate(lckkeyp):
+            self.faminstance.panelplacement(doc,"Glz",thckpn[i],j,hegihtpnl[i],widthpnl[i])
 
     def family_window_placement(self):
         

@@ -31,7 +31,7 @@ doc = Revit.ActiveDBDocument
 
 def AllObjectsName():
     output = []
-
+    
     allobjects = rs.AllObjects()
 
     for obj in allobjects:
