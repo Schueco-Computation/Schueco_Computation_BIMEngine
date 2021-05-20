@@ -31,8 +31,11 @@ unit.frame_files = ["Schueco_UDC-80-UZB_Frame_H01","Schueco_UDC-80-UZB_Frame_H02
 
 unit.frametmplpth= "D:\\Schueco\\Programming\\Develping_projects_local\\Revit Templates\\D_Frame_Window.rft" #automate
 
+unit.csv_path="C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\BIM_Workflow\\The-Spin\\csv\\"
 
 unit.faminstance=unit.create_family() #Create Family instance
+
+print unit.vnmirrk
 
 #unit.create_profile() #Creates profiles
 
@@ -46,5 +49,5 @@ unit.family_profile_placement() # places profiles in family instance
 #unit.family_window_placement() # Places window in family instance
 
 
-unit.family_panel_placement() # Places panel in family instance
+#unit.family_panel_placement() # Places panel in family instance
 

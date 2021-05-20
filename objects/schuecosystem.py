@@ -160,16 +160,17 @@ class Unit():
         self.henpl= ["C.02","C.02","D.02","D.02"]
 
 
-        
+        self.csv_path=()
+
                 ###### Panel placement parameters ####
 
     
                     #### Glazing placement
         
-        self.lckkeyp= ["C.04,Axis,2.02","B.02,Axis,2.02","A.02,Axis,2.02","A.01,Ext. Axis 1,1.01"]
-        self.hegihtpnl=["3.01","3.01","3.01","3"]
-        self.widthpnl=["D.01","C.01","B.01","C.02"]
-        self.thckpnl= [55.5,55.5,55.5,16.74]
+        self.lckkeyp= ["C.04,Axis,2.02","B.02,Axis,2.02","A.02,Axis,2.02","A.01,Ext. Axis 1,1.02","C.03, Ext. Axis 1 ,1.02"]
+        self.hegihtpnl=["3.01","3.01","3.01","3.02","3.02"]
+        self.widthpnl=["D.01","C.01","B.01","C.02","D.02"]
+        self.thckpnl= [55.5,55.5,55.5,16.74,16.74]
                 ##### Spandrel placement
         
         self.lckkeysp=["C.03,Axis,1.01","A.01,Axis,1.01"]
@@ -188,11 +189,12 @@ class Unit():
 
     def profile_creation(self,path_prof_files,prof_files,detpth,fdname,fname,proftmplpth,contour,extrloc):
         for i in prof_files:
-            if ".3dm" in i:
+            if ".dwg" in i:
                 path = (path_prof_files+"{}").format(i)
                 dname=i.split(".")[0]
                 rs.DocumentModified(False)
                 rs.Command('-Open "{}" _Enter'.format(path))
+                rs.Command('-SaveAs "{}" _Enter'.format(path_prof_files+"3dm\\"+dname))
                 filedname=(fdname+"{}").format(dname)
                 profileschueco.Schuecoprofile(detpth,filedname,fdname,dname,proftmplpth,contour,extrloc)# i was replaced
            
@@ -282,6 +284,12 @@ class Unit():
         for i,j in enumerate(Hp):
             self.faminstance.instanceplacementH(doc,j,hk[i],henpl[i],0)
 
+        TypeName=nmirrpv+mirrpv+Hp
+        LocationKey=vnmirrk+vmirrk+hk
+        EndRefPlane=vnmirrenpl+vmirrenpl+henpl
+        filepath=self.csv_path
+        self.faminstance.csv(TypeName,LocationKey,EndRefPlane,filepath)
+
     def family_panel_placement(self):
 
         doc=self.doc
@@ -302,6 +310,11 @@ class Unit():
 
         for i,j in enumerate(lckkeyp):
             self.faminstance.panelplacement(doc,"Glz",thckpn[i],j,hegihtpnl[i],widthpnl[i])
+
+    
+        
+
+
 
     def family_window_placement(self):
         
