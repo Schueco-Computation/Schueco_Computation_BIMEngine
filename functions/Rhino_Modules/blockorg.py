@@ -6,6 +6,30 @@ def block_org():
 
     names=[]
 
+    guid =rs.ObjectsByType(4096)
+
+    oldnames = []
+
+    for x in guid:
+        oldnames.append(rs.BlockInstanceName(x))
+
+    nameschange = []
+    for x in oldnames:
+        if "_" in x:
+            nameschange.append(x.split("_")[0])
+        else:
+            nameschange.append(x)
+
+    newnames = []
+    for i, v in enumerate(nameschange):
+        totalcount = nameschange.count(v)
+        count = nameschange[:i].count(v)
+        newnames.append(v + str("/") + str(count + 1) if totalcount > 1 else v)
+
+    rename=[]
+    for i,j in enumerate(guid):
+        rename.append(rs.ObjectName(j,newnames[i]))
+
     ###### First explode #####
     """
     a=rs.ObjectsByType(4096)
@@ -15,21 +39,20 @@ def block_org():
     """
     ###### Nested explode #####
 
-    y=rs.ObjectsByType(4096)
-
-    def explode_em(blocks):
+    def explode_em(blocks, name):
         for Id in blocks:
             if rs.IsBlockInstance(Id):
                 names.append(rs.BlockInstanceName(Id))
-                rs.ObjectName(rs.BlockObjects(rs.BlockInstanceName(Id)),(rs.BlockInstanceName(Id)))
+                rs.ObjectName(rs.BlockObjects(rs.BlockInstanceName(Id)),name)
                 blocks=rs.ExplodeBlockInstance(Id)
 
                 if blocks:
-                    explode_em(blocks)
+                    explode_em(blocks, name)
 
-    for z in y:
-
-        explode_em([z])
+    for x in newnames:
+        y = rs.ObjectsByName(x)
+        for z in y:
+            explode_em([z], x)
 
 
     rs.DeleteObjects(rs.ObjectsByType(65536))

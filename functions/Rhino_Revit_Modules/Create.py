@@ -92,7 +92,7 @@ def DetailItems(objectname, famtypename, DetailItemsAllDOC, detailitemtemp):
     
     parameter = newfam.FamilyManager.get_Parameter("Art. No.")
 
-    setartparam = newfam.FamilyManager.Set(parameter, objectname)
+    setartparam = newfam.FamilyManager.Set(parameter, (objectname.split("/")[0]))
 
     #Create Curve Array
     #carray = CurveArray()

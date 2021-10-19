@@ -1,5 +1,5 @@
 import sys
-sys.path.append("C:\\Users\\tomas\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMengine\\objects")
+sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine-main\\objects")
 import rhinoscriptsyntax as rs
 import profileschueco
 import frameschueco
@@ -97,7 +97,7 @@ class Unit():
 
         self.detpth=() #"C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Revit Templates\\Detail Item.rft" # 01 --- shared 
         
-        self.fname="schueco_det_prof" # 02 --- shared
+        self.fname="Schueco_Det_Prof" # 02 --- shared
         
         self.fdname=()# "Schueco_ USC-Cust_ Det" # 03 --- shared
         
@@ -167,7 +167,7 @@ class Unit():
     
                     #### Glazing placement
         
-        self.lckkeyp= ["C.04,Axis,2.02","B.02,Axis,2.02","A.02,Axis,2.02","A.01,Ext. Axis 1,1.02","C.03, Ext. Axis 1 ,1.02"]
+        self.lckkeyp= ["C.04,Axis,2.02","B.02,Axis,2.02","A.02,Axis,2.02","A.01,Ext. Axis 1,1.02","C.03,Ext. Axis 1,1.02"]
         self.hegihtpnl=["3.01","3.01","3.01","3.02","3.02"]
         self.widthpnl=["D.01","C.01","B.01","C.02","D.02"]
         self.thckpnl= [55.5,55.5,55.5,16.74,16.74]
@@ -189,14 +189,14 @@ class Unit():
 
     def profile_creation(self,path_prof_files,prof_files,detpth,fdname,fname,proftmplpth,contour,extrloc):
         for i in prof_files:
-            if ".dwg" in i:
+            if ".3dm" in i:
                 path = (path_prof_files+"{}").format(i)
                 dname=i.split(".")[0]
                 rs.DocumentModified(False)
                 rs.Command('-Open "{}" _Enter'.format(path))
                 rs.Command('-SaveAs "{}" _Enter'.format(path_prof_files+"3dm\\"+dname))
                 filedname=(fdname+"{}").format(dname)
-                profileschueco.Schuecoprofile(detpth,filedname,fdname,dname,proftmplpth,contour,extrloc)# i was replaced
+                profileschueco.Schuecoprofile(detpth,fname,fdname,dname,proftmplpth,contour,extrloc)# i was replaced
            
 
     def create_profile(self):
