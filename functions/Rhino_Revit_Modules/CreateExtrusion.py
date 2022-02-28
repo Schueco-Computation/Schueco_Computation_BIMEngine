@@ -42,6 +42,18 @@ def NewProfile(newfamily, rvtlines, locationref, FrameOrProf):
     
         value = paramvalue+(24/304.80)
         dim.append(value)
+        
+    if FrameProfOrVent == "Vent":
+        bip = BuiltInParameter.DIM_LABEL
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, "Panel height", False)
+        filter = ElementParameterFilter(rule)
+        mullionlength = FilteredElementCollector(newfamily).OfClass(Dimension).WherePasses(filter).FirstElement()
+
+        name = mullionlength.get_Parameter(BuiltInParameter.DIM_VALUE_LENGTH)
+        paramvalue = name.AsDouble()
+        dim.append(paramvalue)
     else:
         bip = BuiltInParameter.DIM_LABEL
         provider = ParameterValueProvider(ElementId(bip))

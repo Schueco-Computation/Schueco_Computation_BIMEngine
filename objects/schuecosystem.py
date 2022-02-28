@@ -1,5 +1,5 @@
 import sys
-sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine-main\\objects")
+sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\objects")
 import rhinoscriptsyntax as rs
 import profileschueco
 import frameschueco
@@ -142,22 +142,22 @@ class Unit():
 
                         ### no mirror profiles ##
         
-        self.nmirrpv=["Schueco_AWS75_Prof_H1_445mm","Schueco_AWS75_Prof_H2_296mm","Schueco_AWS75_Prof_H3_299mm"]
-        self.vnmirrk= ["A,Axis,2","B,Axis,2.02","A,Axis,1"]
-        self.vnmirrenpl= ["3","3.01","2"]
+        self.nmirrpv=["Schueco_Cust_Prof_H01_48mm","Schueco_Cust_Prof_H02_48mm"]
+        self.vnmirrk= ["A,Axis,1","A,Axis,2"]
+        self.vnmirrenpl= ["2","3"]
         
                     ### mirror profiles ###
 
-        self.mirrpv= ["Schueco_AWS75_Prof_H1_445mm", "Schueco_AWS75_Prof_H3_299mm"]
-        self.vmirrk= ["C,Axis,2", "C,Axis,1"]
-        self.vmirrenpl= ["3", "2"] 
+        self.mirrpv= ["Schueco_Cust_Prof_H01_48mm", "Schueco_Cust_Prof_H02_48mm"]
+        self.vmirrk= ["B,Axis,1", "B,Axis,2"]
+        self.vmirrenpl= ["2", "3"] 
         
         
                 ## HORIZONTAL 
         
-        self.Hp= ["Schueco_AWS75_Prof_V1_476mm","Schueco_AWS75_Prof_V2_256mm","Schueco_AWS75_Prof_V1_476mm","Schueco_AWS75_Prof_V2_256mm"]
-        self.hk= ["A.01,Axis,3","A.01,Axis,2","C.03,Axis,3","C.03,Axis,2"]
-        self.henpl= ["C.02","C.02","D.02","D.02"]
+        self.Hp= ["Schueco_Cust_Prof_V01-1_49mm","Schueco_Cust_Prof_V02_86mm","Schueco_Cust_Prof_V01-2_51mm"]
+        self.hk= ["A.01,Ext. Axis 1,3","A.01,Axis,2","A.01,Axis,1"]
+        self.henpl= ["B.01","B.01","B.01"]
 
 
         self.csv_path=()
@@ -167,16 +167,16 @@ class Unit():
     
                     #### Glazing placement
         
-        self.lckkeyp= ["C.04,Axis,2.02","B.02,Axis,2.02","A.02,Axis,2.02","A.01,Ext. Axis 1,1.02","C.03,Ext. Axis 1,1.02"]
-        self.hegihtpnl=["3.01","3.01","3.01","3.02","3.02"]
-        self.widthpnl=["D.01","C.01","B.01","C.02","D.02"]
-        self.thckpnl= [55.5,55.5,55.5,16.74,16.74]
+        self.lckkeyp= ["A.01,Axis,1.01"]
+        self.hegihtpnl=["2.01"]
+        self.widthpnl=["B.01"]
+        self.thckpnl= [65.5]
                 ##### Spandrel placement
         
-        self.lckkeysp=["C.03,Axis,1.01","A.01,Axis,1.01"]
-        self.heightsp= ["2.01","2.01"]
-        self.widthsp= ["D.02","C.02"]
-        self.thckspnd=74.8
+        self.lckkeysp=["A.01,Ext. Axis 1,2.02","A.01,Int. Axis 1,2.02"]
+        self.heightsp= ["3.01","3.01"]
+        self.widthsp= ["B.01","B.01"]
+        self.thckspnd=[32,1]
             ##### Window Placement Parameters #####
         
         self.lckkeyw= "A.01,Axis,1.01"
@@ -267,7 +267,7 @@ class Unit():
         
         for i,j in enumerate(nmirrpv):
 
-            self.faminstance.instanceplacementV(doc,j,vnmirrk[i],vnmirrenpl[i],1)
+            self.faminstance.instanceplacementV(doc,j,vnmirrk[i],vnmirrenpl[i],0)
 
         mirrpv=self.mirrpv
         vmirrk=self.vmirrk
@@ -275,7 +275,7 @@ class Unit():
 
         for i,j in enumerate(mirrpv):
 
-            self.faminstance.instanceplacementV(doc,j,vmirrk[i],vmirrenpl[i],0)
+            self.faminstance.instanceplacementV(doc,j,vmirrk[i],vmirrenpl[i],1)
         
         Hp=self.Hp
         hk=self.hk
@@ -300,7 +300,7 @@ class Unit():
         thckspn=self.thckspnd
 
         for i,j in enumerate(lckkeysp):
-            self.faminstance.panelplacement(doc,"Spandrel",thckspn,j,heightsp[i],widthsp[i])
+            self.faminstance.panelplacement(doc,"Spandrel",thckspn[i],j,heightsp[i],widthsp[i])
 
         
         lckkeyp=self.lckkeyp

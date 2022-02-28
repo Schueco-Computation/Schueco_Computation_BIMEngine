@@ -39,7 +39,7 @@ def ToRvtline(objectname):
         profile.append(lines)
 
     explode = rs.ExplodeCurves(profile)
-
+    unselect = rs.UnselectObjects(ObjId)
     # coerce
 
     profcoerce = []

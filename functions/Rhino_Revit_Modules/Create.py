@@ -249,7 +249,7 @@ def ReferenceLines(newfamily, FrameOrProf):
         TransactionManager.ForceCloseTransaction(t1)
         reflines.append(refp1)
 
-    return refp1
+    return reflines
 
 def NewAlignment(newfamily, refPlane, solid):
     
@@ -427,14 +427,19 @@ def NewWidthDimension(newfamily, FrameOrProf):
     if FrameOrProf == "Frame":
         widthparameter = newfamily.FamilyManager.get_Parameter("Visible frame width")
         parameter.append(widthparameter)
+    if FrameProfOrVent == "Vent":
+        widthparameter = newfamily.FamilyManager.get_Parameter("Panel width")
+        parameter.append(widthparameter)
     else:
         widthparam = newfamily.FamilyManager.get_Parameter("Profile width")
         parameter.append(widthparam)
 
     dimension.FamilyLabel = parameter[0]
+    # Just to have the value of the width
+    width = rvtpts1[0].DistanceTo(newrvtpt)
 
     #End Transaction
     #t.Commit()
     TransactionManager.ForceCloseTransaction(t2)
 
-    return dimension
+    return width
