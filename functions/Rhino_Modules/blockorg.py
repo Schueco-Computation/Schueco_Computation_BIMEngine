@@ -89,8 +89,10 @@ def block_org():
 
     curvelist=["a_simp-prof","a_ref-line1","a_ref-line2","a_void"]
     for i in curvelist:
-        rs.ObjectName(rs.ObjectsByLayer(i),i)
-
+        try:
+            rs.ObjectName(rs.ObjectsByLayer(i),i)
+        except:
+                ""
 
     ##### Cleaning file ####
 

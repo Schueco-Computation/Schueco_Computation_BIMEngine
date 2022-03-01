@@ -341,7 +341,7 @@ def NewAlignment(newfamily, refPlane, solid):
     
     return align
 
-def NewWidthDimension(newfamily, FrameOrProf):
+def NewWidthDimension(newfamily, FrameProfOrVent):
     obj = rs.ObjectsByName("a_ref-line1")
 
     profile1 = []
@@ -424,7 +424,7 @@ def NewWidthDimension(newfamily, FrameOrProf):
     
     dimension = newfamily.FamilyCreate.NewLinearDimension(plane, line, refarray)
     parameter = []
-    if FrameOrProf == "Frame":
+    if FrameProfOrVent == "Frame":
         widthparameter = newfamily.FamilyManager.get_Parameter("Visible frame width")
         parameter.append(widthparameter)
     if FrameProfOrVent == "Vent":

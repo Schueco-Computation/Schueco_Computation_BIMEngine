@@ -26,10 +26,10 @@ from RevitServices.Transactions import TransactionManager
 ##########################################
 #Get Mullion length
 
-def NewProfile(newfamily, rvtlines, locationref, FrameOrProf):
+def NewProfile(newfamily, rvtlines, locationref, FrameProfOrVent):
     #CONDITIONAL FRAME OR PROFILE
     dim = []
-    if FrameOrProf == "Frame":
+    if FrameProfOrVent == "Frame":
         bip = BuiltInParameter.DIM_LABEL
         provider = ParameterValueProvider(ElementId(bip))
         evaluator = FilterStringEquals()
