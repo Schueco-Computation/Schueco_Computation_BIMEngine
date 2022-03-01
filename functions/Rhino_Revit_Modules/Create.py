@@ -333,6 +333,7 @@ def NewAlignment(newfamily, refPlane, solid):
     t2 = TransactionManager.Instance
     t2.EnsureInTransaction(newfamily)
     
+    newfamily.Regenerate()
     align = newfamily.FamilyCreate.NewAlignment(refplan, facere, ref1)
     
     #End Transaction
