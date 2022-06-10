@@ -43,7 +43,7 @@ def NewProfile(newfamily, rvtlines, locationref, FrameProfOrVent):
         value = paramvalue+(24/304.80)
         dim.append(value)
         
-    if FrameProfOrVent == "Vent":
+    elif FrameProfOrVent == "Vent":
         bip = BuiltInParameter.DIM_LABEL
         provider = ParameterValueProvider(ElementId(bip))
         evaluator = FilterStringEquals()

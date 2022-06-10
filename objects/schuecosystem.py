@@ -3,6 +3,7 @@ sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\P
 import rhinoscriptsyntax as rs
 import profileschueco
 import frameschueco
+import ventschueco
 import windowschueco
 import familyschueco
 from RhinoInside.Revit import Revit, Convert
@@ -95,7 +96,7 @@ class Unit():
         ###### Shared Creation Parameters #####
 
 
-        self.detpth=() #"C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Revit Templates\\Detail Item.rft" # 01 --- shared 
+        self.detpth="K:\\Engineering\\Abteilungen\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\Detail Item.rft" # 01 --- shared 
         
         self.fname="Schueco_Det_Prof" # 02 --- shared
         
@@ -112,25 +113,31 @@ class Unit():
         self.prof_files=[]#["V02_75mm"]#,"V04_75mm","V04_270mm","H01-2_75mm", "H01-1_75mm","H02_147mm")
         
         self.proftmplpth=""# "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Revit Templates\\A_Profile.rft" #automate
-        
+
+
         ###### Window Creation Parameters #####
 
-        self.path_frame_files =""# "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Rhino_files\\FrameFiles\\"
+        self.path_frame_files ="K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Projects\\Business Centre Al Farabi\\3dm\\Frames\\"# "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Rhino_files\\FrameFiles\\"
         
         self.wtypename=""#"Schueco_UDC-80-UZB_Win-in_Family01"
 
-        self.wtemppth=""#"D:\Schueco\Programming\Develping_projects_local\Revit Templates\F_Window.rft"
+        self.wtemppth="K:\\Engineering\\Abteilungen\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\F_Window.rft"
 
-
+        self.windowtype = "Vent"
 
             ##### Frame Creation  Parameters #####
 
-        self.frame_files = ["Schueco_UDC-80-UZB_Frame_H01"]#,"Schueco_UDC-80-UZB_Frame_H02","Schueco_UDC-80-UZB_Frame_V01","Schueco_UDC-80-UZB_Frame_V02"]
+        self.frame_files = ""#["Schueco_UDC-80-UZB_Frame_H01"],"Schueco_UDC-80-UZB_Frame_H02","Schueco_UDC-80-UZB_Frame_V01","Schueco_UDC-80-UZB_Frame_V02"]
         
-        self.frametmplpth= "D:\\Schueco\\Programming\\Develping_projects_local\\Revit Templates\\D_Frame_Window.rft" #automate
+        self.frametmplpth= "K:\\Engineering\\Abteilungen\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\D_Frame_Window.rft" #automate
 
+            ##### Vent Creation Parameters
 
-    
+        self.path_vent_files = "K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Projects\\Business Centre Al Farabi\\3dm\\Vent panel\\"
+        self.ventname = "" #Name del Vent
+        self.venttempath = "K:\\Engineering\\Abteilungen\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\C_VentPanels.rft"
+        self.contournmvoid = "a_void"
+
             ###### Family Parameters #####
 
         self.faminstance=()
@@ -218,17 +225,28 @@ class Unit():
 
     def frame_placement(self,frame_files,famwindow,window):
 
-        frplaces=["Bottom","Top","Right","Left"]
+        window.placefrhor(famwindow,frame_files[0],"Bottom")
+        window.placefrvert(famwindow,frame_files[0],"Right")
+        window.placefrhor(famwindow,frame_files[1],"Top")
+        window.placefrvert(famwindow,frame_files[1],"Left")
+        """frplaces=["Bottom","Top","Right","Left"]
 
         for i,j in enumerate(frame_files):
             if "H" in j:
         #print j
                 window.placefrhor(famwindow,j,frplaces[i])
             else:
-                window.placefrvert(famwindow,j,frplaces[i])
+                window.placefrvert(famwindow,j,frplaces[i])"""
 
 
-    def create_window(self):
+    def ventpanel_creation(self,path_vent_files,ventname,detpth,fdname,fname,venttempath,contour,extrloc,famwindow,contournmvoid):
+        path = (path_vent_files+"{}").format(ventname)
+        rs.DocumentModified(False)
+        rs.Command("! _-New None")
+        rs.Command('-Open "{}" _Enter'.format(path))
+        ventschueco.Schuecovent(detpth,fname,fdname,ventname,venttempath,contour,extrloc,famwindow,contournmvoid)
+
+    def create_window(self, windowtype):
         
         doc=self.doc
 
@@ -238,9 +256,15 @@ class Unit():
 
         self.frame_creation(self.path_frame_files,self.frame_files,self.detpth,self.fdname,self.fname,self.frametmplpth,self.contour,self.extrloc,famwindow)
 
-        self.frame_placement(self.frame_files,famwindow,window)
+        if windowtype == "Vent":
+            self.ventpanel_creation(self.path_vent_files,self.ventname,self.detpth,self.fdname,self.fname,self.venttempath,self.contour,self.extrloc,famwindow,self.contournmvoid)
+            window.windowpanel(famwindow,self.ventname, 41)
+        else:
+            window.windowpanel(famwindow,"Glz", 41)
 
-        window.windowpanel(famwindow)
+        window.windowdim(famwindow, windowtype)
+
+        self.frame_placement(self.frame_files,famwindow,window)
 
         window.loadwindow(doc,famwindow)
 
@@ -308,8 +332,8 @@ class Unit():
         widthpnl=self.widthpnl
         thckpn=self.thckpnl
 
-        for i,j in enumerate(lckkeyp):
-            self.faminstance.panelplacement(doc,"Glz",thckpn[i],j,hegihtpnl[i],widthpnl[i])
+        #for i,j in enumerate(lckkeyp):
+        #    self.faminstance.panelplacement(doc,"Glz",thckpn[i],j,hegihtpnl[i],widthpnl[i])
 
     
         

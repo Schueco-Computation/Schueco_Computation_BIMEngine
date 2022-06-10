@@ -39,8 +39,8 @@ window=s.windowschueco.Schuecowindow()
 
 ### Windowobject variable input ###
 
-wtypename="Schueco_UDC-80-UZB_Win-in_Family01"
-wtemppth="D:\Schueco\Programming\Develping_projects_local\Revit Templates\F_Window.rft"
+wtypename="Schueco_Cust_Win-in_Family01"
+wtemppth="K:\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\F_Window.rft"
 
 #print window.placehold
 
@@ -50,11 +50,11 @@ famwindow=window.famwindow(wtemppth,wtypename)
 
 #famwindow=s.windowschueco.Schuecowindow()
 
-files = ["Schueco_UDC-80-UZB_Frame_H01"]#,"Schueco_UDC-80-UZB_Frame_H02","Schueco_UDC-80-UZB_Frame_V01","Schueco_UDC-80-UZB_Frame_V02"]
-detpth= "D:\\Schueco\\Programming\\Develping_projects_local\\Revit Templates\\Detail Item.rft" #automate
-fname= "schueco_det_prof"
-fdname = "Schueco_ USC-Cust_ Det"
-frametmplpth= "D:\\Schueco\\Programming\\Develping_projects_local\\Revit Templates\\D_Frame_Window.rft" #automate
+files = ["Schueco_Cust_Frame_V01_20mm","Schueco_Cust_Frame_V02_20mm"]#,"Schueco_UDC-80-UZB_Frame_H02","Schueco_UDC-80-UZB_Frame_V01","Schueco_UDC-80-UZB_Frame_V02"]
+detpth= "K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\Detail Item.rft" #automate
+fname= "Schueco_Det_Prof"
+fdname = "Schueco_Cust_Det"
+frametmplpth= "K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\D_Frame_Window.rft" #automate
 contour= "a_simp-prof" # atomate
 #refline="a_ref-line1" # automate
 #refpl="Reference line 1"
@@ -62,7 +62,7 @@ extrloc="Axis" # inside class
 doc= Revit.ActiveDBDocument
 
 for a in files:
-    path = "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Rhino_files\\FrameFiles\\{}".format(a) ### Change path!!!
+    path = "K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Projects\\Business Centre Al Farabi\\3dm\\Frames\\{}".format(a) ### Change path!!!
     #print (path)
     rs.DocumentModified(False)
     rs.Command("! _-New None")

@@ -428,7 +428,7 @@ def NewWidthDimension(newfamily, FrameProfOrVent):
     if FrameProfOrVent == "Frame":
         widthparameter = newfamily.FamilyManager.get_Parameter("Visible frame width")
         parameter.append(widthparameter)
-    if FrameProfOrVent == "Vent":
+    elif FrameProfOrVent == "Vent":
         widthparameter = newfamily.FamilyManager.get_Parameter("Panel width")
         parameter.append(widthparameter)
     else:

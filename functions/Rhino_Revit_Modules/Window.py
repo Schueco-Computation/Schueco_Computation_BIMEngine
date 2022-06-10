@@ -446,7 +446,7 @@ def Dimensions(WindowDocument, Typepanel):
     t1.EnsureInTransaction(WindowDocument)
 
     #Axis to glass distance
-    if Typepanel.startswith("Schueco"): 
+    if Typepanel.startswith("Vent"): 
         set = WindowDocument.FamilyManager.Set(winparameter, value)
     else:
         lineone = rs.ObjectsByName("a_AxisToGlass")
@@ -664,7 +664,7 @@ def NewPanel(WindowDocument, Typepanel, Thickness):
     return newobj
 
 def VentVoids(Document, RvtVoidLines, ReferencePlane1, Solid):
-    
+         
     #Get center plane
     bip = BuiltInParameter.DATUM_TEXT
     provider = ParameterValueProvider(ElementId(bip))
@@ -687,21 +687,11 @@ def VentVoids(Document, RvtVoidLines, ReferencePlane1, Solid):
     t1.EnsureInTransaction(Document)
     
     plane = Plane.CreateByThreePoints(XYZ(0,0,0), XYZ(0,-1,0), XYZ(0,0,1))
+    
     sketchp = SketchPlane.Create(Document, plane)
     
     void = Document.FamilyCreate.NewExtrusion(True, carrarray, sketchp, -depth)   
     ####
-    opt = Options()
-    opt.ComputeReferences = True
-
-    geometry = void.get_Geometry(opt)
-    for g in geometry:
-        try:
-            fa = g.Faces[0]
-            fa2 = g.Faces[1]
-        
-        except:
-                ""
     
     bip = BuiltInParameter.DIM_LABEL
     provider = ParameterValueProvider(ElementId(bip))
@@ -719,6 +709,18 @@ def VentVoids(Document, RvtVoidLines, ReferencePlane1, Solid):
     
     filter = ElementClassFilter(Extrusion)
     allins = FilteredElementCollector(Document).WherePasses(filter).ToElements()
+
+    opt = Options()
+    opt.ComputeReferences = True
+
+    geometry = void.get_Geometry(opt)
+    for g in geometry:
+        try:
+            fa = g.Faces[0]
+            fa2 = g.Faces[1]
+        
+        except:
+                ""
 
     ids = []
     for x in allins:
@@ -739,6 +741,7 @@ def VentVoids(Document, RvtVoidLines, ReferencePlane1, Solid):
     
     #Lock Alignment
     topface = [fa.Reference,faobj.Reference]
+
     bottomface = [fa2.Reference,fa2obj.Reference]
     #Finding the view
     bip = BuiltInParameter.VIEW_NAME

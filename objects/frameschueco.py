@@ -41,9 +41,11 @@ class Schuecoframe():
     def __init__(self,dtemplpath,famname,famdetname,typename,famframetempath,contournm,extlocation,famwindow):
         ############## Variables  ###########
         
-        self.objs= Select.AllObjectsName()
-        
+        self.blockorg()
+
         self.docr=Revit.ActiveDBDocument
+        
+        self.objs= Select.AllObjectsName()
         
         ############## Function Calling ##############
 
@@ -70,9 +72,10 @@ class Schuecoframe():
         self.dimension(self.famframe) # 11 Creates dimension parameter in profile family _ Consider erase the variable 
 
         self.famload(self.famframe,famwindow) # 12 Loads profile family into mother family _ Consider erase the variable
-    
-        self.windowdim(famwindow)
   
+
+    def blockorg(self):
+        return blockorg.block_org()
 
     def objects (self,obj):    
         objsfam = [x for x in obj if not "a_" in x]
@@ -93,8 +96,7 @@ class Schuecoframe():
     def prof_fam(self,path,name_type):
         return Create.FamilyNew(path,name_type)
     
-    def famload (self,detaildoc,famprof): 
-        
+    def famload(self,detaildoc,famprof):
         return detaildoc.LoadFamily(famprof)
    
     def placedetail (self,famprof):
@@ -106,21 +108,49 @@ class Schuecoframe():
     def revit_extrusion(self,famprof,lines,locationref):
         return CreateExtrusion.NewProfile(famprof,lines,locationref,"Frame")
 
-    def cornervoids(self,famframe,prof_contour): 
-        return Window.FrameCornerVoids(famframe,prof_contour)
+    def cornervoids(self,famprof,prof_contour): 
+        return Window.FrameCornerVoids(famprof,prof_contour)
 
     def refline(self,famprof):
         return Create.ReferenceLines(famprof,"Frame")
    
     def dimension(self,famprof):
         return Create.NewWidthDimension(famprof,"Frame")
-
-    def load_frame(self,famframe,famwindow): 
-        return famframe.LoadFamily(famwindow)
-
-    def windowdim(self,famwindow):
-        return Window.Dimensions(famwindow)
     
 
 if __name__ == '__main__':
     pass
+
+#Example of Child Class
+"""
+class Schuecovent(Schuecoframe):
+
+    def __init__(self,dtemplpath,famname,famdetname,typename,famframetempath,contournm,extlocation,famwindow,contournmvoid):
+        Schuecoframe.__init__(self,dtemplpath,famname,famdetname,typename,famframetempath,contournm,extlocation,famwindow)
+
+        self.dimension(self.famframe)
+        self.rvtlinesvoid = self.revitlinesvoid(contournmvoid) 
+        self.revitextrusion = self.revit_extrusion(self.famframe,self.revitcontour,extlocation)
+        self.voids(self.famframe,self.rvtlinesvoid, self.reflinervt, self.revitextrusion)
+        self.windowdim(famwindow)
+
+    def dimension(self,famprof):
+        return Create.NewWidthDimension(famprof,"Vent")
+
+    def revitlinesvoid(self,prof_contour):
+        return ConvertPoly.ToRvtline(prof_contour)
+    
+    def revit_extrusion(self,famprof,lines,locationref):
+        return CreateExtrusion.NewProfile(famprof,lines,locationref,"Vent")
+
+    def cornervoids(self,famprof,prof_contour): pass
+        #return Window.FrameCornerVoids(famprof,prof_contour)
+
+    def voids(self,famprof, RvtVoidLines, ReferencePlane1, Solid): 
+        return Window.VentVoids(famprof, RvtVoidLines, ReferencePlane1, Solid)
+
+    def windowdim(self,famwindow):
+        return Window.Dimensions(famwindow,"Vent")
+      
+if __name__ == '__main__':
+    pass"""

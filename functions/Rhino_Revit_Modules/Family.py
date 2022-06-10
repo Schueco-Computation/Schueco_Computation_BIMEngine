@@ -1040,7 +1040,7 @@ def NewPanel(Document, Typepanel, Thickness, LocationKey, EndHeigthRefPlane, End
 
 def NewWindowInstance(Document, TypeName, LocationKey, EndHeigthRefPlane, EndWidthRefPlane):
     
-    all = FilteredElementCollector(doc).OfClass(ReferencePlane).ToElements()
+    all = FilteredElementCollector(Document).OfClass(ReferencePlane).ToElements()
     output = []
     for x in all:
         output.append(x.Name)

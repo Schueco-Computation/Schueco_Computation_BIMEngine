@@ -61,8 +61,8 @@ class Schuecowindow():
     def famwindow (self,wtemppth,wtypename):
         return Create.FamilyNew(wtemppth,wtypename)
     
-    def windowpanel(self,famwindow):
-        return Window.NewPanel(famwindow, "Glz", 41)
+    def windowpanel(self,famwindow,ventname, thickness):
+        return Window.NewPanel(famwindow, ventname, thickness)
     
     def placefrhor(self,famwindow,frame,place):
         return Window.NewHorizontalFrameInstance(famwindow,frame,place,False)
@@ -73,6 +73,8 @@ class Schuecowindow():
     def loadwindow(self,doc,famwindow):
         famwindow.LoadFamily(doc)
 
+    def windowdim(self,famwindow, typepanel):
+        return Window.Dimensions(famwindow,typepanel)
     
 
 if __name__ == '__main__':

@@ -124,7 +124,8 @@ def block_org():
     for i,j in articles.items():
         articles_str= articles_str + str (i) + ':' + str (j)+ ' '
 
-    return (articles,articles_str)
+    return names
+    #return (articles,articles_str)
 
 
 if __name__ == '__main__':
