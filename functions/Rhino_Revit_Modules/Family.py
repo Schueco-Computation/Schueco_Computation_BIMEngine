@@ -186,6 +186,16 @@ def NewHorizontalProfileInstace(Document, TypeName, LocationKey, EndRefPlane, Mi
     parameter = instance[0].GetParameters("Mullion length")
     setheight = parameter[0].Set(heigthprof)
 
+    bip = BuiltInParameter.MATERIAL_NAME
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEndsWith()
+    rule = FilterStringRule(provider, evaluator, "Aluminium (European)", False)
+    filter = ElementParameterFilter(rule)
+    matids = FilteredElementCollector(Document).OfClass(Material).WherePasses(filter).FirstElementId()
+    
+    parammat = instance[0].GetParameters("Profile material")
+    setwidthmat = parammat[0].Set(matids)
+
     #End Transaction
     TransactionManager.ForceCloseTransaction(t1)
 
@@ -366,6 +376,16 @@ def NewVerticalProfileInstace(Document, TypeName, LocationKey, EndRefPlane, Mirr
     
     parameter = instance[0].GetParameters("Mullion length")
     setheight = parameter[0].Set(heigthprof)
+
+    bip = BuiltInParameter.MATERIAL_NAME
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEndsWith()
+    rule = FilterStringRule(provider, evaluator, "Aluminium (European)", False)
+    filter = ElementParameterFilter(rule)
+    matids = FilteredElementCollector(Document).OfClass(Material).WherePasses(filter).FirstElementId()
+    
+    parammat = instance[0].GetParameters("Profile material")
+    setwidthmat = parammat[0].Set(matids)
     
     #End Transaction
     TransactionManager.ForceCloseTransaction(t1)
@@ -812,7 +832,7 @@ def NewVerticalProfileInstace(Document, TypeName, LocationKey, EndRefPlane, Mirr
     
     return newobj
 
-def NewPanel(Document, Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidthRefPlane):
+def NewPanel(Document, Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidthRefPlane, materialname):
     
     all = FilteredElementCollector(Document).OfClass(ReferencePlane).ToElements()
     output = []
@@ -940,7 +960,7 @@ def NewPanel(Document, Typepanel, Thickness, LocationKey, EndHeigthRefPlane, End
         
         newt = manager.NewType(rename)
         getparam = manager.get_Parameter("Panel thickness")
-        
+          
         value = Thickness/304.80
         param = manager.Set(getparam, value)
         
@@ -995,6 +1015,16 @@ def NewPanel(Document, Typepanel, Thickness, LocationKey, EndHeigthRefPlane, End
     param = newobj.GetParameters("Panel width")
     setwidth = param[0].Set(widthpanel)
     
+    bip = BuiltInParameter.MATERIAL_NAME
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEndsWith()
+    rule = FilterStringRule(provider, evaluator, materialname, False)
+    filter = ElementParameterFilter(rule)
+    matids = FilteredElementCollector(Document).OfClass(Material).WherePasses(filter).FirstElementId()
+    
+    parammat = newobj.GetParameters("Panel material")
+    setwidthmat = parammat[0].Set(matids)
+
     #End Transaction
     TransactionManager.ForceCloseTransaction(t1)
     

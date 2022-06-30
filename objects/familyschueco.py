@@ -21,8 +21,8 @@ class SchuecoFamily():
     def instanceplacementH(self,Document,TypeName,LocationKeyH,EndRefPlaneH,MirrorBoolean):
         return Family.NewHorizontalProfileInstace(Document,TypeName,LocationKeyH,EndRefPlaneH,MirrorBoolean)
     
-    def panelplacement(self,Document,Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidthRefPlane):
-        return Family.NewPanel(Document,Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidthRefPlane)
+    def panelplacement(self,Document,Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidthRefPlane, materialname):
+        return Family.NewPanel(Document,Typepanel, Thickness, LocationKey, EndHeigthRefPlane, EndWidthRefPlane, materialname)
 
     def windowinstace(self,Document,wtypename,LocationKey,Higrefplane,EndWidthRefPlane):
         return Family.NewWindowInstance(Document,wtypename,LocationKey,Higrefplane,EndWidthRefPlane)

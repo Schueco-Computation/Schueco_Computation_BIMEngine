@@ -42,10 +42,10 @@ class Schuecovent():
 
         self.blockorg()
         self.docr=Revit.ActiveDBDocument
-        self.allobjects = self.objs()
+        #self.allobjects = self.objs()
         
         self.newfamdoc=self.newfam(dtemplpath,famname)
-        self.detailitem(self.objects(self.allobjects),famdetname,dtemplpath,self.newfamdoc)
+        self.detailitem(self.blockorg()[1], self.blockorg()[0],famdetname,dtemplpath,self.newfamdoc)
         self.place_detailitem(self.newfamdoc)
         self.famvent=self.vent_fam(famventtempath,typename)
         self.reflinervt=self.refline(self.famvent)
@@ -69,12 +69,12 @@ class Schuecovent():
     def objs(self):
         return Select.AllObjectsName()
 
-    def objects (self,obj):
+    """def objects (self,obj):
         objsfam =[]
         for i in obj:
             if not "a_" in i:
                 objsfam.append(i)
-        return objsfam
+        return objsfam"""
 
     #def objects (self,obj):    
     #    objsfam = [x for x in obj if not "a_" in x]
@@ -83,10 +83,10 @@ class Schuecovent():
     def newfam (self,temp,name):
         return Create.FamilyNew(temp,name)
     
-    def detailitem (self,familyobjects,famdetname,dtemplpath,famnew):  
+    def detailitem (self,objectsname,dic,famdetname,dtemplpath,famnew):  
             output=[]
-            for i,j in enumerate(familyobjects,1):
-                output.append(Create.DetailItems(j,famdetname+str(i),famnew,dtemplpath))
+            for i,j in enumerate(objectsname,1):
+                output.append(Create.DetailItems(j,dic,famdetname+str(i),famnew,dtemplpath))
             return output
 
     def place_detailitem(self,fam):
