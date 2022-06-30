@@ -45,13 +45,13 @@ class Schuecoframe():
 
         self.docr=Revit.ActiveDBDocument
         
-        self.objs= Select.AllObjectsName()
+        #self.objs= Select.AllObjectsName()
         
         ############## Function Calling ##############
 
         self.newfamdoc=self.newfam(dtemplpath,famname) # 2 Create a detail family doc for each detail inside the drawing
 
-        self.detailitem(self.objects(self.objs),famdetname,dtemplpath,self.newfamdoc) # 3 Creates a lists of detail families_Consider erease the variable *** done (self.nesteddetitem=) erased
+        self.detailitem(self.blockorg()[1], self.blockorg()[0],famdetname,dtemplpath,self.newfamdoc) # 3 Creates a lists of detail families_Consider erease the variable *** done (self.nesteddetitem=) erased
 
         self.place_detailitem(self.newfamdoc) # 4 places the detail items in their place _ Consider erase the variable *** done (self.newdetfaminst=) erased
 
@@ -77,17 +77,17 @@ class Schuecoframe():
     def blockorg(self):
         return blockorg.block_org()
 
-    def objects (self,obj):    
+    """def objects (self,obj):    
         objsfam = [x for x in obj if not "a_" in x]
-        return objsfam
+        return objsfam"""
 
     def newfam (self,temp,name):
         return Create.FamilyNew(temp,name)
     
-    def detailitem (self,familyobjects,famdetname,dtemplpath,famnew):  
+    def detailitem (self,objectname,dic,famdetname,dtemplpath,famnew):  
             output=[]
-            for i,j in enumerate(familyobjects,1):
-                output.append(Create.DetailItems(j,famdetname+str(i),famnew,dtemplpath))
+            for i,j in enumerate(objectname,1):
+                output.append(Create.DetailItems(j,dic,famdetname+str(i),famnew,dtemplpath))
             return output
 
     def place_detailitem(self,fam):

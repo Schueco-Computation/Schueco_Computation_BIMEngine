@@ -178,12 +178,14 @@ class Unit():
         self.hegihtpnl=["2.01"]
         self.widthpnl=["B.01"]
         self.thckpnl= [65.5]
+        self.matnamegl=["Glass"]
                 ##### Spandrel placement
         
-        self.lckkeysp=["A.01,Ext. Axis 1,2.02","A.01,Int. Axis 1,2.02"]
-        self.heightsp= ["3.01","3.01"]
-        self.widthsp= ["B.01","B.01"]
-        self.thckspnd=[32,1]
+        self.lckkeysp=["A.01,Ext. Axis 1,2.02","A.01,Int. Axis 1,2.02","A.01,Int. Axis 1,2.02"]
+        self.heightsp= ["3.01","3.01","3.01"]
+        self.widthsp= ["B.01","B.01","B.01"]
+        self.thckspnd=[33,1,150]
+        self.matnamesp=["SCH_Glass","coil","Mineral Wool"]
             ##### Window Placement Parameters #####
         
         self.lckkeyw= "A.01,Axis,1.01"
@@ -322,18 +324,20 @@ class Unit():
         heightsp=self.heightsp
         widthsp=self.widthsp
         thckspn=self.thckspnd
+        matnamesp=self.matnamesp
 
         for i,j in enumerate(lckkeysp):
-            self.faminstance.panelplacement(doc,"Spandrel",thckspn[i],j,heightsp[i],widthsp[i])
+            self.faminstance.panelplacement(doc,"Spandrel",thckspn[i],j,heightsp[i],widthsp[i],matnamesp[i])
 
         
         lckkeyp=self.lckkeyp
         hegihtpnl=self.hegihtpnl
         widthpnl=self.widthpnl
         thckpn=self.thckpnl
+        matnamegl=self.matnamegl
 
-        #for i,j in enumerate(lckkeyp):
-        #    self.faminstance.panelplacement(doc,"Glz",thckpn[i],j,hegihtpnl[i],widthpnl[i])
+        for i,j in enumerate(lckkeyp):
+            self.faminstance.panelplacement(doc,"Glz",thckpn[i],j,hegihtpnl[i],widthpnl[i],matnamegl[i])
 
     
         

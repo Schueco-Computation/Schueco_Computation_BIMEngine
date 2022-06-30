@@ -26,8 +26,7 @@ clr.ImportExtensions(Convert.Geometry)
 clr.AddReference("RevitServices")
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
-
-
+import csv as csv
 
 doc = Revit.ActiveDBDocument
 
@@ -38,7 +37,7 @@ doc = Revit.ActiveDBDocument
 
 # Select a layer in Rhino
 
-def DetailItems(objectname, famtypename, DetailItemsAllDOC, detailitemtemp):
+def DetailItems(objectname, dic, famtypename, DetailItemsAllDOC, detailitemtemp):
     #layer = rs.GetLayer(layname)
     #rs.ObjectsByLayer()
     #obj= rs.ObjectsByLayer(layer, True)
@@ -91,12 +90,91 @@ def DetailItems(objectname, famtypename, DetailItemsAllDOC, detailitemtemp):
     newtype = newfam.FamilyManager.NewType(famtypename)
     
     parameter = newfam.FamilyManager.get_Parameter("Art. No.")
-
     setartparam = newfam.FamilyManager.Set(parameter, (objectname.split("/")[0]))
+    
+    parameterarea = newfam.FamilyManager.get_Parameter("Area")
+    area = dic[objectname]*10.764
+    setareaparam = []
+    try:
+        setareaparam.append(newfam.FamilyManager.Set(parameterarea, area))
+    except:
+            ""
+    
+    rows=[]
+    with open('Data_base.csv', 'r') as file:
+        reader = csv.reader(file)
+        header = next(reader)
+        for row in reader:
+            rows.append(row)
+    file.close()
+    
+    #removing nones in list
+    data= [ ele for ele in rows if ele is not None ]
+    
+    artno = []
+    density = []
+    material = []
+    for x in data:
+        artno.append(x[0])
+        density.append(x[6])
+        material.append(x[5])
+        
+    dicden = {artno[i]:density[i] for i in range(len(artno))}
+    dicmat = {artno[i]:material[i] for i in range(len(artno))}
+    
+    splitobjname = []
+    try:
+        splitobjname.append(objectname.split("/"))
+    except:
+            ""
+    
+    
+    if splitobjname == []:
+        cleanobjname = objectname
+    else:
+        cleanobjname = splitobjname[0][0]
+    
+    den = []
+    parameterden = newfam.FamilyManager.get_Parameter("Density")
+    densityalu = float(0.00270)/35.31481481
+    #densitycsv = float(dicden[cleanobjname])
+    
+    #density = densitycsv*0.06242796
+    if cleanobjname.startswith("SP"):
+        setdenparam = newfam.FamilyManager.Set(parameterden, densityalu)
+        den.append(densityalu)
+    else:
+        try:
+            setdenparam = newfam.FamilyManager.Set(parameterden, (float(dicden[cleanobjname])/35.31481481))
+            den.append(float(dicden[cleanobjname])/35.31481481)
+        except:
+                ""
+    
+    parametermat = newfam.FamilyManager.get_Parameter("Material")
+    
+    bip = BuiltInParameter.MATERIAL_NAME
+    provider = ParameterValueProvider(ElementId(bip))
+    
+    if cleanobjname.startswith("SP"):
+        evaluator = FilterStringEndsWith()
+        rule = FilterStringRule(provider, evaluator, "Aluminium (European)", False)
+        filter = ElementParameterFilter(rule)
+        matids = FilteredElementCollector(newfam).OfClass(Material).WherePasses(filter).FirstElementId()
+        setmatparam = newfam.FamilyManager.Set(parametermat, matids)
+    else:
+        evaluator = FilterStringEndsWith()
+        rule = FilterStringRule(provider, evaluator, dicmat[cleanobjname], False)
+        filter = ElementParameterFilter(rule)
+        matids = FilteredElementCollector(newfam).OfClass(Material).WherePasses(filter).FirstElementId()
+        setmatparam = newfam.FamilyManager.Set(parametermat, matids)
 
-    #Create Curve Array
-    #carray = CurveArray()
-
+    try:
+        mass = (area*den[0])/0.3046843510117884
+        parametermass = newfam.FamilyManager.get_Parameter("Mass")
+        setmassparam = newfam.FamilyManager.Set(parametermass, mass)
+    except:
+            ""
+    
     bip = BuiltInParameter.VIEW_NAME
     provider = ParameterValueProvider(ElementId(bip))
     evaluator = FilterStringEquals()

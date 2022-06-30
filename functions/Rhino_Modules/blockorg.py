@@ -1,4 +1,3 @@
-from unicodedata import name
 import rhinoscriptsyntax as rs
 import Rhino.Geometry as rc
 import scriptcontext as sc
@@ -64,11 +63,11 @@ def block_org():
     # group hatches by name and calculate the hatch area 
     
     nameh=[]
-    rs.AddLayer("Hatches", None , False,True)
+    #rs.AddLayer("Hatches", None , False,True)
     
     
     for i in hatch:
-        rs.ObjectLayer(i,"Hatches")
+        #rs.ObjectLayer(i,"Hatches")
         nameh.append(rs.ObjectName(i))
 
     uniqu_namesh=set(nameh)
@@ -133,8 +132,8 @@ def block_org():
         if rs.ObjectName(i) == None:
             #print (rs.ObjectName(i))
             rs.DeleteObjects(i)
-        #elif rs.CurveLength(i) < float(0.8):
-            #rs.DeleteObjects(i)
+        elif rs.CurveLength(i) < float(0.8):
+            rs.DeleteObjects(i)
     
     ##### Article numbers Dictionaries #####
 

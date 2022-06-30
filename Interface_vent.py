@@ -1,106 +1,56 @@
-# Enable Python support and load DesignScript library
-import clr
+import os
+import schuecobim as s
 
-clr.AddReference('RhinoInside.Revit')
-clr.AddReference('RevitAPIUI')
+unit=s.schuecosystem.Unit() # Creates Unit instance
 
-import rhinoscriptsyntax as rs
-import Rhino
-from Rhino import Geometry as rg
-import RhinoInside as ri
-clr.AddReference('ProtoGeometry')
-from Autodesk.DesignScript.Geometry import *
+#unit.detpth= "D:\\Detail Item.rft" # 01 --- shared 
 
-#Import RevitAPI
-clr.AddReference("RevitAPI")
-#import Autodesk.Revit.DB as re
-from Autodesk.Revit.DB import*
-from Autodesk.Revit.UI import *
-from Autodesk.Revit.Creation import*
-#as oCreate
-import Autodesk.Revit.ApplicationServices.Application 
+unit.fdname = "Schueco_Cust_Det" # 03 --- shared
 
-# rhino.inside utilities
-from RhinoInside.Revit import Revit, Convert
-clr.ImportExtensions(Convert.Geometry)
+###### Profile Creation Parameters #####
 
-# Import DocumentManager and TransactionManager
-clr.AddReference("RevitServices")
-from RevitServices.Persistence import DocumentManager
-from RevitServices.Transactions import TransactionManager
+unit.proftmplpth= "K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\A_profile.rft" #automate
 
-import schueco
-#from imp import reload
-##BEFORE RUNNING REMEMBER TO LOAD THE wINDOW FAMILY FIRST INTO THE fAMILY UNIT AND OVERWRITE ALL ELEMENTS
+unit.path_prof_files = "K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Projects\\Business Centre Al Farabi\\3dm\\"
 
-doc = Revit.ActiveDBDocument
-files = "Schueco_VentPanel-Window_170mm"
-wtypename = "Schueco_VentPanel-Window_170mm"
-#famwindow = schueco.Create.FamilyNew("D:\F_Window.rft", wtypename)
+unit.prof_files=os.listdir(unit.path_prof_files)
 
 
-objs = schueco.Select.AllObjectsName()
 
-objsfam = [x for x in objs if not "a_" in x]
+##### Window Creation Profiles ##### 
 
-newfam = schueco.Create.FamilyNew("K:\Engineering\Abteilungen\ES\Computation\BIM_strategie\BIM Workflow\Revit templates\Detail Item.rft", "Schueco_Det_Prof")
+#unit.path_frame_files = "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Rhino_files\\FrameFiles\\"
 
-output = []
+unit.ventname = "Schueco_VentPanel-Window_170mm"
 
-for i,j in enumerate(objsfam, 1):
-    f = schueco.Create.DetailItems(j, "Schueco_Cust_Det_VentPanel_"+ str(i), newfam, "K:\Engineering\Abteilungen\ES\Computation\BIM_strategie\BIM Workflow\Revit templates\Detail Item.rft" )
-    output.append(f)
+unit.wtypename="Schueco_UDC-80-UZB_Win-in_Family01"
 
-place = schueco.Place.DetailItems(newfam)
+#unit.wtemppth="D:\Schueco\Programming\Develping_projects_local\Revit Templates\F_Window.rft"
 
-###################################
+##### Frame Creation  Parameters #####
 
-famvent = schueco.Create.FamilyNew("K:\Engineering\Abteilungen\ES\Computation\BIM_strategie\BIM Workflow\Revit templates\C_VentPanels.rft", files)
+unit.frame_files = ["Schueco_Cust_Frame_H01_20mm","Schueco_Cust_Frame_H02_20mm"]
 
-#Reference Lines ya fue actualizada en visual studio code
-
-refl = schueco.Create.ReferenceLines(famvent, "Frame")
-
-#New update for widthdimension to take in consideration vent --> LISTO
-
-dim = schueco.Create.NewWidthDimension(famvent, "Vent")
-
-loadet = newfam.LoadFamily(famvent)
-
-placedet = schueco.Place.DetailItemInprof(famvent)
-
-#New update for this function --> LISTO
-
-rvtlines = schueco.ConvertPoly.ToRvtline("a_simp-prof")
-
-#New: for vent
-rvtlinesvoid = ToRvtline("a_void")
-
-#New: update for extrusion to take in consideration vent too --> LISTO
-
-prof = schueco.CreateExtrusion.NewProfile(famvent, rvtlines, "Axis", "Vent")
-
-#New: VentVoids --> LISTO
-
-void = schueco.Window.VentVoids(famvent, rvtlinesvoid, refl, prof)
-
-load = famvent.LoadFamily(doc)
-
-# New update for this function to take in consideration vent too --> LISTO
-
-paramdim = schueco.Window.Dimensions(doc, "Schueco_VentPanel-Window_170mm")
-#    rs.Command("! _-New None")
+#unit.frametmplpth= "D:\\Schueco\\Programming\\Develping_projects_local\\Revit Templates\\D_Frame_Window.rft" #automate
 
 
-#NewFrameInstance
 
-framevOne = schueco.Window.NewVerticalFrameInstance(doc, "Schueco_Cust_Frame_V01_20mm", "Right", False)
-framevTwo = schueco.Window.NewVerticalFrameInstance(doc, "Schueco_Cust_Frame_V02_20mm", "Left", False)
-framehOne = schueco.Window.NewHorizontalFrameInstance(doc, "Schueco_Cust_Frame_V01_20mm", "Bottom", False)
-framehOne = schueco.Window.NewHorizontalFrameInstance(doc, "Schueco_Cust_Frame_V02_20mm", "Top", False)
+unit.csv_path="C:\\Users\\ramijc\\Schueco\\BIM Workflow\\Projects\\Business Centre Al Farabi\\Csv\\"
 
-#New update Panel Instance to take in consideration vent too --> LISTO
+unit.faminstance=unit.create_family() #Create Family instance
 
-window = schueco.Window.NewPanel(doc, "Schueco_VentPanel-Window_170mm", 41)
+unit.create_profile() #Creates profiles"""
 
-print window
+
+
+
+unit.create_window("Vent") #Creates window
+
+
+unit.family_profile_placement() # places profiles in family instance
+
+
+unit.family_window_placement() # Places window in family instance
+
+
+unit.family_panel_placement() # Places panel in family instance
