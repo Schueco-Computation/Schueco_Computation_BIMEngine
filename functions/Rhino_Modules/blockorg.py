@@ -82,7 +82,7 @@ def block_org():
     articles_area={}
     
     for i,j in enumerate(set(nameh)):
-        articles_area.update({j :(sum(hatch_area[i])/1000)})
+        articles_area.update({j :(sum(hatch_area[i])/1000000)})
         
 
     rs.DeleteObjects(rs.ObjectsByType(65536))
@@ -139,7 +139,6 @@ def block_org():
 
     rs.UnselectObjects(rs.AllObjects())
 
-    print (articles_area)
     return (articles_area,newnames)
 
 
