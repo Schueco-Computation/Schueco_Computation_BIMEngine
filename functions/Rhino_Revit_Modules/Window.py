@@ -457,7 +457,7 @@ def Dimensions(WindowDocument, Typepanel):
     
         axistog = WindowDocument.FamilyManager.get_Parameter("AxisToGlass")
         set = WindowDocument.FamilyManager.Set(winparameter, value)
-        setaxistog = WindowDocument.FamilyManager.Set(axistog, (-distance/304.80))
+        setaxistog = WindowDocument.FamilyManager.Set(axistog, (distance/304.80))
     
     #End Transaction
     

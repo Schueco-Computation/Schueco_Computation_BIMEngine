@@ -118,7 +118,7 @@ def block_org():
    
     ##### Naming reference lines and simplified profile #####
 
-    curvelist=["a_simp-prof","a_ref-line1","a_ref-line2","a_void"]
+    curvelist=["a_simp-prof","a_ref-line1","a_ref-line2","a_void","a_AxisToGlass"]
     for i in curvelist:
         try:
             rs.ObjectName(rs.ObjectsByLayer(i),i)

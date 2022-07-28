@@ -3,15 +3,9 @@ import schuecobim as s
 
 unit=s.schuecosystem.Unit() # Creates Unit instance
 
-#unit.detpth= "D:\\Detail Item.rft" # 01 --- shared 
-
-unit.fdname = "Schueco_Cust_Det" # 03 --- shared
-
 ###### Profile Creation Parameters #####
 
-unit.proftmplpth= "K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\A_profile.rft" #automate
-
-unit.path_prof_files = "C:\\Users\\ramijc\\Desktop\\Try\\"
+unit.path_prof_files = "K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Projects\\Business Centre Al Farabi\\3dm\\"
 
 unit.prof_files=os.listdir(unit.path_prof_files)
 
@@ -39,7 +33,7 @@ unit.csv_path="C:\\Users\\ramijc\\Schueco\\BIM Workflow\\Projects\\Business Cent
 
 unit.faminstance=unit.create_family() #Create Family instance
 
-unit.create_profile() #Creates profiles"""
+unit.create_profile() #Creates profiles
 
 
 
@@ -47,10 +41,10 @@ unit.create_profile() #Creates profiles"""
 #unit.create_window("Vent") #Creates window
 
 
-#unit.family_profile_placement() # places profiles in family instance
+unit.family_profile_placement() # places profiles in family instance
 
 
 #unit.family_window_placement() # Places window in family instance
 
 
-#unit.family_panel_placement() # Places panel in family instance
+unit.family_panel_placement() # Places panel in family instance

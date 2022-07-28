@@ -7,6 +7,7 @@ sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\P
 # import frameschueco
 # import windowschueco
 import schuecosystem
+import schuecosystem_standard
 # import Family
 # import Family
 # import ConvertPoly

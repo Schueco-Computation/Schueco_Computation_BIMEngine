@@ -100,7 +100,7 @@ class Unit():
         
         self.fname="Schueco_Det_Prof" # 02 --- shared
         
-        self.fdname=()# "Schueco_ USC-Cust_ Det" # 03 --- shared
+        self.fdname="Schueco_Cust_Det"# "Schueco_ USC-Cust_ Det" # 03 --- shared
         
         self.contour= "a_simp-prof" # 04 --- shared  --- atomate?
         
@@ -112,7 +112,7 @@ class Unit():
 
         self.prof_files=[]#["V02_75mm"]#,"V04_75mm","V04_270mm","H01-2_75mm", "H01-1_75mm","H02_147mm")
         
-        self.proftmplpth=""# "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Revit Templates\\A_Profile.rft" #automate
+        self.proftmplpth="K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\A_profile.rft"# "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Revit Templates\\A_Profile.rft" #automate
 
 
         ###### Window Creation Parameters #####
@@ -178,7 +178,7 @@ class Unit():
         self.hegihtpnl=["2.01"]
         self.widthpnl=["B.01"]
         self.thckpnl= [65.5]
-        self.matnamegl=["Glass"]
+        self.matnamegl=["SCH_Glass"]
                 ##### Spandrel placement
         
         self.lckkeysp=["A.01,Ext. Axis 1,2.02","A.01,Int. Axis 1,2.02","A.01,Int. Axis 1,2.02"]

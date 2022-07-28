@@ -41,7 +41,7 @@ class Schuecoframe():
     def __init__(self,dtemplpath,famname,famdetname,typename,famframetempath,contournm,extlocation,famwindow):
         ############## Variables  ###########
         
-        self.blockorg()
+        self.elements = self.blockorg()
 
         self.docr=Revit.ActiveDBDocument
         
@@ -51,7 +51,7 @@ class Schuecoframe():
 
         self.newfamdoc=self.newfam(dtemplpath,famname) # 2 Create a detail family doc for each detail inside the drawing
 
-        self.detailitem(self.blockorg()[1], self.blockorg()[0],famdetname,dtemplpath,self.newfamdoc) # 3 Creates a lists of detail families_Consider erease the variable *** done (self.nesteddetitem=) erased
+        self.detailitem(self.elements[1], self.elements[0],famdetname,dtemplpath,self.newfamdoc) # 3 Creates a lists of detail families_Consider erease the variable *** done (self.nesteddetitem=) erased
 
         self.place_detailitem(self.newfamdoc) # 4 places the detail items in their place _ Consider erase the variable *** done (self.newdetfaminst=) erased
 
