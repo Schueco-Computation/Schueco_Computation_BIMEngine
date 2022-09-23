@@ -61,17 +61,24 @@ class Schuecowindow():
     def famwindow (self,wtemppth,wtypename):
         return Create.FamilyNew(wtemppth,wtypename)
     
-    def windowpanel(self,famwindow,ventname, thickness):
-        return Window.NewPanel(famwindow, ventname, thickness)
+    def windowpanel(self,famwindow,ventname, thickness, materialname):
+        return Window.NewPanel(famwindow, ventname, thickness, materialname)
     
     def placefrhor(self,famwindow,frame,place):
         return Window.NewHorizontalFrameInstance(famwindow,frame,place,False)
     
     def placefrvert(self,famwindow,frame,place):
         return Window.NewVerticalFrameInstance(famwindow,frame,place,False)
-   
+
     def loadwindow(self,doc,famwindow):
-        famwindow.LoadFamily(doc)
+        class FamilyOption(IFamilyLoadOptions):
+	        def OnFamilyFound(self, familyInUse, overwriteParameterValues):
+		        overwriteParameterValues = True
+		        return True
+
+	        def OnSharedFamilyFound(self, sharedFamily, familyInUse, source, overwriteParameterValues):
+		        return True
+        famwindow.LoadFamily(doc, FamilyOption())
 
     def windowdim(self,famwindow, typepanel):
         return Window.Dimensions(famwindow,typepanel)

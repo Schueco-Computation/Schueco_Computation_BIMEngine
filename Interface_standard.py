@@ -1,3 +1,4 @@
+# coding=utf-8
 import os
 import schuecobim as s
 
@@ -19,17 +20,17 @@ unit.fdname = "Schueco_Cust_Det" # 03 --- shared
 
 ##### Window Creation Profiles ##### 
 
-unit.path_frame_files = "C:\\Users\\ramijc\\Schueco\\BIM Workflow\\Projects\\Standard project\\3dm\\"
+unit.path_frame_files = "C:\\Users\\ramijc\\Schueco\\BIM Workflow\\Projects\\Schüco UZB, Bielefeld\\Costs\\Rhino frames\\"
 
-unit.ventname = "Schueco_AWS75.SI_170mm"
+unit.ventname = "Schueco_Cust_170mm"
 
-unit.wtypename="Schueco_AWS75.SI_Window_Family01"
+unit.wtypename="Schueco_Cust_Window_Family01"
 
 unit.wtemppth="K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\F_Window.rft"
 
 ##### Frame Creation  Parameters #####
 
-unit.frame_files = ["Schueco_AWS75.SI_Frame_H01_93mm.3dm", "Schueco_AWS75.SI_Frame_H02_93mm.3dm"]
+unit.frame_files = ["Schueco_Cust_Frame_H01_20mm.3dm", "Schueco_UDC-80-UZB_Frame_H02.3dm"]
 
 #unit.frametmplpth= "K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\D_Frame_Window.rft" #automate
 
