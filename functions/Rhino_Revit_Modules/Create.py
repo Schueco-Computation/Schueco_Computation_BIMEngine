@@ -99,7 +99,7 @@ def DetailItems(objectname, dic, famtypename, DetailItemsAllDOC, detailitemtemp)
         setareaparam.append(newfam.FamilyManager.Set(parameterarea, area))
     except:
             ""
-    
+    #Comment from here when there is no data base for density and material """
     rows=[]
     with open('Data_base.csv', 'r') as file:
         reader = csv.reader(file)
@@ -136,7 +136,7 @@ def DetailItems(objectname, dic, famtypename, DetailItemsAllDOC, detailitemtemp)
     
     den = []
     parameterden = newfam.FamilyManager.get_Parameter("Density")
-    densityalu = float(0.00270)/35.31481481
+    densityalu = float(2700)/35.31481481
     #densitycsv = float(dicden[cleanobjname])
     
     #density = densitycsv*0.06242796
@@ -162,7 +162,8 @@ def DetailItems(objectname, dic, famtypename, DetailItemsAllDOC, detailitemtemp)
         matids = FilteredElementCollector(newfam).OfClass(Material).WherePasses(filter).FirstElementId()
         setmatparam = newfam.FamilyManager.Set(parametermat, matids)
     else:
-        try :
+
+        try:
             evaluator = FilterStringEndsWith()
             rule = FilterStringRule(provider, evaluator, dicmat[cleanobjname], False)
             filter = ElementParameterFilter(rule)
@@ -177,7 +178,7 @@ def DetailItems(objectname, dic, famtypename, DetailItemsAllDOC, detailitemtemp)
         setmassparam = newfam.FamilyManager.Set(parametermass, mass)
     except:
             ""
-    
+    #until here"""
     bip = BuiltInParameter.VIEW_NAME
     provider = ParameterValueProvider(ElementId(bip))
     evaluator = FilterStringEquals()

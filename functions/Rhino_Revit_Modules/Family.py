@@ -923,8 +923,8 @@ def NewPanel(Document, Typepanel, Thickness, LocationKey, EndHeigthRefPlane, End
     
     ################ Panel
     
-    keysname = ("Glz","Panel","Spandrel")
-    lst = ("Glz_40mm", "Panel_2mm", "Spandrel-Panel_100mm")
+    keysname = ("Glz","Panel","Spandrel","IntGlz","IntPanel","IntSpandrel","GlzCust")
+    lst = ("Glz_40mm", "Panel_2mm", "Spandrel-Panel_100mm","IntGlz_40mm", "IntPanel_2mm", "IntSpandrel-Panel_100mm","GlzCust_40mm")
     
     paneldi = {keysname[i]:lst[i] for i in range(len(keysname))}
     
@@ -939,7 +939,28 @@ def NewPanel(Document, Typepanel, Thickness, LocationKey, EndHeigthRefPlane, End
 
     splitname = paneldi[Typepanel].split("_")
     rename = splitname[0]+ str("_")+str(Thickness)+str("mm")
+
+        #Opening, closing and reloading of the panel family to make sure it loads all the new types
+    familyDocument = panel.Family
+    edit = Document.EditFamily(familyDocument)
+    manager = edit.FamilyManager
     
+    tsub = TransactionManager.Instance
+    tsub.EnsureInTransaction(edit)
+    
+    #End Transaction
+    TransactionManager.ForceCloseTransaction(tsub)
+    
+    class FamilyOption(IFamilyLoadOptions):
+	    def OnFamilyFound(self, familyInUse, overwriteParameterValues):
+		    overwriteParameterValues = True
+		    return True
+
+	    def OnSharedFamilyFound(self, sharedFamily, familyInUse, source, overwriteParameterValues):
+		    return True
+    load = edit.LoadFamily(Document, FamilyOption())
+    ########################
+
     bip = BuiltInParameter.SYMBOL_NAME_PARAM
     provider = ParameterValueProvider(ElementId(bip))
     evaluator = FilterStringEquals()

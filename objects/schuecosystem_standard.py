@@ -117,13 +117,13 @@ class Unit():
 
         ###### Window Creation Parameters #####
 
-        self.path_frame_files ="K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Projects\\Business Centre Al Farabi\\3dm\\Frames\\"# "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Rhino_files\\FrameFiles\\"
+        self.path_frame_files =""#K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Projects\\Business Centre Al Farabi\\3dm\\Frames\\"# "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Rhino_files\\FrameFiles\\"
         
         self.wtypename=""#"Schueco_UDC-80-UZB_Win-in_Family01"
 
         self.wtemppth="K:\\Engineering\\Abteilungen\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\F_Window.rft"
 
-        self.windowtype = "Vent"
+        self.windowtype = "Win"
 
             ##### Frame Creation  Parameters #####
 
@@ -260,9 +260,9 @@ class Unit():
 
         if windowtype == "Vent":
             self.ventpanel_creation(self.path_vent_files,self.ventname,self.detpth,self.fdname,self.fname,self.venttempath,self.contour,self.extrloc,famwindow,self.contournmvoid)
-            window.windowpanel(famwindow,self.ventname, 41)
+            window.windowpanel(famwindow,self.ventname, 38)
         else:
-            window.windowpanel(famwindow,"Glz", 41)
+            window.windowpanel(famwindow,"Glz", 38)
 
         window.windowdim(famwindow, windowtype)
 

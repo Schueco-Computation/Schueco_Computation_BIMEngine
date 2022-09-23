@@ -6,6 +6,9 @@ import schuecosystem
 # import familyschueco
 # import frameschueco
 # import windowschueco
+
+import schuecosystem
+
 # import Family
 # import Family
 # import ConvertPoly        

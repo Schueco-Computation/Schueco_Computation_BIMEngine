@@ -25,7 +25,7 @@
 236956,Corner cleat,TRUE,,0,,
 244316,PT INSUL. BAR SM 37.5/18.9,TRUE,,0,,
 244318,PT insul. bar Sm 37.5/28.9,TRUE,,0,,
-246427,Front chamber gkt 20,TRUE,,0,"EPDM (Rubber, Synthetic)",0.00251
+246427,Front chamber gkt 20,TRUE,,0,"EPDM (Rubber, Synthetic)",100
 247001,Push w-hdle C0 IW,TRUE,,0,,
 247083,Handle rstte Basis IW,TRUE,,0,,
 265087,Glazing bridge Reinf,TRUE,,0,,
@@ -61,28 +61,28 @@
 Fenstergriff,,TRUE,,0,,
 v8-34604,,TRUE,,0,,
 203087,Empty,TRUE,,0,,
-224085,Empty,TRUE,,0,Polyamide,0.00113
-224105,Empty,TRUE,,0,"EPDM (Rubber, Synthetic)",0.00251
-224313,Empty,TRUE,,0,"EPDM (Rubber, Synthetic)",0.00251
-244058,Empty,TRUE,,0,EPDM (Moosgummi),0.00251
-244219,Empty,TRUE,,0,Polyamide,0.00113
-244511,Empty,TRUE,,0,EPDM (Moosgummi),0.00251
-244512,Empty,TRUE,,0,EPDM (Moosgummi),0.00251
-246504,Empty,TRUE,,0,"EPDM (Rubber, Synthetic)",0.00251
+224085,Empty,TRUE,,0,Polyamide,1140
+224105,Empty,TRUE,,0,"EPDM (Rubber, Synthetic)",100
+224313,Empty,TRUE,,0,"EPDM (Rubber, Synthetic)",100
+244058,Empty,TRUE,,0,EPDM (Moosgummi),400
+244219,Empty,TRUE,,0,Polyamide,1140
+244511,Empty,TRUE,,0,EPDM (Moosgummi),400
+244512,Empty,TRUE,,0,EPDM (Moosgummi),400
+246504,Empty,TRUE,,0,"EPDM (Rubber, Synthetic)",100
 268614,Empty,TRUE,,0,,
-284834,Empty,TRUE,,0,"EPDM (Rubber, Synthetic)",0.00251
-288126,Empty,TRUE,,0,Polyethylene foam,18
+284834,Empty,TRUE,,0,"EPDM (Rubber, Synthetic)",100
+288126,Empty,TRUE,,0,Polyethylene foam,910
 298968,Empty,TRUE,,0,,
-323390,Empty,TRUE,,0,Aluminium (European),0.0027
-336830,Empty,TRUE,,0,Aluminium (European),0.0027
-9072781,Empty,TRUE,,0,Aluminium (European),0.0027
-9072789,Empty,TRUE,,0,Aluminium (European),0.0027
-9073979,Empty,TRUE,,0,Aluminium (European),0.0027
-9639608,Empty,TRUE,,0,Aluminium (European),0.0027
-SD01-a,Empty,TRUE,,0,"EPDM (Rubber, Synthetic)",0.00251
+323390,Empty,TRUE,,0,Aluminium (European),2700
+336830,Empty,TRUE,,0,Aluminium (European),2700
+9072781,Empty,TRUE,,0,Aluminium (European),2700
+9072789,Empty,TRUE,,0,Aluminium (European),2700
+9073979,Empty,TRUE,,0,Aluminium (European),2700
+9639608,Empty,TRUE,,0,Aluminium (European),2700
+SD01-a,Empty,TRUE,,0,"EPDM (Rubber, Synthetic)",100
 SP-001c,Empty,TRUE,,0,,
 SP-002,Empty,TRUE,,0,,
 SP-004b,Empty,TRUE,,0,,
 SP007-c,Empty,TRUE,,0,,
 SP008-c,Empty,TRUE,,0,,
-v8-61259,Empty,TRUE,,0,"EPDM (Rubber, Synthetic)",0.00251
+v8-61259,Empty,TRUE,,0,"EPDM (Rubber, Synthetic)",100
