@@ -162,11 +162,14 @@ def DetailItems(objectname, dic, famtypename, DetailItemsAllDOC, detailitemtemp)
         matids = FilteredElementCollector(newfam).OfClass(Material).WherePasses(filter).FirstElementId()
         setmatparam = newfam.FamilyManager.Set(parametermat, matids)
     else:
-        evaluator = FilterStringEndsWith()
-        rule = FilterStringRule(provider, evaluator, dicmat[cleanobjname], False)
-        filter = ElementParameterFilter(rule)
-        matids = FilteredElementCollector(newfam).OfClass(Material).WherePasses(filter).FirstElementId()
-        setmatparam = newfam.FamilyManager.Set(parametermat, matids)
+        try :
+            evaluator = FilterStringEndsWith()
+            rule = FilterStringRule(provider, evaluator, dicmat[cleanobjname], False)
+            filter = ElementParameterFilter(rule)
+            matids = FilteredElementCollector(newfam).OfClass(Material).WherePasses(filter).FirstElementId()
+            setmatparam = newfam.FamilyManager.Set(parametermat, matids)
+        except:
+                ""
 
     try:
         mass = (area*den[0])/0.3046843510117884

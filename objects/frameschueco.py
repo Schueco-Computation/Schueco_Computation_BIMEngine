@@ -1,7 +1,7 @@
 import sys
 sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Modules")
 sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Revit_Modules")
-import blockorg
+import blockorg_00
 import corners
 import simplify
 import ConvertPoly
@@ -38,10 +38,27 @@ from RevitServices.Transactions import TransactionManager
 
 class Schuecoframe():
    
-    def __init__(self,dtemplpath,famname,famdetname,typename,famframetempath,contournm,extlocation,famwindow):
+    def __init__(self,dtemplpath,famname,famdetname,typename,typeID,famframetempath,contournm,extlocation,famwindow):
+        
+        """
+        inputs =>
+
+        1.- dtemplpath : Detail template path (Shared)
+        2.- famname : Detail Mother family Name (Shared)
+        3.- famdetname : Each article number as detail item (Shared)
+        4.- typename : boundled block Name ()
+        5.- typeID : boundled block ID ()
+        6.- famframetempath :
+        7.- contournm
+        8.- extlocation :
+        9.- famwindow: 
+
+        """
+        
+        
         ############## Variables  ###########
         
-        self.blockorg()
+        self.inst=blockorg_00.block_org(typeID)
 
         self.docr=Revit.ActiveDBDocument
         
@@ -51,7 +68,7 @@ class Schuecoframe():
 
         self.newfamdoc=self.newfam(dtemplpath,famname) # 2 Create a detail family doc for each detail inside the drawing
 
-        self.detailitem(self.blockorg()[1], self.blockorg()[0],famdetname,dtemplpath,self.newfamdoc) # 3 Creates a lists of detail families_Consider erease the variable *** done (self.nesteddetitem=) erased
+        self.detailitem(self.inst[1], self.inst[0],famdetname,dtemplpath,self.newfamdoc) # 3 Creates a lists of detail families_Consider erease the variable *** done (self.nesteddetitem=) erased
 
         self.place_detailitem(self.newfamdoc) # 4 places the detail items in their place _ Consider erase the variable *** done (self.newdetfaminst=) erased
 
@@ -73,13 +90,6 @@ class Schuecoframe():
 
         self.famload(self.famframe,famwindow) # 12 Loads profile family into mother family _ Consider erase the variable
   
-
-    def blockorg(self):
-        return blockorg.block_org()
-
-    """def objects (self,obj):    
-        objsfam = [x for x in obj if not "a_" in x]
-        return objsfam"""
 
     def newfam (self,temp,name):
         return Create.FamilyNew(temp,name)

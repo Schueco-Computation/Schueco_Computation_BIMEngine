@@ -1,7 +1,8 @@
 import sys
-sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Modules")
-sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Revit_Modules")
-import blockorg
+sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\objects")
+sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Modules")
+sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Revit_Modules")
+import blockorg_00
 import corners
 import simplify
 import ConvertPoly
@@ -43,7 +44,7 @@ class Schuecoprofile():
     def __init__(self,dtemplpath,famname,famdetname,typename,famproftempath,contournm,extlocation):
         ############## Variables  ###########
         
-        self.elements = self.blockorg()
+        self.elements = blockorg_00.block_org(typename)
         
         self.docr=Revit.ActiveDBDocument
 
@@ -59,7 +60,7 @@ class Schuecoprofile():
 
         self.place_detailitem(self.newfamdoc) # 4 Places the detail items in their place
 
-        self.proffamil=self.prof_fam(famproftempath,typename)
+        self.proffamil=self.prof_fam(famproftempath,self.elements[1])
 
         self.reflinervt=self.refline(self.proffamil)
         
@@ -75,11 +76,11 @@ class Schuecoprofile():
         
         self.famload(self.proffamil,self.docr)
     
-    
+    """
     def blockorg(self):
         return blockorg.block_org()
 
-    """def objects (self,obj):   
+    def objects (self,obj):   
         #objsfam = [x for x in obj if not "a_" or "Ref" in x]
         objsfam =[]
         for i in obj:
@@ -100,7 +101,7 @@ class Schuecoprofile():
         return Place.DetailItems(fam)
     
     def prof_fam(self,path,name_type):
-        return Create.FamilyNew(path,name_type)
+        return Create.FamilyNew(path,"Schueco_AWS75.SI_Frame_H01_93mm")
 
     def famload (self,detaildoc,famprof):
         return detaildoc.LoadFamily(famprof)
