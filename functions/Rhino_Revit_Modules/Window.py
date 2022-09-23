@@ -49,14 +49,14 @@ def FrameCornerVoids(Document, ObjectName):
         
     fixrvtpts= []
     for i in rvtpts:
-        fixrvtpts.append(XYZ(i.X, i.Y, ((i.Z)-(12/304.80))))
+        fixrvtpts.append(XYZ(i.X, i.Y, ((i.Z)-(23/304.80))))
 
     firstp = fixrvtpts[0]
     scndp = fixrvtpts[1]
 
     distance = firstp.DistanceTo(scndp)
 
-    thirdp = XYZ(firstp.X,firstp.Y, (distance-(12/304.80)))
+    thirdp = XYZ(firstp.X,firstp.Y, (distance-(23/304.80)))
 
     lineOne= Line.CreateBound(firstp,scndp)
     lineTwo = Line.CreateBound(scndp, thirdp)
@@ -464,7 +464,7 @@ def Dimensions(WindowDocument, Typepanel):
     TransactionManager.ForceCloseTransaction(t1)
     return parameter
 
-def NewPanel(WindowDocument, Typepanel, Thickness):
+def NewPanel(WindowDocument, Typepanel, Thickness, materialname):
 
     #First: Dictionaries
     
@@ -558,8 +558,8 @@ def NewPanel(WindowDocument, Typepanel, Thickness):
     
     ################ Panel
     
-    keysname = ["Glz","Panel"]
-    lst = ["Glz_40mm", "Panel_2mm"]
+    keysname = ["Glz","Panel", "GlzCust"]
+    lst = ["Glz_40mm", "Panel_2mm", "GlzCust_40mm"]
     
     paneldi = {keysname[i]:lst[i] for i in range(len(keysname))}
     
@@ -615,6 +615,16 @@ def NewPanel(WindowDocument, Typepanel, Thickness):
     param = newobj.GetParameters("Panel width")
     setwidth = param[0].Set(widthpanel)
     
+    bip = BuiltInParameter.MATERIAL_NAME
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEndsWith()
+    rule = FilterStringRule(provider, evaluator, materialname, False)
+    filter = ElementParameterFilter(rule)
+    matids = FilteredElementCollector(WindowDocument).OfClass(Material).WherePasses(filter).FirstElementId()
+    
+    parammat = newobj.GetParameters("Panel material")
+    setwidthmat = parammat[0].Set(matids)
+
     #End Transaction
     TransactionManager.ForceCloseTransaction(t1)
     

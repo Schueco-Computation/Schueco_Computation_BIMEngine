@@ -117,23 +117,23 @@ class Unit():
 
         ###### Window Creation Parameters #####
 
-        self.path_frame_files ="K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Projects\\Business Centre Al Farabi\\3dm\\Frames\\"# "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Rhino_files\\FrameFiles\\"
+        self.path_frame_files =""#"K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Projects\\Business Centre Al Farabi\\3dm\\Frames\\"# "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Rhino_files\\FrameFiles\\"
         
         self.wtypename=""#"Schueco_UDC-80-UZB_Win-in_Family01"
 
         self.wtemppth="K:\\Engineering\\Abteilungen\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\F_Window.rft"
 
-        self.windowtype = "Vent"
+        self.windowtype=""#"Vent"
 
             ##### Frame Creation  Parameters #####
 
         self.frame_files = ""#["Schueco_UDC-80-UZB_Frame_H01"],"Schueco_UDC-80-UZB_Frame_H02","Schueco_UDC-80-UZB_Frame_V01","Schueco_UDC-80-UZB_Frame_V02"]
         
-        self.frametmplpth= "K:\\Engineering\\Abteilungen\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\D_Frame_Window.rft" #automate
+        self.frametmplpth= "K:\\Engineering\\Abteilungen\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\D_Frame_Window - 23.rft" #automate
 
             ##### Vent Creation Parameters
 
-        self.path_vent_files = "K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Projects\\Business Centre Al Farabi\\3dm\\Vent panel\\"
+        self.path_vent_files = "" #"K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Projects\\Business Centre Al Farabi\\3dm\\Vent panel\\"
         self.ventname = "" #Name del Vent
         self.venttempath = "K:\\Engineering\\Abteilungen\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\C_VentPanels.rft"
         self.contournmvoid = "a_void"
@@ -149,22 +149,22 @@ class Unit():
 
                         ### no mirror profiles ##
         
-        self.nmirrpv=["Schueco_Cust_Prof_H01_48mm","Schueco_Cust_Prof_H02_48mm"]
-        self.vnmirrk= ["A,Axis,1","A,Axis,2"]
-        self.vnmirrenpl= ["2","3"]
+        self.nmirrpv=["Schueco_Cust_Prof_H01_32mm","Schueco_Cust_Prof_H02_65mm"]
+        self.vnmirrk= ["A,Axis,1","B,Axis,1.01"]
+        self.vnmirrenpl= ["4","4.01"]
         
                     ### mirror profiles ###
 
-        self.mirrpv= ["Schueco_Cust_Prof_H01_48mm", "Schueco_Cust_Prof_H02_48mm"]
-        self.vmirrk= ["B,Axis,1", "B,Axis,2"]
-        self.vmirrenpl= ["2", "3"] 
+        self.mirrpv= ["Schueco_Cust_Prof_H01_32mm"]
+        self.vmirrk= ["C,Axis,1"]
+        self.vmirrenpl= ["4"] 
         
         
                 ## HORIZONTAL 
         
-        self.Hp= ["Schueco_Cust_Prof_V01-1_49mm","Schueco_Cust_Prof_V02_86mm","Schueco_Cust_Prof_V01-2_51mm"]
-        self.hk= ["A.01,Ext. Axis 1,3","A.01,Axis,2","A.01,Axis,1"]
-        self.henpl= ["B.01","B.01","B.01"]
+        self.Hp= ["Schueco_Cust_Prof_H02_65mm", "Schueco_Cust_Prof_H02_65mm", "Schueco_Cust_Prof_V01_52mm", "Schueco_Cust_Prof_V02_37mm"]
+        self.hk= ["A.01,Axis,2", "A.01,Axis,3", "A.01,Axis,1", "A.01,Axis,4"]
+        self.henpl= ["B.01", "B.01", "C.01", "C.01"]
 
 
         self.csv_path=()
@@ -174,22 +174,42 @@ class Unit():
     
                     #### Glazing placement
         
-        self.lckkeyp= ["A.01,Axis,1.01"]
-        self.hegihtpnl=["2.01"]
-        self.widthpnl=["B.01"]
-        self.thckpnl= [65.5]
+        self.lckkeyg= ["A.01,Axis,1.01"]
+        self.hegihtg=["3.01"]#["2.01"]
+        self.widthg=["B.01"]
+        self.thckg= [41]
         self.matnamegl=["SCH_Glass"]
+
+                    #### Panel placement
+        
+        self.lckkeypnl= ["B.02,Ext. Axis 1,1.01", "B.02,Int. Axis 4,1.01", "B.02,Ext. Axis 2,1.01"]
+        self.hegihtpnl=["4.01","4.01", "4.01"]
+        self.widthpnl=["C.01","C.01", "C.01" ]
+        self.thckpnl= [3,2,200]
+        self.matnamepnl=["Aluminium (European)", "coil", "Default"]
+
+
                 ##### Spandrel placement
         
-        self.lckkeysp=["A.01,Ext. Axis 1,2.02","A.01,Int. Axis 1,2.02","A.01,Int. Axis 1,2.02"]
-        self.heightsp= ["3.01","3.01","3.01"]
-        self.widthsp= ["B.01","B.01","B.01"]
-        self.thckspnd=[33,1,150]
-        self.matnamesp=["SCH_Glass","coil","Mineral Wool"]
+        self.lckkeysp=["A.01,Ext. Axis 1,3.02"]
+        self.heightsp= ["4.01"]
+        self.widthsp= ["B.01"]
+        self.thckspnd=[2]
+        self.matnamesp=["Aluminium (European)"]
+
+                ##### Internal panel placement
+        
+        self.lckkeyip=["A.01,Int. Axis 1,3.02","B.02,Int. Axis 3,1.01","A.01,Int. Axis 2,3.02"]
+        self.heightip= ["4.01","4.01","4.01"]
+        self.widthip= ["B.01","C.01","B.01"]
+        self.thckip=[149,170,2]
+        self.matnameip=["Mineral Wool", "Mineral Wool", "coil"]
+            
+            
             ##### Window Placement Parameters #####
         
-        self.lckkeyw= "A.01,Axis,1.01"
-        self.heightw="2.01"
+        self.lckkeyw= "A.01,Axis,2.02"
+        self.heightw="3.01"
         self.widthw= "B.01"
         
     
@@ -227,10 +247,10 @@ class Unit():
 
     def frame_placement(self,frame_files,famwindow,window):
 
-        window.placefrhor(famwindow,frame_files[0],"Bottom")
-        window.placefrvert(famwindow,frame_files[0],"Right")
-        window.placefrhor(famwindow,frame_files[1],"Top")
-        window.placefrvert(famwindow,frame_files[1],"Left")
+        window.placefrhor(famwindow,frame_files[0],"Top")
+        window.placefrvert(famwindow,frame_files[0],"Left")
+        window.placefrhor(famwindow,frame_files[1],"Bottom")
+        window.placefrvert(famwindow,frame_files[1],"Right")
         """frplaces=["Bottom","Top","Right","Left"]
 
         for i,j in enumerate(frame_files):
@@ -260,9 +280,9 @@ class Unit():
 
         if windowtype == "Vent":
             self.ventpanel_creation(self.path_vent_files,self.ventname,self.detpth,self.fdname,self.fname,self.venttempath,self.contour,self.extrloc,famwindow,self.contournmvoid)
-            window.windowpanel(famwindow,self.ventname, 41)
+            window.windowpanel(famwindow,self.ventname, 41.04)
         else:
-            window.windowpanel(famwindow,"Glz", 41)
+            window.windowpanel(famwindow,"GlzCust", 41.04, "SCH_Glass")
 
         window.windowdim(famwindow, windowtype)
 
@@ -330,17 +350,32 @@ class Unit():
             self.faminstance.panelplacement(doc,"Spandrel",thckspn[i],j,heightsp[i],widthsp[i],matnamesp[i])
 
         
-        lckkeyp=self.lckkeyp
-        hegihtpnl=self.hegihtpnl
-        widthpnl=self.widthpnl
-        thckpn=self.thckpnl
+        lckkeyg=self.lckkeyg
+        hegihtg=self.hegihtg
+        widthg=self.widthg
+        thckg=self.thckg
         matnamegl=self.matnamegl
 
-        for i,j in enumerate(lckkeyp):
-            self.faminstance.panelplacement(doc,"Glz",thckpn[i],j,hegihtpnl[i],widthpnl[i],matnamegl[i])
+        for i,j in enumerate(lckkeyg):
+            self.faminstance.panelplacement(doc,"Glz",thckg[i],j,hegihtg[i],widthg[i],matnamegl[i])
 
+        lckkeypnl=self.lckkeypnl
+        hegihtpnl=self.hegihtpnl
+        widthpnl=self.widthpnl
+        thckpnl=self.thckpnl
+        matnamepnl=self.matnamepnl
+
+        for i,j in enumerate(lckkeypnl):
+            self.faminstance.panelplacement(doc,"Panel",thckpnl[i],j,hegihtpnl[i],widthpnl[i],matnamepnl[i])
     
-        
+        lckkeyip=self.lckkeyip
+        heightip=self.heightip
+        widthip=self.widthip
+        thckip=self.thckip
+        matnameip=self.matnameip
+
+        for i,j in enumerate(lckkeyip):
+            self.faminstance.panelplacement(doc,"IntPanel",thckip[i],j,heightip[i],widthip[i],matnameip[i])
 
 
 

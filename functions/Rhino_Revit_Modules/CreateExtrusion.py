@@ -40,7 +40,7 @@ def NewProfile(newfamily, rvtlines, locationref, FrameProfOrVent):
         name = mullionlength.get_Parameter(BuiltInParameter.DIM_VALUE_LENGTH)
         paramvalue = name.AsDouble()
     
-        value = paramvalue+(24/304.80)
+        value = paramvalue+(46/304.80)
         dim.append(value)
         
     elif FrameProfOrVent == "Vent":
