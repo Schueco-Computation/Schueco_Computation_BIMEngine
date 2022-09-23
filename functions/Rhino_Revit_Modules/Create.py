@@ -162,6 +162,7 @@ def DetailItems(objectname, dic, famtypename, DetailItemsAllDOC, detailitemtemp)
         matids = FilteredElementCollector(newfam).OfClass(Material).WherePasses(filter).FirstElementId()
         setmatparam = newfam.FamilyManager.Set(parametermat, matids)
     else:
+
         try:
             evaluator = FilterStringEndsWith()
             rule = FilterStringRule(provider, evaluator, dicmat[cleanobjname], False)

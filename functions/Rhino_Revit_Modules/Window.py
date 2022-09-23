@@ -451,10 +451,11 @@ def Dimensions(WindowDocument, Typepanel):
     else:
         lineone = rs.ObjectsByName("a_AxisToGlass")
         linetwo = rs.ObjectsByName("a_ref-line2")
-    
+        print (lineone , linetwo)
         intersection = rs.LineLineIntersection(lineone, linetwo)
+        
         distance = intersection[0][1]
-    
+        print (distance)
         axistog = WindowDocument.FamilyManager.get_Parameter("AxisToGlass")
         set = WindowDocument.FamilyManager.Set(winparameter, value)
         setaxistog = WindowDocument.FamilyManager.Set(axistog, (distance/304.80))

@@ -1,26 +1,28 @@
 import rhinoscriptsyntax as rs
 import Rhino.Geometry as rc
 import scriptcontext as sc
+import block_exploder
 
-def block_org():
 
-    names=[]
 
-    guid =rs.ObjectsByType(4096)
+def block_org(bl):
+    """
+    input: objects ID (First level profile block e.g Sch_V_00...) 
+    """
+    block_ob=bblock_ob=rs.ExplodeBlockInstance(bl)
 
-    
-    oldnames = []
+    items=block_exploder.block_reader(block_ob)
 
-    for x in guid:
-        oldnames.append(rs.BlockInstanceName(x))
-        
+    list_g=((items)[1])
+    list_n=(items)[0]
+
     nameschange = []
-    for x in oldnames:
+    for x in list_n:
         if "_" in x:
             nameschange.append(x.split("_")[0])
         else:
             nameschange.append(x)
-    
+
     newnames = []
     for i,v in enumerate(nameschange):
         totalcount = nameschange.count(v)
@@ -28,44 +30,21 @@ def block_org():
         
         newnames.append(v + str("/") + str(count + 1) if totalcount > 1 else v)
 
-    rename=[]
 
-    for i,j in enumerate(guid):
-        rename.append(rs.ObjectName(j,newnames[i]))
+    fil_names=[]
+    for i,j in enumerate(list_g):
+        for k in j:
+            for l in rs.NormalObjects():
+                if k == l:
+                    (rs.ObjectName(k,newnames[i]))
+                    fil_names.append(newnames[i])
 
-    ###### First explode #####
-    """
-    a=rs.ObjectsByType(4096)
-
-    for i in a:
-        rs.ExplodeBlockInstance(i)
-    """
-    ###### Nested explode #####
-
-    def explode_em(blocks, name):
-        for Id in blocks:
-            if rs.IsBlockInstance(Id):
-                names.append(rs.BlockInstanceName(Id))
-                rs.ObjectName(rs.BlockObjects(rs.BlockInstanceName(Id)),name)
-                blocks=rs.ExplodeBlockInstance(Id)
-
-                if blocks:
-                    explode_em(blocks, name)
-
+    # # group hatches by name and calculate the hatch area 
     
-    for x in newnames:
-        y = rs.ObjectsByName(x)
-        for z in y:
-            #print([z])
-            explode_em([z], x)
-
     hatch=rs.ObjectsByType(65536)
 
-    # group hatches by name and calculate the hatch area 
-     
     nameh=[]
     #rs.AddLayer("Hatches", None , False,True)
-    
     
     for i in hatch:
         #rs.ObjectLayer(i,"Hatches")
@@ -88,29 +67,29 @@ def block_org():
         
 
     rs.DeleteObjects(rs.ObjectsByType(65536))
-    objects=[]
+    # objects=[]
 
-    for i in names:
+    # for i in names:
 
-        if len(rs.ObjectsByName(i))>0:
-            objects.append(rs.ObjectsByName(i))
-        else:
-            names.pop(names.index(i))
+    #     if len(rs.ObjectsByName(i))>0:
+    #         objects.append(rs.ObjectsByName(i))
+    #     else:
+    #         names.pop(names.index(i))
 
-    qtty=[]
+    # qtty=[]
 
-    for i in names:
-         qtty.append(names.count(i))
+    # for i in names:
+    #      qtty.append(names.count(i))
 
     
     #### Reduce Polylines points #####
     
-    degrees=(rs.AllObjects())
+    degrees=(rs.NormalObjects())
     for i in degrees:
         rs.SelectObject(i)
         rs.Command('-ChangeDegree _Deformable=Yes 1 _Enter')
         
-    reduced=(rs.AllObjects())
+    reduced=(rs.NormalObjects())
 
     for i in reduced:
         rs.SelectObject(i)
@@ -119,16 +98,16 @@ def block_org():
    
     ##### Naming reference lines and simplified profile #####
 
-    curvelist=["a_simp-prof","a_ref-line1","a_ref-line2","a_void","a_AxisToGlass"]
-    for i in curvelist:
-        try:
-            rs.ObjectName(rs.ObjectsByLayer(i),i)
-        except:
-                ""
+    # curvelist=["a_simp-prof","a_ref-line1","a_ref-line2","a_void"]
+    # for i in curvelist:
+    #     try:
+    #         rs.ObjectName(rs.ObjectsByLayer(i),i)
+    #     except:
+    #             ""
 
     ##### Cleaning file ####
     
-    rest=rs.AllObjects()
+    rest=rs.NormalObjects()
 
     for i in rest:
         if rs.ObjectName(i) == None:
@@ -139,11 +118,11 @@ def block_org():
     
     ##### Article numbers Dictionaries #####
 
-    rs.UnselectObjects(rs.AllObjects())
-
-    return (articles_area,newnames)
+    rs.UnselectObjects(rs.NormalObjects())
+   
+    return (articles_area,set(fil_names))
 
 
 if __name__ == '__main__':
-    block_org()
+    pass
 
