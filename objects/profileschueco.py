@@ -70,7 +70,7 @@ class Schuecoprofile():
         
         self.revitcontour=self.revitlines(contournm)
         
-        self.revitextrusion=self.revit_extrusion(self.proffamil,self.revitcontour,extlocation)
+        self.revitextrusion=self.revit_extrusion(self.proffamil,self.revitcontour,contournm,extlocation)
         
         self.dimension(self.proffamil)
         
@@ -112,8 +112,8 @@ class Schuecoprofile():
     def revitlines(self,prof_contour):
         return ConvertPoly.ToRvtline(prof_contour)
     
-    def revit_extrusion(self,famprof,lines,locationref):
-        return CreateExtrusion.NewProfile(famprof,lines,locationref,"Profile")
+    def revit_extrusion(self,famprof,lines,prof_contour,locationref):
+        return CreateExtrusion.NewProfile(famprof,lines,locationref,prof_contour,"Profile")
      
     def refline(self,famprof):
         return Create.ReferenceLines(famprof,"Profile")

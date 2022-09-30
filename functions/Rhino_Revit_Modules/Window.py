@@ -34,29 +34,34 @@ def FrameCornerVoids(Document, ObjectName):
     object = rs.ObjectsByName(ObjectName)
     pts = rs.BoundingBox(object)
     
+    distanceofinsertion = []
     selectedpts = []
     if pts[0][0] <= -35:
         points = [pts[0], pts[1], pts[2]]
         selectedpts.append(points)
+        distanceofinsertion.append(pts[1][0])
     else:
         points = [pts[1], pts[0], pts[3]]
         selectedpts.append(points)
-    
+        distanceofinsertion.append(-pts[0][0])
+
     rvtpts = []
     for pp in selectedpts[0]:
         e = ri.Revit.Convert.Geometry.GeometryEncoder.ToXYZ(pp)
         rvtpts.append(e)
-        
+
+    dstinsertion = round(distanceofinsertion[0], 0) 
+
     fixrvtpts= []
     for i in rvtpts:
-        fixrvtpts.append(XYZ(i.X, i.Y, ((i.Z)-(23/304.80))))
+        fixrvtpts.append(XYZ(i.X, i.Y, ((i.Z)-(dstinsertion/304.80))))
 
     firstp = fixrvtpts[0]
     scndp = fixrvtpts[1]
 
     distance = firstp.DistanceTo(scndp)
 
-    thirdp = XYZ(firstp.X,firstp.Y, (distance-(23/304.80)))
+    thirdp = XYZ(firstp.X,firstp.Y, (distance-(distanceofinsertion[0]/304.80)))
 
     lineOne= Line.CreateBound(firstp,scndp)
     lineTwo = Line.CreateBound(scndp, thirdp)

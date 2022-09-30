@@ -86,7 +86,7 @@ class Schuecoframe():
 
         self.revitcontour=self.revitlines(contournm) # 9 converts rhino polyline contour into revit contour
 
-        self.revitextrusion=self.revit_extrusion(self.famframe,self.revitcontour,extlocation) # 10 Creates Profile extrusion inside revit profile family
+        self.revitextrusion=self.revit_extrusion(self.famframe,self.revitcontour,contournm,extlocation) # 10 Creates Profile extrusion inside revit profile family
 
         self.cornervoids(self.famframe,contournm)  # 11 Creates voids
 
@@ -119,8 +119,8 @@ class Schuecoframe():
     def revitlines(self,prof_contour):
         return ConvertPoly.ToRvtline(prof_contour)
     
-    def revit_extrusion(self,famprof,lines,locationref):
-        return CreateExtrusion.NewProfile(famprof,lines,locationref,"Frame")
+    def revit_extrusion(self,famprof,lines,prof_contour,locationref):
+        return CreateExtrusion.NewProfile(famprof,lines,prof_contour,locationref,"Frame")
 
     def cornervoids(self,famprof,prof_contour): 
         return Window.FrameCornerVoids(famprof,prof_contour)

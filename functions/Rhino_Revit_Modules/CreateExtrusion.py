@@ -7,6 +7,13 @@ clr.AddReference('RevitAPIUI')
 import RhinoInside as ri
 clr.AddReference('ProtoGeometry')
 
+import rhinoscriptsyntax as rs
+import Rhino
+from Rhino import Geometry as rg
+import RhinoInside as ri
+clr.AddReference('ProtoGeometry')
+from Autodesk.DesignScript.Geometry import *
+
 #Import RevitAPI
 clr.AddReference("RevitAPI")
 #import Autodesk.Revit.DB as re
@@ -26,7 +33,7 @@ from RevitServices.Transactions import TransactionManager
 ##########################################
 #Get Mullion length
 
-def NewProfile(newfamily, rvtlines, locationref, FrameProfOrVent):
+def NewProfile(newfamily, rvtlines, ObjectName, locationref, FrameProfOrVent):
     #CONDITIONAL FRAME OR PROFILE
     dim = []
     if FrameProfOrVent == "Frame":
@@ -39,8 +46,19 @@ def NewProfile(newfamily, rvtlines, locationref, FrameProfOrVent):
 
         name = mullionlength.get_Parameter(BuiltInParameter.DIM_VALUE_LENGTH)
         paramvalue = name.AsDouble()
-    
-        value = paramvalue+(46/304.80)
+
+        object = rs.ObjectsByName(ObjectName)
+        pts = rs.BoundingBox(object)
+
+        distanceofinsertion = []
+        if pts[0][0] <= -35:
+            distanceofinsertion.append(pts[1][0])
+        else:
+            distanceofinsertion.append(-pts[0][0])
+        
+        dstinsertion = round(distanceofinsertion[0], 0)
+
+        value = paramvalue+((dstinsertion*2)/304.80)
         dim.append(value)
         
     elif FrameProfOrVent == "Vent":
