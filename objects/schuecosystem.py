@@ -181,7 +181,7 @@ class Unit():
                     #### Glazing placement
         
         self.lckkeyg= ["A.01,Axis,1.01"]
-        self.hegihtg=["3.01"]#["2.01"]
+        self.hegihtg=["2.01"]#["3.01"]
         self.widthg=["B.01"]
         self.thckg= [41]
         self.matnamegl=["SCH_Glass"]
