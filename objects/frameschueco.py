@@ -1,6 +1,6 @@
 import sys
-sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Modules")
-sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Revit_Modules")
+sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Modules")
+sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Revit_Modules")
 import blockorg_00
 import corners
 import simplify
@@ -38,7 +38,7 @@ from RevitServices.Transactions import TransactionManager
 
 class Schuecoframe():
    
-    def __init__(self,dtemplpath,famname,famdetname,typename,typeID,famframetempath,contournm,extlocation,famwindow):
+    def __init__(self,dtemplpath,famname,famdetname,inst,typename,famframetempath,contournm,extlocation,famwindow):
         
         """
         inputs =>
@@ -48,7 +48,7 @@ class Schuecoframe():
         3.- famdetname : Each article number as detail item (Shared)
         4.- typename : boundled block Name ()
         5.- typeID : boundled block ID ()
-        6.- famframetempath :
+        6.- famframetempath : 
         7.- contournm
         8.- extlocation :
         9.- famwindow: 
@@ -59,7 +59,7 @@ class Schuecoframe():
         ############## Variables  ###########
         
 
-        self.inst=blockorg_00.block_org(typeID)
+        #self.inst=blockorg_00.block_org(typeID) ## Remove funtcion from object class.
 
 
         self.docr=Revit.ActiveDBDocument
@@ -70,8 +70,8 @@ class Schuecoframe():
 
         self.newfamdoc=self.newfam(dtemplpath,famname) # 2 Create a detail family doc for each detail inside the drawing
 
-
-        self.detailitem(self.inst[1], self.inst[0],famdetname,dtemplpath,self.newfamdoc) # 3 Creates a lists of detail families_Consider erease the variable *** done (self.nesteddetitem=) erased
+        ## pass parameters of rhino guids and names from outside of Schuecoframe 
+        self.detailitem(inst[1],inst[0],famdetname,dtemplpath,self.newfamdoc) # 3 Creates a lists of detail families_Consider erease the variable *** done (self.nesteddetitem=) erased
 
 
         self.place_detailitem(self.newfamdoc) # 4 places the detail items in their place _ Consider erase the variable *** done (self.newdetfaminst=) erased
@@ -98,7 +98,7 @@ class Schuecoframe():
     def newfam (self,temp,name):
         return Create.FamilyNew(temp,name)
     
-    def detailitem (self,objectname,dic,famdetname,dtemplpath,famnew):  
+    def detailitem (self,objectname,dic,famdetname,dtemplpath,famnew):  # deals with GUIDs rhino. 
             output=[]
             for i,j in enumerate(objectname,1):
                 output.append(Create.DetailItems(j,dic,famdetname+str(i),famnew,dtemplpath))
@@ -116,19 +116,19 @@ class Schuecoframe():
     def placedetail (self,famprof):
         return Place.DetailItemInprof(famprof)
     
-    def revitlines(self,prof_contour):
+    def revitlines(self,prof_contour): #Rhino Contour to Revit
         return ConvertPoly.ToRvtline(prof_contour)
     
     def revit_extrusion(self,famprof,lines,prof_contour,locationref):
         return CreateExtrusion.NewProfile(famprof,lines,prof_contour,locationref,"Frame")
 
     def cornervoids(self,famprof,prof_contour): 
-        return Window.FrameCornerVoids(famprof,prof_contour)
+        return Window.FrameCornerVoids(famprof,prof_contour) # Rhino boundingbox
 
-    def refline(self,famprof):
-        return Create.ReferenceLines(famprof,"Frame")
+    def refline(self,famprof):  # Rhino Ref_lines to Revit  
+        return Create.ReferenceLines(famprof,"Frame") 
    
-    def dimension(self,famprof):
+    def dimension(self,famprof): # Rhino Reflines
         return Create.NewWidthDimension(famprof,"Frame")
     
 

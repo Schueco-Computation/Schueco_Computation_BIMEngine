@@ -47,6 +47,7 @@ def NewProfile(newfamily, rvtlines, ObjectName, locationref, FrameProfOrVent):
         name = mullionlength.get_Parameter(BuiltInParameter.DIM_VALUE_LENGTH)
         paramvalue = name.AsDouble()
 
+
         object = rs.ObjectsByName(ObjectName)
         pts = rs.BoundingBox(object)
 
@@ -59,6 +60,7 @@ def NewProfile(newfamily, rvtlines, ObjectName, locationref, FrameProfOrVent):
         dstinsertion = round(distanceofinsertion[0], 0)
 
         value = paramvalue+((dstinsertion*2)/304.80)
+
         dim.append(value)
         
     elif FrameProfOrVent == "Vent":

@@ -9,6 +9,7 @@ import ventschueco
 import windowschueco
 import familyschueco
 import block_finder
+import blockorg_00
 from RhinoInside.Revit import Revit, Convert
 
 class Unit():
@@ -238,28 +239,40 @@ class Unit():
 
     ##### Window Creation Functions ####
 
-    def frame_creation(self,detpth,fdname,fname,frametmplpth,contour,extrloc,famwindow):
+    def frame_creation(self,detpth,fdname,fname,inst_unpk,i,frametmplpth,contour,extrloc,famwindow):
         """
         
-        Inputs=>
+        inputs =>
+
+        1.- detpath : Detail template path (Shared)
+        2.- fdname : Detail Mother family Name (Shared)
+        3.- famdetname : Each article number as detail item (Shared)
+        4.- typeID : boundled block ID ()
+        5.- typename : boundled block Name ()
+        6.- famframetempath : Frame family template file 
+        7.- contournm : closed polyline name representing a simplified frame section 
+        8.- extlocation : reference plane location name
+        9.- famwindow: Window family created in the bacground
         
         
         """
-        
+        frameschueco.Schuecoframe(detpth,fdname,fname,inst_unpk,i,frametmplpth,contour,extrloc,famwindow)
+        """
         inst_list=block_finder.block_finder()[0]
 
         for b in inst_list:
-            print (b)
             i= (rs.BlockInstanceName(b))
             rs.SelectObject(b)
             rs.ZoomSelected()
             rs.Command("_Isolate")
-            frame=frameschueco.Schuecoframe(detpth,fdname,fname,i,b,frametmplpth,contour,extrloc,famwindow)
-            rs.HideObjects(rs.NormalObjects())
+            inst_unpk=blockorg_00.block_org(b)
+            frame=frameschueco.Schuecoframe(detpth,fdname,fname,inst_unpk,i,frametmplpth,contour,extrloc,famwindow)
             rs.Command("_Show")
-            print (frame.inst)
-
-
+            guids=inst_unpk[2]
+            rs.LockObjects(guids)
+        """ 
+            
+        
         # for i in frame_files:
         #     path = (path_frame_files+"{}").format(i)
         #     rs.DocumentModified(False)
@@ -269,12 +282,12 @@ class Unit():
         
 
 
-    def frame_placement(self,famwindow,window):
-        frame_files="Schueco_AWS75.SI_Frame_H01_93mm"
-        window.placefrhor(famwindow,frame_files,"Bottom")
-        window.placefrvert(famwindow,frame_files,"Right")
-        # window.placefrhor(famwindow,frame_files[1],"Top")
-        # window.placefrvert(famwindow,frame_files[1],"Left")
+    def frame_placement(self,famwindow,window,frame_name):
+        frame_files=frame_name
+        window.placefrhor(famwindow,frame_files[1],"Bottom")
+        window.placefrvert(famwindow,frame_files[1],"Right")
+        window.placefrhor(famwindow,frame_files[0],"Top")
+        window.placefrvert(famwindow,frame_files[0],"Left")
 
         """frplaces=["Bottom","Top","Right","Left"]
 
@@ -299,9 +312,27 @@ class Unit():
 
         window= windowschueco.Schuecowindow()
 
-        famwindow= window.famwindow(self.wtemppth,self.wtypename)
+        famwindow= window.famwindow(self.wtemppth,windowtype)
+        frame_names= []
+        inst_list=block_finder.block_finder()[0]
 
-        self.frame_creation(self.detpth,self.fdname,self.fname,self.frametmplpth,self.contour,self.extrloc,famwindow)
+        for a,b in enumerate(inst_list):
+            # i= (rs.BlockInstanceName(b))
+            i= (rs.BlockInstanceName(b)+ "_" + str(a))
+            frame_names.append(i)
+            rs.SelectObject(b)
+            rs.ZoomSelected()
+            rs.Command("_Isolate")
+            inst_unpk=blockorg_00.block_org(b)
+            self.frame_creation(self.detpth,self.fdname,self.fname,inst_unpk,i,self.frametmplpth,self.contour,self.extrloc,famwindow)
+            rs.Command("_Show")
+            guids=inst_unpk[2]
+            window.windowdim(famwindow, windowtype)
+            rs.Command("_Zoom_Extent")
+            rs.HideObjects(guids)
+
+        
+        #self.frame_creation(self.detpth,self.fdname,self.fname,self.frametmplpth,self.contour,self.extrloc,famwindow)
 
         if windowtype == "Vent":
             self.ventpanel_creation(self.path_vent_files,self.ventname,self.detpth,self.fdname,self.fname,self.venttempath,self.contour,self.extrloc,famwindow,self.contournmvoid)
@@ -309,9 +340,9 @@ class Unit():
         else:
             window.windowpanel(famwindow,"GlzCust", 41.04, "SCH_Glass")
 
-        window.windowdim(famwindow, windowtype)
+        #window.windowdim(famwindow, windowtype) #Crea una familia de ventana? Se puede incluir en el forloop?
 
-        self.frame_placement(famwindow,window)
+        self.frame_placement(famwindow,window,frame_names)
 
         window.loadwindow(doc,famwindow)
 
