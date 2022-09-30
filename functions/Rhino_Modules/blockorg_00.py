@@ -39,6 +39,10 @@ def block_org(bl):
                     (rs.ObjectName(k,newnames[i]))
                     fil_names.append(newnames[i])
 
+    objs_guids=rs.NormalObjects()
+    # for i in set(fil_names):
+    #     objs_guids.append(rs.ObjectByName(i))
+
     # # group hatches by name and calculate the hatch area 
     
     hatch=rs.ObjectsByType(65536)
@@ -64,7 +68,7 @@ def block_org(bl):
     for i,j in enumerate(set(nameh)):
         articles_area.update({j :(sum(hatch_area[i])*10**-6)})
 
-        
+
 
     rs.DeleteObjects(rs.ObjectsByType(65536))
     # objects=[]
@@ -120,7 +124,7 @@ def block_org(bl):
 
     rs.UnselectObjects(rs.NormalObjects())
    
-    return (articles_area,set(fil_names))
+    return articles_area,set(fil_names),objs_guids
 
 
 if __name__ == '__main__':

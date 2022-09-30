@@ -49,14 +49,14 @@ def FrameCornerVoids(Document, ObjectName):
         
     fixrvtpts= []
     for i in rvtpts:
-        fixrvtpts.append(XYZ(i.X, i.Y, ((i.Z)-(23/304.80))))
+        fixrvtpts.append(XYZ(i.X, i.Y, ((i.Z)-(12/304.80))))
 
     firstp = fixrvtpts[0]
     scndp = fixrvtpts[1]
 
     distance = firstp.DistanceTo(scndp)
 
-    thirdp = XYZ(firstp.X,firstp.Y, (distance-(23/304.80)))
+    thirdp = XYZ(firstp.X,firstp.Y, (distance-(12/304.80)))
 
     lineOne= Line.CreateBound(firstp,scndp)
     lineTwo = Line.CreateBound(scndp, thirdp)
@@ -451,8 +451,8 @@ def Dimensions(WindowDocument, Typepanel):
     else:
         lineone = rs.ObjectsByName("a_AxisToGlass")
         linetwo = rs.ObjectsByName("a_ref-line2")
-        print (lineone , linetwo)
-        intersection = rs.LineLineIntersection(lineone, linetwo)
+        lines= (lineone , linetwo)
+        intersection = rs.LineLineIntersection(lineone[0], linetwo[0])
         
         distance = intersection[0][1]
         print (distance)
