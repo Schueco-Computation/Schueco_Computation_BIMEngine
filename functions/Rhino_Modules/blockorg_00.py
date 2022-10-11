@@ -9,7 +9,8 @@ def block_org(bl):
     """
     input: objects ID (First level profile block e.g Sch_V_00...) 
     """
-    block_ob=bblock_ob=rs.ExplodeBlockInstance(bl)
+    block_ob=rs.ExplodeBlockInstance(bl)
+
 
     items=block_exploder.block_reader(block_ob)
 

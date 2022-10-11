@@ -46,7 +46,7 @@ def NewProfile(newfamily, rvtlines, ObjectName, locationref, FrameProfOrVent):
 
         name = mullionlength.get_Parameter(BuiltInParameter.DIM_VALUE_LENGTH)
         paramvalue = name.AsDouble()
-
+        
 
         object = rs.ObjectsByName(ObjectName)
         pts = rs.BoundingBox(object)

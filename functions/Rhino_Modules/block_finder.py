@@ -33,7 +33,7 @@ def block_finder():
         m_vector=(rs.VectorCreate(rs.CreatePoint(0,0,0),rs.CreateVector(t_point)))
         rs.MoveObjects(bl_inst[i],m_vector)
         rs.RotateObject(bl_inst[i],rs.CreatePoint(0,0,0),180)
-        rt_bl_inst=rs.MirrorObject(bl_inst[i],rs.CreatePoint(0,0,0),rs.CreatePoint(0,1,0),True)
+        #rt_bl_inst=rs.MirrorObject(bl_inst[i],rs.CreatePoint(0,0,0),rs.CreatePoint(0,1,0),True)
         inst_list=rs.BlockInstances(j)
         
         return inst_list, bl_inst_names

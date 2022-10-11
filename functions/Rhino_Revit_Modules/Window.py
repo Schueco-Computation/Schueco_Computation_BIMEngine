@@ -258,8 +258,8 @@ def NewVerticalFrameInstance(Document, TypeName, Position, MirrorBoolean):
     
     centerref = instance[0].GetReferenceByName("Center (Left/Right)")
     hcenterref = instance[0].GetReferenceByName("Center (Front/Back)")
-    heightref = instance[0].GetReferenceByName("Lock top")
-    baseref = instance[0].GetReferenceByName("Lock bottom")
+    heightref = instance[0].GetReferenceByName("top")
+    baseref = instance[0].GetReferenceByName("bottom")
     
     firstref = refplanedi[txt[0]].GetReference()
     scnref = refplanedi[txt[1]].GetReference()
@@ -415,8 +415,8 @@ def NewHorizontalFrameInstance(Document, TypeName, Position, MirrorBoolean):
     
     horref = instance[0].GetReferenceByName("Center (Left/Right)")
     vertref = instance[0].GetReferenceByName("Center (Front/Back)")
-    lengthref = instance[0].GetReferenceByName("Lock top")
-    baseref = instance[0].GetReferenceByName("Lock bottom")
+    lengthref = instance[0].GetReferenceByName("top")
+    baseref = instance[0].GetReferenceByName("bottom")
 
     firstref = refplanedi[txt[2]].GetReference()
     scnref = refplanedi[txt[1]].GetReference()

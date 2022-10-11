@@ -312,8 +312,9 @@ class Unit():
 
         window= windowschueco.Schuecowindow()
 
-        famwindow= window.famwindow(self.wtemppth,windowtype)
+        famwindow= window.famwindow(self.wtemppth,self.wtypename)
         frame_names= []
+        
         inst_list=block_finder.block_finder()[0]
 
         for a,b in enumerate(inst_list):
@@ -325,11 +326,11 @@ class Unit():
             rs.Command("_Isolate")
             inst_unpk=blockorg_00.block_org(b)
             self.frame_creation(self.detpth,self.fdname,self.fname,inst_unpk,i,self.frametmplpth,self.contour,self.extrloc,famwindow)
-            rs.Command("_Show")
             guids=inst_unpk[2]
-            window.windowdim(famwindow, windowtype)
+            window.windowdim(famwindow, self.windowtype)
+            rs.Command("_Show")
             rs.Command("_Zoom_Extent")
-            rs.HideObjects(guids)
+            rs.DeleteObjects(guids)
 
         
         #self.frame_creation(self.detpth,self.fdname,self.fname,self.frametmplpth,self.contour,self.extrloc,famwindow)
