@@ -66,9 +66,15 @@ class Schuecowindow():
     
     def placefrhor(self,famwindow,frame,place):
         return Window.NewHorizontalFrameInstance(famwindow,frame,place,False)
-    
+
     def placefrvert(self,famwindow,frame,place):
         return Window.NewVerticalFrameInstance(famwindow,frame,place,False)
+
+    """def placefrhor(self,famwindow,frame,place):
+        return Window.NewHorizontalFrameInstanceBigWin(famwindow,frame,LocationKey, EndRefPlane,False)
+    
+    def placefrvert(self,famwindow,frame,place):
+        return Window.NewVerticalFrameInstanceBigWinn(famwindow,frame,LocationKey, EndRefPlane,False)"""
 
     def loadwindow(self,doc,famwindow):
         class FamilyOption(IFamilyLoadOptions):

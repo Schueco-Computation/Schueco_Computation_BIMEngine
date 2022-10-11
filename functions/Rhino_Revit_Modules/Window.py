@@ -433,6 +433,365 @@ def NewHorizontalFrameInstance(Document, TypeName, Position, MirrorBoolean):
     
     return newobj
 
+def NewVerticalFrameInstanceBigWin(Document, TypeName, LocationKey, EndRefPlane, MirrorBoolean):
+    
+    all = FilteredElementCollector(Document).OfClass(ReferencePlane).ToElements()
+    output = []
+    for x in all:
+        output.append(x.Name)
+
+
+
+    listverticalplanes = []# ("A", "A.01", "B", "B.01", "B.02", "C", "C.01", "Center")
+    listhorizontalplanes =[]# ("Axis", "Ext. Axis 1", "Ext. Axis 2", "Ext. Axis 3")
+    intviewlisthorizontalplanes =[] #("1", "1.01", "2", "2.01","2.02", "3", "3.01")
+    
+    firstchar = []
+
+    for x in output:
+        firstchar.append(x[0])
+    
+    letras = [] 
+    for i,j in enumerate(firstchar):
+        if j.isnumeric():
+            intviewlisthorizontalplanes.append(output[i])
+        else:
+            letras.append(output[i])
+    for x in letras:
+        if "Axis" in x:
+            listhorizontalplanes.append(x)
+        else:
+            listverticalplanes.append(x)
+
+
+    verticalref = []
+
+    for x in listverticalplanes:
+        bip = BuiltInParameter.DATUM_TEXT
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, x, False)
+        filter = ElementParameterFilter(rule)
+        all = FilteredElementCollector(Document).OfClass(ReferencePlane).WherePasses(filter).FirstElement()
+        verticalref.append(all)
+        
+
+    horizontalref = []
+
+    for x in listhorizontalplanes:
+        bip = BuiltInParameter.DATUM_TEXT
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, x, False)
+        filter = ElementParameterFilter(rule)
+        hall = FilteredElementCollector(Document).OfClass(ReferencePlane).WherePasses(filter).FirstElement()
+        horizontalref.append(hall)
+
+    horizontallines = []
+
+    
+
+    intviewhorizontalref = []
+
+    for x in intviewlisthorizontalplanes:
+        bip = BuiltInParameter.DATUM_TEXT
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, x, False)
+        filter = ElementParameterFilter(rule)
+        intvhall = FilteredElementCollector(Document).OfClass(ReferencePlane).WherePasses(filter).FirstElement()
+        intviewhorizontalref.append(intvhall)
+
+    pts = []
+    for i in verticalref:
+        equis = (i.BubbleEnd).X
+        for j in horizontalref:
+            ye = (j.BubbleEnd).Y
+            for k in intviewhorizontalref:
+                zeta = (k.BubbleEnd).Z
+                pts.append(XYZ(equis,ye,zeta))
+
+    keys = []
+    for i in listverticalplanes:
+        for j in listhorizontalplanes:
+            for k in intviewlisthorizontalplanes:
+                keys.append(''.join([i,',',j,',',k]))
+
+    ################ Dictionary ptsdi
+    ptsdi = {keys[i]:pts[i] for i in range(len(keys))}
+    ################
+
+    keysname = listverticalplanes+listhorizontalplanes+intviewlisthorizontalplanes
+    refall = verticalref+horizontalref+intviewhorizontalref
+
+    ################ Dictionary refplanedi
+    refplanedi = {keysname[i]:refall[i] for i in range(len(keysname))}
+    ################
+    
+    bip = BuiltInParameter.SYMBOL_NAME_PARAM
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEquals()
+    rule = FilterStringRule(provider, evaluator, TypeName, False)
+    filter = ElementParameterFilter(rule)
+    collector = FilteredElementCollector(Document).OfCategory(BuiltInCategory.OST_GenericModel).OfClass(FamilySymbol).WherePasses(filter).FirstElement()
+    
+    bip = BuiltInParameter.VIEW_NAME
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEquals()
+    rule = FilterStringRule(provider, evaluator, "Ref. Level", False)
+    filter = ElementParameterFilter(rule)
+    reflevel = FilteredElementCollector(Document).OfClass(ViewPlan).WherePasses(filter).FirstElement()
+    
+    bip = BuiltInParameter.VIEW_NAME
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEquals()
+    rule = FilterStringRule(provider, evaluator, "Front", False)
+    filter = ElementParameterFilter(rule)
+    interior = FilteredElementCollector(Document).OfClass(ViewSection).WherePasses(filter).FirstElement()
+    
+    ############### NewFamily Instance
+    t1 = TransactionManager.Instance
+    t1.EnsureInTransaction(Document)
+    
+    collector.Activate()
+    
+    startsloc = ptsdi[LocationKey]
+    txt = LocationKey.split(",")
+    endsloc = refplanedi[EndRefPlane]
+    
+    newobj = Document.FamilyCreate.NewFamilyInstance(startsloc, collector, 0)
+    
+    #MirrorBoolean = False
+    
+    instance = []
+    if MirrorBoolean == True:
+        mirror = ElementTransformUtils.MirrorElement(Document, newobj.Id, refplanedi[txt[0]].GetPlane())
+        filter = ElementClassFilter(FamilyInstance)
+        allins = FilteredElementCollector(Document).WherePasses(filter).ToElements()
+        ids = []
+        for x in allins:
+            ids.append(x.Id)
+        obj = Document.GetElement(ids[-1])
+        delete = Document.Delete(ids[-2])
+        instance.append(obj)
+    else:
+        instance.append(newobj)
+    
+    starts = (refplanedi[txt[2]].BubbleEnd).Z
+    ends = (endsloc.BubbleEnd).Z
+    heigthprof = ends - starts
+    
+    parameter = instance[0].GetParameters("Length")
+    setheight = parameter[0].Set(heigthprof)
+    
+    #End Transaction
+    TransactionManager.ForceCloseTransaction(t1)
+    
+    centerref = instance[0].GetReferenceByName("Center (Left/Right)")
+    hcenterref = instance[0].GetReferenceByName("Center (Front/Back)")
+    heightref = instance[0].GetReferenceByName("top")
+    baseref = instance[0].GetReferenceByName("bottom")
+    
+    firstref = refplanedi[txt[0]].GetReference()
+    scnref = refplanedi[txt[1]].GetReference()
+    thirdref = endsloc.GetReference()
+    fourthref = refplanedi[txt[2]].GetReference()
+    
+    t2 = TransactionManager.Instance
+    t2.EnsureInTransaction(Document)
+    
+    align = Document.FamilyCreate.NewAlignment(reflevel, firstref, centerref)
+    align2 = Document.FamilyCreate.NewAlignment(reflevel, scnref, hcenterref)
+    align3 = Document.FamilyCreate.NewAlignment(interior, thirdref, heightref)
+    align4 = Document.FamilyCreate.NewAlignment(interior, fourthref, baseref)
+    
+    #End Transaction
+    TransactionManager.ForceCloseTransaction(t2)
+    
+    return instance[0]
+
+def NewHorizontalFrameInstanceBigWin(Document, TypeName, LocationKey, EndRefPlane, MirrorBoolean):
+    
+    all = FilteredElementCollector(Document).OfClass(ReferencePlane).ToElements()
+    output = []
+    for x in all:
+        output.append(x.Name)
+
+
+
+    listverticalplanes = []# ("A", "A.01", "B", "B.01", "B.02", "C", "C.01", "Center")
+    listhorizontalplanes =[]# ("Axis", "Ext. Axis 1", "Ext. Axis 2", "Ext. Axis 3")
+    intviewlisthorizontalplanes =[] #("1", "1.01", "2", "2.01","2.02", "3", "3.01")
+    
+    firstchar = []
+
+    for x in output:
+        firstchar.append(x[0])
+    
+    letras = [] 
+    for i,j in enumerate(firstchar):
+        if j.isnumeric():
+            intviewlisthorizontalplanes.append(output[i])
+        else:
+            letras.append(output[i])
+    for x in letras:
+        if "Axis" in x:
+            listhorizontalplanes.append(x)
+        else:
+            listverticalplanes.append(x)
+
+
+    verticalref = []
+
+    for x in listverticalplanes:
+        bip = BuiltInParameter.DATUM_TEXT
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, x, False)
+        filter = ElementParameterFilter(rule)
+        all = FilteredElementCollector(Document).OfClass(ReferencePlane).WherePasses(filter).FirstElement()
+        verticalref.append(all)
+        
+
+    horizontalref = []
+
+    for x in listhorizontalplanes:
+        bip = BuiltInParameter.DATUM_TEXT
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, x, False)
+        filter = ElementParameterFilter(rule)
+        hall = FilteredElementCollector(Document).OfClass(ReferencePlane).WherePasses(filter).FirstElement()
+        horizontalref.append(hall)
+
+    horizontallines = []
+
+    
+
+    intviewhorizontalref = []
+
+    for x in intviewlisthorizontalplanes:
+        bip = BuiltInParameter.DATUM_TEXT
+        provider = ParameterValueProvider(ElementId(bip))
+        evaluator = FilterStringEquals()
+        rule = FilterStringRule(provider, evaluator, x, False)
+        filter = ElementParameterFilter(rule)
+        intvhall = FilteredElementCollector(Document).OfClass(ReferencePlane).WherePasses(filter).FirstElement()
+        intviewhorizontalref.append(intvhall)
+
+    pts = []
+    for i in verticalref:
+        equis = (i.BubbleEnd).X
+        for j in horizontalref:
+            ye = (j.BubbleEnd).Y
+            for k in intviewhorizontalref:
+                zeta = (k.BubbleEnd).Z
+                pts.append(XYZ(equis,ye,zeta))
+
+    keys = []
+    for i in listverticalplanes:
+        for j in listhorizontalplanes:
+            for k in intviewlisthorizontalplanes:
+                keys.append(''.join([i,',',j,',',k]))
+
+    ################ Dictionary ptsdi
+    ptsdi = {keys[i]:pts[i] for i in range(len(keys))}
+    ################
+
+    keysname = listverticalplanes+listhorizontalplanes+intviewlisthorizontalplanes
+    refall = verticalref+horizontalref+intviewhorizontalref
+
+    ################ Dictionary refplanedi
+    refplanedi = {keysname[i]:refall[i] for i in range(len(keysname))}
+    ################
+    
+    bip = BuiltInParameter.SYMBOL_NAME_PARAM
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEquals()
+    rule = FilterStringRule(provider, evaluator, TypeName, False)
+    filter = ElementParameterFilter(rule)
+    collector = FilteredElementCollector(Document).OfCategory(BuiltInCategory.OST_GenericModel).OfClass(FamilySymbol).WherePasses(filter).FirstElement()
+    
+    bip = BuiltInParameter.VIEW_NAME
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEquals()
+    rule = FilterStringRule(provider, evaluator, "Ref. Level", False)
+    filter = ElementParameterFilter(rule)
+    reflevel = FilteredElementCollector(Document).OfClass(ViewPlan).WherePasses(filter).FirstElement()
+    
+    bip = BuiltInParameter.VIEW_NAME
+    provider = ParameterValueProvider(ElementId(bip))
+    evaluator = FilterStringEquals()
+    rule = FilterStringRule(provider, evaluator, "Front", False)
+    filter = ElementParameterFilter(rule)
+    interior = FilteredElementCollector(Document).OfClass(ViewSection).WherePasses(filter).FirstElement()
+    
+    ############### NewFamily Instance
+    t1 = TransactionManager.Instance
+    t1.EnsureInTransaction(Document)
+    
+    notVert = collector.Family.get_Parameter(BuiltInParameter.FAMILY_ALWAYS_VERTICAL).Set(0)
+    horizontal = collector.Family.get_Parameter(BuiltInParameter.FAMILY_WORK_PLANE_BASED).Set(1)
+    
+    collector.Activate()
+    
+    startsloc = ptsdi[LocationKey]
+    txt = LocationKey.split(",")
+    endsloc = refplanedi[EndRefPlane]
+    
+    ref = refplanedi[txt[0]].GetReference()
+    scpoint = XYZ(0, 0 , -1)
+    newobj = Document.FamilyCreate.NewFamilyInstance(ref, startsloc, scpoint, collector)
+    
+    #MirrorBoolean = False
+    
+    instance = []
+    if MirrorBoolean == True:
+        mirror = ElementTransformUtils.MirrorElement(Document, newobj.Id, refplanedi[txt[0]].GetPlane())
+        filter = ElementClassFilter(FamilyInstance)
+        allins = FilteredElementCollector(Document).WherePasses(filter).ToElements()
+        ids = []
+        for x in allins:
+            ids.append(x.Id)
+        obj = Document.GetElement(ids[-1])
+        delete = Document.Delete(ids[-2])
+        instance.append(obj)
+    else:
+        instance.append(newobj)
+    
+    starts = (refplanedi[txt[0]].BubbleEnd).X
+    ends = (endsloc.BubbleEnd).X
+    heigthprof = ends - starts
+    
+    parameter = instance[0].GetParameters("Length")
+    setheight = parameter[0].Set(heigthprof)
+    
+    #End Transaction
+    TransactionManager.ForceCloseTransaction(t1)
+    
+    horref = instance[0].GetReferenceByName("Center (Left/Right)")
+    vertref = instance[0].GetReferenceByName("Center (Front/Back)")
+    lengthref = instance[0].GetReferenceByName("top")
+    baseref = instance[0].GetReferenceByName("bottom")
+
+    firstref = refplanedi[txt[2]].GetReference()
+    scnref = refplanedi[txt[1]].GetReference()
+    thirdref = endsloc.GetReference()
+    fourthref = refplanedi[txt[0]].GetReference()
+
+    t2 = TransactionManager.Instance
+    t2.EnsureInTransaction(Document)
+
+    align = Document.FamilyCreate.NewAlignment(interior, firstref, horref)
+    align2 = Document.FamilyCreate.NewAlignment(reflevel, scnref, vertref)
+    align3 = Document.FamilyCreate.NewAlignment(reflevel, thirdref, lengthref)
+    align4 = Document.FamilyCreate.NewAlignment(reflevel, fourthref, baseref)
+    
+    #End Transaction
+    TransactionManager.ForceCloseTransaction(t2)
+    
+    return newobj
+
 def Dimensions(WindowDocument, Typepanel):
     
     bip = BuiltInParameter.SYMBOL_NAME_PARAM
