@@ -3,6 +3,7 @@ import rhinoscriptsyntax as rs
 import Rhino.Geometry as rc
 import scriptcontext as sc
 
+inst_list=[]
 
 def block_finder():
     
@@ -31,11 +32,11 @@ def block_finder():
         bl_pos= rs.BlockInstanceInsertPoint(bl_inst[i])
         t_point=origin+bl_pos
         m_vector=(rs.VectorCreate(rs.CreatePoint(0,0,0),rs.CreateVector(t_point)))
-        ins = rs.NormalObjects()
+        ins = rs.BlockInstances(j)
         rs.MoveObjects(ins,m_vector)
-        rs.RotateObject(ins,rs.CreatePoint(0,0,0),180)
+        rotate=rs.RotateObject(ins,rs.CreatePoint(0,0,0),180)
         #rt_bl_inst=rs.MirrorObject(bl_inst[i],rs.CreatePoint(0,0,0),rs.CreatePoint(0,1,0),True)
-        inst_list=ins
+        inst_list.append(ins)
         
         return inst_list, bl_inst_names
 

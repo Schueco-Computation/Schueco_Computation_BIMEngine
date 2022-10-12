@@ -114,12 +114,12 @@ def block_org(bl):
     
     rest=rs.NormalObjects()
 
-    for i in rest:
-        if rs.ObjectName(i) == None:
-            #print (rs.ObjectName(i))
-            rs.DeleteObjects(i)
-        elif rs.CurveLength(i) < float(0.8):
-            rs.DeleteObjects(i)
+#    for i in rest:
+#        if rs.ObjectName(i) == None:
+#            #print (rs.ObjectName(i))
+#            rs.DeleteObjects(i)
+#        elif rs.CurveLength(i) < float(0.8):
+#            rs.DeleteObjects(i)
     
     ##### Article numbers Dictionaries #####
 

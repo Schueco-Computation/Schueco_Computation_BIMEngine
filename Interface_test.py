@@ -1,7 +1,7 @@
 
 import schuecobim as s
 
-unit=s.schuecosystem.Unit() # Creates Unit instance
+unit=s.schuecosystem_standard.Unit() # Creates Unit instance
 
 unit.detpth= "K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\Detail Item.rft" # 01 --- shared 
 

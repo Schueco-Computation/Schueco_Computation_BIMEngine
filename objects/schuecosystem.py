@@ -1,7 +1,7 @@
 import sys
-sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\objects")
-sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Modules")
-sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Revit_Modules")
+sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\objects")
+sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Modules")
+sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Revit_Modules")
 import rhinoscriptsyntax as rs
 import profileschueco
 import frameschueco
@@ -315,23 +315,23 @@ class Unit():
         famwindow= window.famwindow(self.wtemppth,self.wtypename)
         frame_names= []
         
-        inst_list_id=block_finder.block_finder()[0]
-        inst_list=block_finder.block_finder()[1]
+        #inst_list_id=block_finder.block_finder()[0]
+        inst_list=block_finder.block_finder()[0]
         
         for a,b in enumerate(inst_list):
-            # i= (rs.BlockInstanceName(b))
-            i= (str(b) + "_" + str(a))
+            i= (rs.BlockInstanceName(b)+ "_" + str(a))
+            #i= (str(b) + "_" + str(a))
             frame_names.append(i)
-            rs.SelectObject(rs.BlockInstances(b))
+            rs.SelectObject(b)
             rs.ZoomSelected()
             rs.Command("_Isolate")
-            inst_unpk=blockorg_00.block_org(rs.BlockInstances(b))
-            self.frame_creation(self.detpth,self.fdname,self.fname,inst_unpk,i,self.frametmplpth,self.contour,self.extrloc,famwindow)
-            guids=inst_unpk[2]
+            inst_unpk=blockorg_00.block_org(b)
+            #self.frame_creation(self.detpth,self.fdname,self.fname,inst_unpk,i,self.frametmplpth,self.contour,self.extrloc,famwindow)
+            #guids=inst_unpk[2]
             #window.windowdim(famwindow, self.windowtype)
             rs.Command("_Show")
             rs.Command("_Zoom_Extent")
-            rs.DeleteObjects(guids)
+            #rs.LockObjects(guids)
 
         
         #self.frame_creation(self.detpth,self.fdname,self.fname,self.frametmplpth,self.contour,self.extrloc,famwindow)
