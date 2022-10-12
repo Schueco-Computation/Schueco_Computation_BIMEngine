@@ -38,7 +38,7 @@ def block_mover(j):
     oblist=rs.BlockObjects(j)
     curves=[]
     for k in oblist:
-        name=rs.ObjectName(k)
+        name=rs.ObjectLayer(k)
         if name == "a_ref-line2" or name == "axis":
             curves.append(k)
     ins_point= rs.CurveCurveIntersection(curves[0],curves[1])

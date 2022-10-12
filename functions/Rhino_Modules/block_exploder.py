@@ -26,7 +26,8 @@ def block_reader(b_obj):
                     block_reader([l])
                 else:
                     rs.ObjectName(l,Ins_n)
-                    
+        else:
+            rs.ObjectName(j,rs.ObjectLayer(j))          
 
     return Block_Names,Block_Obj           
 
