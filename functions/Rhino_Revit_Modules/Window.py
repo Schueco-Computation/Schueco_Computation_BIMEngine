@@ -598,12 +598,13 @@ def NewPanel(WindowDocument, Typepanel, Thickness, materialname):
     if Typepanel.startswith("Schueco"): 
         LocationKey = "B,Axis,2"
     else:
-        LocationKey = "B,Ext. Axis 1,2"
+        #LocationKey = "B,Ext. Axis 1,2"
+        LocationKey = "B,Axis,1.01"
 
     startsloc = ptsdi[LocationKey]
     txt = LocationKey.split(",")
 
-    endsheigthloc = refplanedi["3"]
+    endsheigthloc = refplanedi["2"]
     endswidthloc = refplanedi["C"]
     
     panel.Activate()
@@ -647,7 +648,8 @@ def NewPanel(WindowDocument, Typepanel, Thickness, materialname):
     bip = BuiltInParameter.VIEW_NAME
     provider = ParameterValueProvider(ElementId(bip))
     evaluator = FilterStringEquals()
-    rule = FilterStringRule(provider, evaluator, "Front", False)
+    #rule = FilterStringRule(provider, evaluator, "Front", False)
+    rule = FilterStringRule(provider, evaluator, "Interior", False)
     filter = ElementParameterFilter(rule)
     interior = FilteredElementCollector(WindowDocument).OfClass(ViewSection).WherePasses(filter).FirstElement()
 

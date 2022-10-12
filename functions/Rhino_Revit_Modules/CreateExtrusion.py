@@ -59,7 +59,7 @@ def NewProfile(newfamily, rvtlines, ObjectName, locationref, FrameProfOrVent):
         
         dstinsertion = round(distanceofinsertion[0], 0)
 
-        value = paramvalue+((dstinsertion*2)/304.80)
+        value = paramvalue#+((dstinsertion*2)/304.80)
 
         dim.append(value)
         

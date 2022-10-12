@@ -5,7 +5,7 @@ unit=s.schuecosystem.Unit() # Creates Unit instance
 
 unit.detpth= "K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\Detail Item.rft" # 01 --- shared 
 
-unit.fdname = "Schueco_ USC-Cust_ Det" # 03 --- shared
+unit.fdname = "Schueco_USC-Cust_Det" # 03 --- shared
 
 ###### Profile Creation Parameters #####
 
@@ -21,9 +21,9 @@ unit.fdname = "Schueco_ USC-Cust_ Det" # 03 --- shared
 
 unit.wtypename="Schueco_AWS75_SI_Window_Family01"
 
-unit.wtemppth="K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\F_Window.rft"
+unit.wtemppth="K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\Family TEMPLATE.rft"
 
-# unit.windowtype="Window"
+unit.windowtype="Window"
 
 ##### Frame Creation  Parameters #####
 

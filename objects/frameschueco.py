@@ -1,6 +1,6 @@
 import sys
-sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Modules")
-sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Revit_Modules")
+sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Modules")
+sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Revit_Modules")
 import blockorg_00
 import corners
 import simplify
@@ -88,7 +88,7 @@ class Schuecoframe():
 
         self.revitextrusion=self.revit_extrusion(self.famframe,self.revitcontour,contournm,extlocation) # 10 Creates Profile extrusion inside revit profile family
 
-        self.cornervoids(self.famframe,contournm)  # 11 Creates voids
+        #self.cornervoids(self.famframe,contournm)  # 11 Creates voids
 
         self.dimension(self.famframe) # 11 Creates dimension parameter in profile family _ Consider erase the variable 
 
