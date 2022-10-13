@@ -339,7 +339,7 @@ class Unit():
             self.ventpanel_creation(self.path_vent_files,self.ventname,self.detpth,self.fdname,self.fname,self.venttempath,self.contour,self.extrloc,famwindow,self.contournmvoid)
             window.windowpanel(famwindow,self.ventname, 41.04)
         else:
-            window.windowpanel(famwindow,"GlzCust", 41.04, "SCH_Glass")
+            window.windowpanel(famwindow,"Glz", 42, "SCH_Glass")
 
         #window.windowdim(famwindow, windowtype) #Crea una familia de ventana? Se puede incluir en el forloop?
 

@@ -19,7 +19,7 @@ unit.fdname = "Schueco_ USC-Cust_ Det" # 03 --- shared
 
 #unit.path_frame_files = "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Rhino_files\\FrameFiles\\"
 
-unit.wtypename="Schueco_AWS75_SI_Window_Family01"
+unit.wtypename="Schueco_AWS75_SI_Window_Family02"
 
 unit.wtemppth="K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\F_Window.rft"
 
