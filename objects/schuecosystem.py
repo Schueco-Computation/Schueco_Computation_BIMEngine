@@ -26,7 +26,7 @@ class Unit():
 
                     ###### Profile Creation Parameters #####
 
-                prof_files= Profile drawings names
+                sel_blocks= Profile drawings names
                 proftmplpth= Profile template file path
 
                     ###### Window Creation Parameters #####
@@ -116,7 +116,7 @@ class Unit():
 
         self.path_prof_files=()#"C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Rhino_files\\Renamed_files\\{}".format(i) ### Change path!!!
 
-        self.prof_files=[]#["V02_75mm"]#,"V04_75mm","V04_270mm","H01-2_75mm", "H01-1_75mm","H02_147mm")
+        self.sel_blocks=[]#["V02_75mm"]#,"V04_75mm","V04_270mm","H01-2_75mm", "H01-1_75mm","H02_147mm")
         
         self.proftmplpth="K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\A_profile.rft"# "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Revit Templates\\A_Profile.rft" #automate
 
@@ -224,10 +224,14 @@ class Unit():
 
     ##### Profile Creation Functions ####
 
-    def profile_creation(self,path_prof_files,prof_files,detpth,fdname,fname,proftmplpth,contour,extrloc):
+    def profile_creation(self,path_prof_files,sel_blocks,detpth,fdname,fname,proftmplpth,contour,extrloc):
         
-        inst_list=block_finder_ref.block_finder()[0]
-        inst_list_id=block_finder_ref.block_finder()[1]
+        inst_list=sel_blocks
+        inst_list_id=[]
+
+        for bl in inst_list:
+            inst_list_id.append(rs.BlockInstances(bl))
+
         profile_names= []
         for p in inst_list:
             if "_Prof" in p: 
@@ -294,7 +298,7 @@ class Unit():
            
 
     def create_profile(self):
-        return self.profile_creation(self.path_prof_files,self.prof_files,self.detpth,self.fdname,self.fname,self.proftmplpth,self.contour,self.extrloc)
+        return self.profile_creation(self.path_prof_files,self.sel_blocks,self.detpth,self.fdname,self.fname,self.proftmplpth,self.contour,self.extrloc)
 
     ##### Window Creation Functions ####
 
@@ -365,7 +369,7 @@ class Unit():
         rs.Command('-Open "{}" _Enter'.format(path))
         ventschueco.Schuecovent(detpth,fname,fdname,ventname,venttempath,contour,extrloc,famwindow,contournmvoid)
 
-    def create_window(self, windowtype):
+    def create_window(self,windowtype):
         
         doc=self.doc
 
@@ -373,12 +377,16 @@ class Unit():
 
         famwindow= window.famwindow(self.wtemppth,self.wtypename)
         
-        
-        inst_list=block_finder_ref.block_finder()[0]
-        inst_list_id=block_finder_ref.block_finder()[1]
+
+        inst_list=self.sel_blocks
+        inst_list_id=[]
+
+        for bl in inst_list:
+            inst_list_id.append(rs.BlockInstances(bl))
         
         frame_names= []
         frame_id=[]
+
         frame_names_new=[]
         for e,f in enumerate(inst_list):
             if "_Frame"  in f:

@@ -65,15 +65,18 @@ def block_org(bl):
         hatch_area.append([])
         for k, l in enumerate(nameh):
             if l == j:
-                hatch_area[i].append(rs.Area(hatch[k]))
-    
+                try:
+                    hatch_area[i].append(rs.Area(hatch[k]))
+                except:
+                        ""
 
     articles_area={}
     
     for i,j in enumerate(set(nameh)):
         if j != None:
             articles_area.update({j :(sum(hatch_area[i])*10**-6)})
-
+        # else:    
+        #     articles_area.update({"hatch":float(1)})
 
    
     rs.DeleteObjects(rs.ObjectsByType(65536))
