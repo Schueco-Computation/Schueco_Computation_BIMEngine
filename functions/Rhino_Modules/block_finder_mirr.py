@@ -1,4 +1,3 @@
-
 import rhinoscriptsyntax as rs
 import Rhino.Geometry as rc
 import scriptcontext as sc
@@ -28,7 +27,7 @@ def block_finder():
 
 
 
-def block_mover(j,ang,b_ax):
+def block_mover(j,bl_inst,ang,b_ax):
     
     """
     input => Takes block instance name
@@ -37,6 +36,7 @@ def block_mover(j,ang,b_ax):
     """
     oblist=rs.BlockObjects(j)
     curves=[]
+    ins_l=[]
     for k in oblist:
         name=rs.ObjectLayer(k)
         if name == b_ax or name == "axis":
@@ -49,11 +49,10 @@ def block_mover(j,ang,b_ax):
     ins = rs.BlockInstances(j)
     rs.MoveObjects(ins,m_vector)
     rotate=rs.RotateObject(ins,rs.CreatePoint(0,0,0),ang)
-    #rt_bl_inst=rs.MirrorObject(bl_inst[i],rs.CreatePoint(0,0,0),rs.CreatePoint(0,1,0),True)
+    rt_bl_inst=rs.MirrorObject(bl_inst,rs.CreatePoint(0,0,0),rs.CreatePoint(0,1,0),True)
+    ins_l=[ins[0],rt_bl_inst]
     
-    
-    return ins
-
+    return ins_l
     
 if __name__ == '__main__':
     block_finder()

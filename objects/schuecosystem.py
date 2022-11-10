@@ -10,6 +10,8 @@ import windowschueco
 import familyschueco
 import block_finder
 import blockorg_00
+import block_finder_ref
+import block_finder_mirr
 from RhinoInside.Revit import Revit, Convert
 
 class Unit():
@@ -125,7 +127,7 @@ class Unit():
         
         self.wtypename="Schueco_AWS75.SI_Window_Family01"
 
-        self.wtemppth="K:\\Engineering\\Abteilungen\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\F_Window_.rft"
+        self.wtemppth="K:\\Engineering\\Abteilungen\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\F_Window.rft"
 
 
         self.windowtype = ""
@@ -223,15 +225,72 @@ class Unit():
     ##### Profile Creation Functions ####
 
     def profile_creation(self,path_prof_files,prof_files,detpth,fdname,fname,proftmplpth,contour,extrloc):
-        for i in prof_files:
-            if ".3dm" in i:
-                path = (path_prof_files+"{}").format(i)
-                dname=i.split(".")[0]
-                rs.DocumentModified(False)
-                rs.Command('-Open "{}" _Enter'.format(path))
-                rs.Command('-SaveAs "{}" _Enter'.format(path_prof_files+"3dm\\"+dname))
-                filedname=(fdname+"{}").format(dname)
-                profileschueco.Schuecoprofile(detpth,fname,fdname,dname,proftmplpth,contour,extrloc)# i was replaced
+        
+        inst_list=block_finder_ref.block_finder()[0]
+        inst_list_id=block_finder_ref.block_finder()[1]
+        profile_names= []
+        for p in inst_list:
+            if "_Prof" in p: 
+                profile_names.append(p)
+
+        for a,b in enumerate(profile_names):
+            ax=""
+            for b_o in rs.BlockObjects(b):
+                if rs.ObjectLayer(b_o)== "y":
+                    ax=rs.ObjectLayer(b_o)
+            #i= (str(b)+ "_" + str(a))
+            i=b
+            if "_V" in i and ax!= "y":
+                block_finder_ref.block_mover(b,270,"a_ref-line2")
+                rs.SelectObject(inst_list_id[a][0])
+                rs.ZoomSelected()
+                rs.Command("_Isolate")
+                inst_unpk=blockorg_00.block_org(inst_list_id[a])
+                profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
+                guids=inst_unpk[2]
+                rs.Command("_Show")
+                rs.Command("_Zoom_Extent")
+                rs.LockObjects(guids)
+
+            elif "_V" in i and ax== "y":
+                block_finder_ref.block_mover(b,270,"y")
+                rs.SelectObject(inst_list_id[a][0])
+                rs.ZoomSelected()
+                rs.Command("_Isolate")
+                inst_unpk=blockorg_00.block_org(inst_list_id[a])
+                profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
+                guids=inst_unpk[2]
+                rs.Command("_Show")
+                rs.Command("_Zoom_Extent")
+                rs.LockObjects(guids)
+            else:
+                ""
+
+            if "_H" in i and ax!= "y":
+                block_finder_mirr.block_mover(b,inst_list_id[a],180,"a_ref-line2")
+                rs.SelectObject(inst_list_id[a][0])
+                rs.ZoomSelected()
+                rs.Command("_Isolate")
+                inst_unpk=blockorg_00.block_org(inst_list_id[a])
+                profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
+                guids=inst_unpk[2]
+                rs.Command("_Show")
+                rs.Command("_Zoom_Extent")
+                rs.LockObjects(guids)
+
+            elif "_H" in i and ax== "y":
+                block_finder_mirr.block_mover(b,inst_list_id[a],180,"y")
+                rs.SelectObject(inst_list_id[a][0])
+                rs.ZoomSelected()
+                rs.Command("_Isolate")
+                inst_unpk=blockorg_00.block_org(inst_list_id[a])
+                profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
+                guids=inst_unpk[2]
+                rs.Command("_Show")
+                rs.Command("_Zoom_Extent")
+                rs.LockObjects(guids)
+            else:
+                ""
            
 
     def create_profile(self):
@@ -313,38 +372,43 @@ class Unit():
         window= windowschueco.Schuecowindow()
 
         famwindow= window.famwindow(self.wtemppth,self.wtypename)
+        
+        
+        inst_list=block_finder_ref.block_finder()[0]
+        inst_list_id=block_finder_ref.block_finder()[1]
+        
         frame_names= []
-        
-        #inst_list_id=block_finder.block_finder()[0]
-        inst_list=block_finder.block_finder()[0]
-        
-        for a,b in enumerate(inst_list):
+        frame_id=[]
+        frame_names_new=[]
+        for e,f in enumerate(inst_list):
+            if "_Frame"  in f:
+                g=block_finder_mirr.block_mover(f,inst_list_id[e],180,"a_ref-line2")
+                frame_id=g
+    #        for n in frame_id:
+    #            frame_names.append(rs.ObjectName(n))
+            
+        for a,b in enumerate(frame_id):
             i= (rs.BlockInstanceName(b)+ "_" + str(a))
-            #i= (str(b) + "_" + str(a))
+            #i= b
             frame_names.append(i)
             rs.SelectObject(b)
             rs.ZoomSelected()
             rs.Command("_Isolate")
             inst_unpk=blockorg_00.block_org(b)
-            #self.frame_creation(self.detpth,self.fdname,self.fname,inst_unpk,i,self.frametmplpth,self.contour,self.extrloc,famwindow)
-            #guids=inst_unpk[2]
-            #window.windowdim(famwindow, self.windowtype)
+            self.frame_creation(self.detpth,self.fdname,self.fname,inst_unpk,i,self.frametmplpth,self.contour,self.extrloc,famwindow)
+            guids=inst_unpk[2]
+            window.windowdim(famwindow, self.windowtype)
             rs.Command("_Show")
             rs.Command("_Zoom_Extent")
-            #rs.LockObjects(guids)
-
-        
-        #self.frame_creation(self.detpth,self.fdname,self.fname,self.frametmplpth,self.contour,self.extrloc,famwindow)
+            rs.LockObject(guids)
 
         if windowtype == "Vent":
             self.ventpanel_creation(self.path_vent_files,self.ventname,self.detpth,self.fdname,self.fname,self.venttempath,self.contour,self.extrloc,famwindow,self.contournmvoid)
             window.windowpanel(famwindow,self.ventname, 41.04)
         else:
-            window.windowpanel(famwindow,"Glz", 41.04, "SCH_Glass")
+            window.windowpanel(famwindow,"GlzCust", 59.73, "SCH_Glass")
 
-        #window.windowdim(famwindow, windowtype) #Crea una familia de ventana? Se puede incluir en el forloop?
-
-        #self.frame_placement(famwindow,window,frame_names)
+        self.frame_placement(famwindow,window,frame_names)
 
         window.loadwindow(doc,famwindow)
 

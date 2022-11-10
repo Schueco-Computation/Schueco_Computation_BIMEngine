@@ -13,9 +13,8 @@ def block_org(bl):
 
 
     items=block_exploder.block_reader(block_ob)
-
     list_g=((items)[1])
-    list_n=(items)[0]
+    list_n=((items)[0])
 
     nameschange = []
     for x in list_n:
@@ -39,6 +38,11 @@ def block_org(bl):
                 if k == l:
                     (rs.ObjectName(k,newnames[i]))
                     fil_names.append(newnames[i])
+
+    fil_names_list=[]               
+    for i in set(fil_names):
+        fil_names_list.append(i)
+
 
     objs_guids=rs.NormalObjects()
     # for i in set(fil_names):
@@ -67,10 +71,11 @@ def block_org(bl):
     articles_area={}
     
     for i,j in enumerate(set(nameh)):
-        articles_area.update({j :(sum(hatch_area[i])*10**-6)})
+        if j != None:
+            articles_area.update({j :(sum(hatch_area[i])*10**-6)})
 
 
-
+   
     rs.DeleteObjects(rs.ObjectsByType(65536))
     # objects=[]
 
@@ -98,7 +103,7 @@ def block_org(bl):
 
     for i in reduced:
         rs.SelectObject(i)
-        rs.Command('-ReducePolyline  0.8 _Enter')
+        rs.Command('-ReducePolyline  0.9 _Enter')
 
    
     ##### Naming reference lines and simplified profile #####
@@ -125,7 +130,8 @@ def block_org(bl):
 
     rs.UnselectObjects(rs.NormalObjects())
    
-    return articles_area,set(fil_names),objs_guids
+    return articles_area,fil_names_list,objs_guids
+
 
 
 if __name__ == '__main__':

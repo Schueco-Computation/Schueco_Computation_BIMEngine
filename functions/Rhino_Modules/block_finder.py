@@ -24,7 +24,7 @@ def block_finder():
         oblist=rs.BlockObjects(j)
         curves=[]
         for k in oblist:
-            name=rs.ObjectName(k)
+            name=rs.ObjectLayer(k)
             if name == "a_ref-line2" or name == "axis":
                 curves.append(k)
         ins_point= rs.CurveCurveIntersection(curves[0],curves[1])
@@ -35,7 +35,7 @@ def block_finder():
         ins = rs.BlockInstances(j)
         rs.MoveObjects(ins,m_vector)
         rotate=rs.RotateObject(ins,rs.CreatePoint(0,0,0),180)
-        #rt_bl_inst=rs.MirrorObject(bl_inst[i],rs.CreatePoint(0,0,0),rs.CreatePoint(0,1,0),True)
+        rt_bl_inst=rs.MirrorObject(bl_inst[i],rs.CreatePoint(0,0,0),rs.CreatePoint(0,1,0),True)
         inst_list.append(ins)
         
         return inst_list, bl_inst_names
