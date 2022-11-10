@@ -81,7 +81,7 @@ class Schuecowindow():
         famwindow.LoadFamily(doc, FamilyOption())
 
     def windowdim(self,famwindow, typepanel):
-        return Window.Dimensions(famwindow,typepanel)
+       return Window.Dimensions(famwindow,typepanel)
     
 
 if __name__ == '__main__':

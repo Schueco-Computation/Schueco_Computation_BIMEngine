@@ -46,13 +46,13 @@ def NewProfile(newfamily, rvtlines, ObjectName, locationref, FrameProfOrVent):
 
         name = mullionlength.get_Parameter(BuiltInParameter.DIM_VALUE_LENGTH)
         paramvalue = name.AsDouble()
-
+        
 
         object = rs.ObjectsByName(ObjectName)
         pts = rs.BoundingBox(object)
 
         distanceofinsertion = []
-        if pts[0][0] <= -35:
+        if pts[0][0] <= -52:
             distanceofinsertion.append(pts[1][0])
         else:
             distanceofinsertion.append(-pts[0][0])
@@ -60,7 +60,14 @@ def NewProfile(newfamily, rvtlines, ObjectName, locationref, FrameProfOrVent):
         dstinsertion = round(distanceofinsertion[0], 0)
 
         value = paramvalue+((dstinsertion*2)/304.80)
-
+        t0 = TransactionManager.Instance
+        t0.EnsureInTransaction(newfamily)
+        
+        parametro= newfamily.FamilyManager.get_Parameter("Not visible frame width")
+        parametroset= newfamily.FamilyManager.Set(parametro,dstinsertion/304.80)
+        
+        #End Transaction
+        TransactionManager.ForceCloseTransaction(t0)
         dim.append(value)
         
     elif FrameProfOrVent == "Vent":

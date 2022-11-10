@@ -36,7 +36,7 @@ def FrameCornerVoids(Document, ObjectName):
     
     distanceofinsertion = []
     selectedpts = []
-    if pts[0][0] <= -35:
+    if pts[0][0] <= -52:
         points = [pts[0], pts[1], pts[2]]
         selectedpts.append(points)
         distanceofinsertion.append(pts[1][0])
@@ -91,7 +91,7 @@ def FrameCornerVoids(Document, ObjectName):
     sketchp = SketchPlane.Create(Document, plane)
     
     extrusionvoid = []
-    if pts[0][0] <= -35:
+    if pts[0][0] <= -52:
         extrusionvoid.append(Document.FamilyCreate.NewExtrusion(False, carrarray, sketchp, -depth))
     else:
         extrusionvoid.append(Document.FamilyCreate.NewExtrusion(False, carrarray, sketchp, depth))
@@ -258,8 +258,8 @@ def NewVerticalFrameInstance(Document, TypeName, Position, MirrorBoolean):
     
     centerref = instance[0].GetReferenceByName("Center (Left/Right)")
     hcenterref = instance[0].GetReferenceByName("Center (Front/Back)")
-    heightref = instance[0].GetReferenceByName("Lock top")
-    baseref = instance[0].GetReferenceByName("Lock bottom")
+    heightref = instance[0].GetReferenceByName("top")
+    baseref = instance[0].GetReferenceByName("bottom")
     
     firstref = refplanedi[txt[0]].GetReference()
     scnref = refplanedi[txt[1]].GetReference()
@@ -271,9 +271,8 @@ def NewVerticalFrameInstance(Document, TypeName, Position, MirrorBoolean):
     
     align = Document.FamilyCreate.NewAlignment(reflevel, firstref, centerref)
     align2 = Document.FamilyCreate.NewAlignment(reflevel, scnref, hcenterref)
-    align3 = Document.FamilyCreate.NewAlignment(interior, thirdref, heightref)
-    align4 = Document.FamilyCreate.NewAlignment(interior, fourthref, baseref)
-    
+    #    align3 = Document.FamilyCreate.NewAlignment(interior, thirdref, heightref)
+    #    align4 = Document.FamilyCreate.NewAlignment(interior, fourthref, baseref)
     #End Transaction
     TransactionManager.ForceCloseTransaction(t2)
     
@@ -415,8 +414,8 @@ def NewHorizontalFrameInstance(Document, TypeName, Position, MirrorBoolean):
     
     horref = instance[0].GetReferenceByName("Center (Left/Right)")
     vertref = instance[0].GetReferenceByName("Center (Front/Back)")
-    lengthref = instance[0].GetReferenceByName("Lock top")
-    baseref = instance[0].GetReferenceByName("Lock bottom")
+    lengthref = instance[0].GetReferenceByName("top")
+    baseref = instance[0].GetReferenceByName("bottom")
 
     firstref = refplanedi[txt[2]].GetReference()
     scnref = refplanedi[txt[1]].GetReference()
@@ -428,8 +427,8 @@ def NewHorizontalFrameInstance(Document, TypeName, Position, MirrorBoolean):
 
     align = Document.FamilyCreate.NewAlignment(interior, firstref, horref)
     align2 = Document.FamilyCreate.NewAlignment(reflevel, scnref, vertref)
-    align3 = Document.FamilyCreate.NewAlignment(reflevel, thirdref, lengthref)
-    align4 = Document.FamilyCreate.NewAlignment(reflevel, fourthref, baseref)
+    #align3 = Document.FamilyCreate.NewAlignment(reflevel, thirdref, lengthref)
+    #align4 = Document.FamilyCreate.NewAlignment(reflevel, fourthref, baseref)
     
     #End Transaction
     TransactionManager.ForceCloseTransaction(t2)
@@ -599,6 +598,7 @@ def NewPanel(WindowDocument, Typepanel, Thickness, materialname):
         LocationKey = "B,Axis,2"
     else:
         LocationKey = "B,Ext. Axis 1,2"
+        #LocationKey = "B,Axis,1.01"
 
     startsloc = ptsdi[LocationKey]
     txt = LocationKey.split(",")
@@ -648,6 +648,7 @@ def NewPanel(WindowDocument, Typepanel, Thickness, materialname):
     provider = ParameterValueProvider(ElementId(bip))
     evaluator = FilterStringEquals()
     rule = FilterStringRule(provider, evaluator, "Front", False)
+    #rule = FilterStringRule(provider, evaluator, "Interior", False)
     filter = ElementParameterFilter(rule)
     interior = FilteredElementCollector(WindowDocument).OfClass(ViewSection).WherePasses(filter).FirstElement()
 
@@ -673,7 +674,7 @@ def NewPanel(WindowDocument, Typepanel, Thickness, materialname):
     
     align = WindowDocument.FamilyCreate.NewAlignment(reflevel, firstref, centerref)
     align2 = WindowDocument.FamilyCreate.NewAlignment(reflevel, scnref, hcenterref)
-    align3 = WindowDocument.FamilyCreate.NewAlignment(interior, thirdref, heightref)
+    aign3 = WindowDocument.FamilyCreate.NewAlignment(interior, thirdref, heightref)
     align4 = WindowDocument.FamilyCreate.NewAlignment(interior, fourthref, baseref)
     align5 = WindowDocument.FamilyCreate.NewAlignment(reflevel, fifthref, widthref)
     

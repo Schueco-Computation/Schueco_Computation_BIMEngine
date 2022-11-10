@@ -41,10 +41,28 @@ from RevitServices.Transactions import TransactionManager
 class Schuecoprofile():
 
     
-    def __init__(self,dtemplpath,famname,famdetname,typename,famproftempath,contournm,extlocation):
+    def __init__(self,dtemplpath,famname,famdetname,inst,typename,famproftempath,contournm,extlocation):
+        
+        """
+        inputs =>
+
+        1.- dtemplpath : Detail template path (Shared)
+        2.- famname : Detail Mother family Name (Shared)
+        3.- famdetname : Each article number as detail item (Shared)
+        4.- inst : boundled block ID ()
+        5.- typename : boundled block Name ()
+        6.- famframetempath : 
+        7.- contournm
+        8.- extlocation :
+        9.- famwindow: 
+
+        """
+        
+        
+        
         ############## Variables  ###########
         
-        self.elements = blockorg_00.block_org(typename)
+        #self.elements = blockorg_00.block_org(typename)
         
         self.docr=Revit.ActiveDBDocument
 
@@ -52,15 +70,15 @@ class Schuecoprofile():
        
     
         ############## Function Calling ##############
-        
+        prb=inst
 
         self.newfamdoc=self.newfam(dtemplpath,famname) # 2 Create detail 
 
-        self.detailitem(self.elements[1], self.elements[0],famdetname,dtemplpath,self.newfamdoc) # 3 Create a detail family doc for each item
+        self.detailitem(inst[1], inst[0],famdetname,dtemplpath,self.newfamdoc) # 3 Create a detail family doc for each item
 
         self.place_detailitem(self.newfamdoc) # 4 Places the detail items in their place
 
-        self.proffamil=self.prof_fam(famproftempath,self.elements[1])
+        self.proffamil=self.prof_fam(famproftempath,typename)
 
         self.reflinervt=self.refline(self.proffamil)
         
@@ -101,7 +119,7 @@ class Schuecoprofile():
         return Place.DetailItems(fam)
     
     def prof_fam(self,path,name_type):
-        return Create.FamilyNew(path,"Schueco_AWS75.SI_Frame_H01_93mm")
+        return Create.FamilyNew(path,name_type)
 
     def famload (self,detaildoc,famprof):
         return detaildoc.LoadFamily(famprof)

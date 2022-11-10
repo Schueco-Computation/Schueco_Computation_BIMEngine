@@ -69,8 +69,11 @@ def DetailItems(objectname, dic, famtypename, DetailItemsAllDOC, detailitemtemp)
     rvtlines = []
 
     for ex in profcoerce:
-        lines = ri.Revit.Convert.Geometry.GeometryEncoder.ToCurve(ex)
-        rvtlines.append(lines)
+        try:
+            lines = ri.Revit.Convert.Geometry.GeometryEncoder.ToCurve(ex)
+            rvtlines.append(lines)
+        except:
+            ""
 
     ##########################################
     #Create revit family file

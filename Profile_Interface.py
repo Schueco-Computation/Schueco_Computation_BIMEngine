@@ -7,7 +7,8 @@ import schuecobim as s
 from RhinoInside.Revit import Revit, Convert
 import blockorg
 import blockorg_00
-import block_finder
+import block_finder_ref
+import block_finder_mirr
 
 ##### //// PROFILE CREATION PARAMETERS //// ##### 
 
@@ -79,22 +80,70 @@ widthsp="C.01"
 #     s.profileschueco.Schuecoprofile(detpth,fname,fdname,i,proftmplpth,contour,extrloc)
 #     rs.Command("! _-New None")
 
-inst_list=block_finder.block_finder()
+profile_names= []
+        
+inst_list=block_finder_ref.block_finder()[0]
+inst_list_id=block_finder_ref.block_finder()[1]
 
-for b in inst_list:
-            print (b)
-#           i= (rs.BlockInstanceName(b))
-            rs.SelectObject(b)
-            rs.Command("_Isolate")
-            #print(blockorg_00.block_org(b))
-            s.schuecosystem.profileschueco.Schuecoprofile(detpth,fname,fdname,b,proftmplpth,contour,extrloc)
-            rs.HideObjects(rs.NormalObjects())
-            rs.Command("_Show")
-            
-            #rs.DeleteObjects(rs.AllObjects())
-            # name=rs.BlockInstanceName(rt_bl_inst)
-            # print(name)
-            #blockorg.block_org()
+for a,b in enumerate(inst_list):
+    ax=""
+    for b_o in rs.BlockObjects(b):
+        if rs.ObjectLayer(b_o)== "y":
+            ax=rs.ObjectLayer(b_o)
+
+    i= (str(b)+ "_" + str(a))
+    profile_names.append(i)
+    if "_V" in i and ax!= "y":
+        block_finder_ref.block_mover(b,270,"a_ref-line2")
+        rs.SelectObject(inst_list_id[a][0])
+        rs.ZoomSelected()
+        rs.Command("_Isolate")
+        inst_unpk=blockorg_00.block_org(inst_list_id[a])
+        s.profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
+        guids=inst_unpk[2]
+        rs.Command("_Show")
+        rs.Command("_Zoom_Extent")
+        rs.LockObjects(guids)
+
+    elif "_V" in i and ax== "y":
+        block_finder_ref.block_mover(b,270,"y")
+        rs.SelectObject(inst_list_id[a][0])
+        rs.ZoomSelected()
+        rs.Command("_Isolate")
+        inst_unpk=blockorg_00.block_org(inst_list_id[a])
+        s.profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
+        guids=inst_unpk[2]
+        rs.Command("_Show")
+        rs.Command("_Zoom_Extent")
+        rs.LockObjects(guids)
+    else:
+        ""
+
+    if "_H" in i and ax!= "y":
+        block_finder_mirr.block_mover(b,inst_list_id[a],180,"a_ref-line2")
+        rs.SelectObject(inst_list_id[a][0])
+        rs.ZoomSelected()
+        rs.Command("_Isolate")
+        inst_unpk=blockorg_00.block_org(inst_list_id[a])
+        s.profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
+        guids=inst_unpk[2]
+        rs.Command("_Show")
+        rs.Command("_Zoom_Extent")
+        rs.LockObjects(guids)
+
+    elif "_H" in i and ax== "y":
+        block_finder_mirr.block_mover(b,inst_list_id[a],180,"y")
+        rs.SelectObject(inst_list_id[a][0])
+        rs.ZoomSelected()
+        rs.Command("_Isolate")
+        inst_unpk=blockorg_00.block_org(inst_list_id[a])
+        s.profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
+        guids=inst_unpk[2]
+        rs.Command("_Show")
+        rs.Command("_Zoom_Extent")
+        rs.LockObjects(guids)
+    else:
+        ""
 """
 
 

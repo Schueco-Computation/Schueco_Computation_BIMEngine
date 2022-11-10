@@ -1,8 +1,5 @@
-
 import rhinoscriptsyntax as rs
 import Rhino.Geometry as rc
-import Rhino
-import scriptcontext as sc
 
 
 #block_ob=rs.ExplodeBlockInstance(rs.BlockInstances("Sch_V_F_00"))
@@ -26,9 +23,13 @@ def block_reader(b_obj):
                     block_reader([l])
                 else:
                     rs.ObjectName(l,Ins_n)
-                    
+        else:
+            rs.ObjectName(j,rs.ObjectLayer(j))          
+            
+    
+    return Block_Names,Block_Obj   
 
-    return Block_Names,Block_Obj           
+
 
 if __name__ == '__main__':
     pass

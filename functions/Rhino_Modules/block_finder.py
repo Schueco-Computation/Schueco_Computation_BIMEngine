@@ -3,6 +3,7 @@ import rhinoscriptsyntax as rs
 import Rhino.Geometry as rc
 import scriptcontext as sc
 
+inst_list=[]
 
 def block_finder():
     
@@ -23,7 +24,7 @@ def block_finder():
         oblist=rs.BlockObjects(j)
         curves=[]
         for k in oblist:
-            name=rs.ObjectName(k)
+            name=rs.ObjectLayer(k)
             if name == "a_ref-line2" or name == "axis":
                 curves.append(k)
         ins_point= rs.CurveCurveIntersection(curves[0],curves[1])
@@ -31,10 +32,11 @@ def block_finder():
         bl_pos= rs.BlockInstanceInsertPoint(bl_inst[i])
         t_point=origin+bl_pos
         m_vector=(rs.VectorCreate(rs.CreatePoint(0,0,0),rs.CreateVector(t_point)))
-        rs.MoveObjects(bl_inst[i],m_vector)
-        rs.RotateObject(bl_inst[i],rs.CreatePoint(0,0,0),180)
+        ins = rs.BlockInstances(j)
+        rs.MoveObjects(ins,m_vector)
+        rotate=rs.RotateObject(ins,rs.CreatePoint(0,0,0),180)
         rt_bl_inst=rs.MirrorObject(bl_inst[i],rs.CreatePoint(0,0,0),rs.CreatePoint(0,1,0),True)
-        inst_list=rs.BlockInstances(j)
+        inst_list.append(ins)
         
         return inst_list, bl_inst_names
 

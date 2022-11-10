@@ -46,8 +46,8 @@ class Schuecoframe():
         1.- dtemplpath : Detail template path (Shared)
         2.- famname : Detail Mother family Name (Shared)
         3.- famdetname : Each article number as detail item (Shared)
-        4.- typename : boundled block Name ()
-        5.- typeID : boundled block ID ()
+        4.- inst : boundled block ID ()
+        5.- typename : boundled block Name ()
         6.- famframetempath : 
         7.- contournm
         8.- extlocation :
