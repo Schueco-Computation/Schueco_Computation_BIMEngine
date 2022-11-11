@@ -157,22 +157,22 @@ class Unit():
 
                         ### no mirror profiles ##
         
-        self.nmirrpv=["Schueco_Cust_Prof_H01_32mm","Schueco_Cust_Prof_H02_65mm"]
-        self.vnmirrk= ["A,Axis,1","B,Axis,1.01"]
-        self.vnmirrenpl= ["4","4.01"]
+        self.nmirrpv=["Schueco_Cust_Prof_H01_70mm","Schueco_Cust_Prof_H02_116mm","Schueco_Cust_Prof_H03_70mm", "Schueco_Cust_Prof_H01.1_70mm","Schueco_Cust_Prof_H02.1_116mm","Schueco_Cust_Prof_H02.2_116mm"]
+        self.vnmirrk= ["A, Axis,1","B, Axis,1", "C, Axis,1", "A, Axis,2.02","B, Axis,2.02","B, Axis,3.02"]
+        self.vnmirrenpl= ["2.01","2.01","4","3", "3","4"]
         
                     ### mirror profiles ###
 
-        self.mirrpv= ["Schueco_Cust_Prof_H01_32mm"]
-        self.vmirrk= ["C,Axis,1"]
+        self.mirrpv= ["Schueco_Cust_Prof_H03_70mm"]
+        self.vmirrk= ["A, Axis, 3.02"]
         self.vmirrenpl= ["4"] 
         
         
                 ## HORIZONTAL 
         
-        self.Hp= ["Schueco_Cust_Prof_H02_65mm", "Schueco_Cust_Prof_H02_65mm", "Schueco_Cust_Prof_V01_52mm", "Schueco_Cust_Prof_V02_37mm"]
-        self.hk= ["A.01,Axis,2", "A.01,Axis,3", "A.01,Axis,1", "A.01,Axis,4"]
-        self.henpl= ["B.01", "B.01", "C.01", "C.01"]
+        self.Hp= ["Schueco_Cust_Prof_V01_75mm", "Schueco_Cust_Prof_V02_116mm", "Schueco_Cust_Prof_H02.1_116mm", "Schueco_Cust_Prof_V01.1_75mm","Schueco_Cust_Prof_V01.2_75mm"]
+        self.hk= ["A, Axis,1", "A, Axis,2", "A, Axis,3", "A, Axis,1", "B, Axis,1"]
+        self.henpl= ["B", "B", "B", "C","C"]
 
 
         self.csv_path=()
@@ -182,19 +182,21 @@ class Unit():
     
                     #### Glazing placement
         
-        self.lckkeyg= ["A.01,Axis,1.01"]
-        self.hegihtg=["2.01"]#["3.01"]
-        self.widthg=["B.01"]
-        self.thckg= [41]
-        self.matnamegl=["SCH_Glass"]
+        self.lckkeyg= ["A.01,Axis,1.01","B.02, Ext. Axis 1,1.01"]
+        self.hegihtg=["2.01","4.01",]
+        self.widthg=["B.01","C.01"]
+        self.thckg= [59.50,43]
+        self.matnamegl=["SCH_Glass", "SCH_Glass"]
+
 
                     #### Panel placement
         
-        self.lckkeypnl= ["B.02,Ext. Axis 1,1.01", "B.02,Int. Axis 4,1.01", "B.02,Ext. Axis 2,1.01"]
-        self.hegihtpnl=["4.01","4.01", "4.01"]
-        self.widthpnl=["C.01","C.01", "C.01" ]
-        self.thckpnl= [3,2,200]
-        self.matnamepnl=["Aluminium (European)", "coil", "Default"]
+        self.lckkeypnl= ["A.01,Int. Axis 2,3.02", "B.02, Int. Axis 2"]
+        self.hegihtpnl=["4.01","4.01"]
+        self.widthpnl=["B.01", "C.01" ]
+        self.thckpnl= [2,2]
+        self.matnamepnl=["Aluminium (European)", "Aluminium (European)"]
+
 
 
                 ##### Spandrel placement
@@ -202,16 +204,18 @@ class Unit():
         self.lckkeysp=["A.01,Ext. Axis 1,3.02"]
         self.heightsp= ["4.01"]
         self.widthsp= ["B.01"]
-        self.thckspnd=[2]
-        self.matnamesp=["Aluminium (European)"]
+        self.thckspnd=[43]
+        self.matnamesp=["SCH_Glass"]
+
 
                 ##### Internal panel placement
         
-        self.lckkeyip=["A.01,Int. Axis 1,3.02","B.02,Int. Axis 3,1.01","A.01,Int. Axis 2,3.02"]
-        self.heightip= ["4.01","4.01","4.01"]
-        self.widthip= ["B.01","C.01","B.01"]
-        self.thckip=[149,170,2]
-        self.matnameip=["Mineral Wool", "Mineral Wool", "coil"]
+        self.lckkeyip=["A.01,Int. Axis 1,3.02","B.02, Int. Axis 1,1.01"]
+        self.heightip= ["4.01","4.01"]
+        self.widthip= ["B.01","C.01"]
+        self.thckip=[176,176]
+        self.matnameip=["Mineral Wool", "Mineral Wool"]
+
             
             
             ##### Window Placement Parameters #####
@@ -477,7 +481,7 @@ class Unit():
         matnamesp=self.matnamesp
 
         for i,j in enumerate(lckkeysp):
-            self.faminstance.panelplacement(doc,"Spandrel",thckspn[i],j,heightsp[i],widthsp[i],matnamesp[i])
+            self.faminstance.panelplacement(doc,"GlzCust",thckspn[i],j,heightsp[i],widthsp[i],matnamesp[i])
 
         
         lckkeyg=self.lckkeyg
@@ -487,7 +491,7 @@ class Unit():
         matnamegl=self.matnamegl
 
         for i,j in enumerate(lckkeyg):
-            self.faminstance.panelplacement(doc,"Glz",thckg[i],j,hegihtg[i],widthg[i],matnamegl[i])
+            self.faminstance.panelplacement(doc,"GlzCust",thckg[i],j,hegihtg[i],widthg[i],matnamegl[i])
 
         lckkeypnl=self.lckkeypnl
         hegihtpnl=self.hegihtpnl
