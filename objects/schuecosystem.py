@@ -1,7 +1,7 @@
 import sys
-sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\objects")
-sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Modules")
-sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Revit_Modules")
+sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\objects")
+sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Modules")
+sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Revit_Modules")
 import rhinoscriptsyntax as rs
 import profileschueco
 import frameschueco
@@ -125,7 +125,7 @@ class Unit():
 
         self.path_frame_files =""#"K:\\Engineering\\Abteilungen\\ES\\Computation\\BIM_strategie\\BIM Workflow\\Projects\\Business Centre Al Farabi\\3dm\\Frames\\"# "C:\\Dropbox\\00_TOMAS\\00_PC\\01_Work\\00_Schueco\\Develping_projects_local\\Rhino_files\\FrameFiles\\"
         
-        self.wtypename="Schueco_AWS75.SI_Window_Family01"
+        self.wtypename="Schueco_Cust_Window_Family01"
 
         self.wtemppth="K:\\Engineering\\Abteilungen\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\F_Window.rft"
 
@@ -137,7 +137,7 @@ class Unit():
 
         self.frame_files = ""#["Schueco_UDC-80-UZB_Frame_H01"],"Schueco_UDC-80-UZB_Frame_H02","Schueco_UDC-80-UZB_Frame_V01","Schueco_UDC-80-UZB_Frame_V02"]
         
-        self.frametmplpth= "K:\\Engineering\\Abteilungen\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\D_Frame_Window - 23.rft" #automate
+        self.frametmplpth= "K:\\Engineering\\Abteilungen\ES\\Computation\\BIM_strategie\\BIM Workflow\\Revit templates\\D_Frame_Window.rft" #automate
 
             ##### Vent Creation Parameters
 
@@ -158,20 +158,20 @@ class Unit():
                         ### no mirror profiles ##
         
         self.nmirrpv=["Schueco_Cust_Prof_H01_70mm","Schueco_Cust_Prof_H02_116mm","Schueco_Cust_Prof_H03_70mm", "Schueco_Cust_Prof_H01.1_70mm","Schueco_Cust_Prof_H02.1_116mm","Schueco_Cust_Prof_H02.2_116mm"]
-        self.vnmirrk= ["A, Axis,1","B, Axis,1", "C, Axis,1", "A, Axis,2.02","B, Axis,2.02","B, Axis,3.02"]
+        self.vnmirrk= ["A,Axis,1","B,Axis,1", "C,Axis,1", "A,Axis,2.02","B,Axis,2.02","B,Axis,3.02"]
         self.vnmirrenpl= ["2.01","2.01","4","3", "3","4"]
         
                     ### mirror profiles ###
 
         self.mirrpv= ["Schueco_Cust_Prof_H03_70mm"]
-        self.vmirrk= ["A, Axis, 3.02"]
+        self.vmirrk= ["A,Axis,3.02"]
         self.vmirrenpl= ["4"] 
         
         
                 ## HORIZONTAL 
         
         self.Hp= ["Schueco_Cust_Prof_V01_75mm", "Schueco_Cust_Prof_V02_116mm", "Schueco_Cust_Prof_H02.1_116mm", "Schueco_Cust_Prof_V01.1_75mm","Schueco_Cust_Prof_V01.2_75mm"]
-        self.hk= ["A, Axis,1", "A, Axis,2", "A, Axis,3", "A, Axis,1", "B, Axis,1"]
+        self.hk= ["A,Axis,1", "A,Axis,2", "A,Axis,3", "A,Axis,4", "B,Axis,1"]
         self.henpl= ["B", "B", "B", "C","C"]
 
 
@@ -182,7 +182,7 @@ class Unit():
     
                     #### Glazing placement
         
-        self.lckkeyg= ["A.01,Axis,1.01","B.02, Ext. Axis 1,1.01"]
+        self.lckkeyg= ["A.01,Axis,1.01","B.02,Ext. Axis 1,1.01"]
         self.hegihtg=["2.01","4.01",]
         self.widthg=["B.01","C.01"]
         self.thckg= [59.50,43]
@@ -191,7 +191,7 @@ class Unit():
 
                     #### Panel placement
         
-        self.lckkeypnl= ["A.01,Int. Axis 2,3.02", "B.02, Int. Axis 2"]
+        self.lckkeypnl= ["A.01,Int. Axis 2,3.02", "B.02,Int. Axis 2,1.01"]
         self.hegihtpnl=["4.01","4.01"]
         self.widthpnl=["B.01", "C.01" ]
         self.thckpnl= [2,2]
@@ -210,7 +210,7 @@ class Unit():
 
                 ##### Internal panel placement
         
-        self.lckkeyip=["A.01,Int. Axis 1,3.02","B.02, Int. Axis 1,1.01"]
+        self.lckkeyip=["A.01,Int. Axis 1,3.02","B.02,Int. Axis 1,1.01"]
         self.heightip= ["4.01","4.01"]
         self.widthip= ["B.01","C.01"]
         self.thckip=[176,176]
