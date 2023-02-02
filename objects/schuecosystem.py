@@ -158,21 +158,21 @@ class Unit():
                         ### no mirror profiles ##
         
         self.nmirrpv=["Schueco_Cust_Prof_H01_70mm","Schueco_Cust_Prof_H02_116mm","Schueco_Cust_Prof_H03_70mm", "Schueco_Cust_Prof_H01.1_70mm","Schueco_Cust_Prof_H02.1_116mm","Schueco_Cust_Prof_H02.2_116mm"]
-        self.vnmirrk= ["A,Axis,1","B,Axis,1", "C,Axis,1", "A,Axis,2.02","B,Axis,2.02","B,Axis,3.02"]
-        self.vnmirrenpl= ["2.01","2.01","4","3", "3","4"]
+        self.vnmirrk= ["A,Axis,1","B,Axis,1.01", "C,Axis,1", "A,Axis,2","B,Axis,2","B,Axis,3"]
+        self.vnmirrenpl= ["2","2","4","3", "3","4.01"]
         
                     ### mirror profiles ###
 
         self.mirrpv= ["Schueco_Cust_Prof_H03_70mm"]
-        self.vmirrk= ["A,Axis,3.02"]
+        self.vmirrk= ["A,Axis,3"]
         self.vmirrenpl= ["4"] 
         
         
                 ## HORIZONTAL 
         
         self.Hp= ["Schueco_Cust_Prof_V01_75mm", "Schueco_Cust_Prof_V02_116mm", "Schueco_Cust_Prof_H02.1_116mm", "Schueco_Cust_Prof_V01.1_75mm","Schueco_Cust_Prof_V01.2_75mm"]
-        self.hk= ["A,Axis,1", "A,Axis,2", "A,Axis,3", "A,Axis,4", "B,Axis,1"]
-        self.henpl= ["B", "B", "B", "C","C"]
+        self.hk= ["A.01,Axis,1", "A.01,Axis,2", "A.01,Axis,3", "A.01,Axis,4", "B,Axis,1"]
+        self.henpl= ["B", "B.01", "B.01", "C.01","C.01"]
 
 
         self.csv_path=()
@@ -258,7 +258,7 @@ class Unit():
                 guids=inst_unpk[2]
                 rs.Command("_Show")
                 rs.Command("_Zoom_Extent")
-                rs.LockObjects(guids)
+                rs.DeleteObjects(guids)
 
             elif "_V" in i and ax== "y":
                 block_finder_ref.block_mover(b,270,"y")
@@ -270,7 +270,7 @@ class Unit():
                 guids=inst_unpk[2]
                 rs.Command("_Show")
                 rs.Command("_Zoom_Extent")
-                rs.LockObjects(guids)
+                rs.DeleteObjects(guids)
             else:
                 ""
 
@@ -284,7 +284,7 @@ class Unit():
                 guids=inst_unpk[2]
                 rs.Command("_Show")
                 rs.Command("_Zoom_Extent")
-                rs.LockObjects(guids)
+                rs.DeleteObjects(guids)
 
             elif "_H" in i and ax== "y":
                 block_finder_mirr.block_mover(b,inst_list_id[a],180,"y")
@@ -296,7 +296,7 @@ class Unit():
                 guids=inst_unpk[2]
                 rs.Command("_Show")
                 rs.Command("_Zoom_Extent")
-                rs.LockObjects(guids)
+                rs.DeleteObjects(guids)
             else:
                 ""
            
@@ -412,8 +412,8 @@ class Unit():
             window.windowdim(famwindow, self.windowtype)
             rs.Command("_Show")
             rs.Command("_Zoom_Extent")
-            rs.LockObject(guids)
-
+            rs.DeleteObjects(guids)
+            
         if windowtype == "Vent":
             self.ventpanel_creation(self.path_vent_files,self.ventname,self.detpth,self.fdname,self.fname,self.venttempath,self.contour,self.extrloc,famwindow,self.contournmvoid)
             window.windowpanel(famwindow,self.ventname, 41.04)
@@ -481,7 +481,7 @@ class Unit():
         matnamesp=self.matnamesp
 
         for i,j in enumerate(lckkeysp):
-            self.faminstance.panelplacement(doc,"GlzCust",thckspn[i],j,heightsp[i],widthsp[i],matnamesp[i])
+            self.faminstance.panelplacement(doc,"Glz",thckspn[i],j,heightsp[i],widthsp[i],matnamesp[i])
 
         
         lckkeyg=self.lckkeyg
@@ -491,7 +491,7 @@ class Unit():
         matnamegl=self.matnamegl
 
         for i,j in enumerate(lckkeyg):
-            self.faminstance.panelplacement(doc,"GlzCust",thckg[i],j,hegihtg[i],widthg[i],matnamegl[i])
+            self.faminstance.panelplacement(doc,"Glz",thckg[i],j,hegihtg[i],widthg[i],matnamegl[i])
 
         lckkeypnl=self.lckkeypnl
         hegihtpnl=self.hegihtpnl
