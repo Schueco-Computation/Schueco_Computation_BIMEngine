@@ -1,4 +1,3 @@
-
 import schuecobim as s
 
 
@@ -49,4 +48,3 @@ unit.family_window_placement() # Places window in family instance
 
 unit.family_panel_placement() # Places panel in family instance
 
-#

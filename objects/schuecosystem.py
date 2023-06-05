@@ -1,7 +1,7 @@
 import sys
-sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\objects")
-sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Modules")
-sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Revit_Modules")
+sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\objects")
+sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Modules")
+sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Revit_Modules")
 import rhinoscriptsyntax as rs
 import profileschueco
 import frameschueco
@@ -9,14 +9,15 @@ import ventschueco
 import windowschueco
 import familyschueco
 import block_finder
-import blockorg_00
 import block_finder_ref
+import block_finder_ref_mirr
 import block_finder_mirr
+import blockorg_00
 from RhinoInside.Revit import Revit, Convert
 
 class Unit():
     """
-                    ###### Shared Creation Parameters #####
+                    #inseation Parameters #####
 
                 detpth= Detail template file path
                 fname= Name of the detail family file that will be created
@@ -224,8 +225,6 @@ class Unit():
         self.heightw="3.01"
         self.widthw= "B.01"
         
-    
-
     ##### Profile Creation Functions ####
 
     def profile_creation(self,path_prof_files,sel_blocks,detpth,fdname,fname,proftmplpth,contour,extrloc):
@@ -246,14 +245,15 @@ class Unit():
             for b_o in rs.BlockObjects(b):
                 if rs.ObjectLayer(b_o)== "y":
                     ax=rs.ObjectLayer(b_o)
-            #i= (str(b)+ "_" + str(a))
+            #i= (str(b)+ "_" + str(a))  
             i=b
             if "_V" in i and ax!= "y":
-                block_finder_ref.block_mover(b,270,"a_ref-line2")
-                rs.SelectObject(inst_list_id[a][0])
+                print ("woring on {} V_mirrored".format(i))
+                ins = block_finder_ref_mirr.block_mover(b,270,"a_ref-line2")
+                rs.SelectObject(ins)
                 rs.ZoomSelected()
                 rs.Command("_Isolate")
-                inst_unpk=blockorg_00.block_org(inst_list_id[a])
+                inst_unpk=blockorg_00.block_org(ins)
                 profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
                 guids=inst_unpk[2]
                 rs.Command("_Show")
@@ -261,11 +261,12 @@ class Unit():
                 rs.DeleteObjects(guids)
 
             elif "_V" in i and ax== "y":
-                block_finder_ref.block_mover(b,270,"y")
-                rs.SelectObject(inst_list_id[a][0])
+                print ("woring on {} V_mirrored".format(i))
+                ins = block_finder_ref_mirr.block_mover(b,270,"y")
+                rs.SelectObject(ins)
                 rs.ZoomSelected()
                 rs.Command("_Isolate")
-                inst_unpk=blockorg_00.block_org(inst_list_id[a])
+                inst_unpk=blockorg_00.block_org(ins)
                 profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
                 guids=inst_unpk[2]
                 rs.Command("_Show")
@@ -273,33 +274,34 @@ class Unit():
                 rs.DeleteObjects(guids)
             else:
                 ""
+            
+            # if "_H" in i and ax!= "y":
+            #     print ("woring on {}_ mirrored".format(i))
+            #     block_finder_mirr.block_mover(b,inst_list_id[a],180,"a_ref-line2")
+            #     rs.SelectObject(inst_list_id[a][0])
+            #     rs.ZoomSelected()
+            #     rs.Command("_Isolate")
+            #     inst_unpk=blockorg_00.block_org(inst_list_id[a])
+            #     profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
+            #     guids=inst_unpk[2]
+            #     rs.Command("_Show")
+            #     rs.Command("_Zoom_Extent")
+            #     rs.DeleteObjects(guids)
 
-            if "_H" in i and ax!= "y":
-                block_finder_mirr.block_mover(b,inst_list_id[a],180,"a_ref-line2")
-                rs.SelectObject(inst_list_id[a][0])
-                rs.ZoomSelected()
-                rs.Command("_Isolate")
-                inst_unpk=blockorg_00.block_org(inst_list_id[a])
-                profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
-                guids=inst_unpk[2]
-                rs.Command("_Show")
-                rs.Command("_Zoom_Extent")
-                rs.DeleteObjects(guids)
-
-            elif "_H" in i and ax== "y":
-                block_finder_mirr.block_mover(b,inst_list_id[a],180,"y")
-                rs.SelectObject(inst_list_id[a][0])
-                rs.ZoomSelected()
-                rs.Command("_Isolate")
-                inst_unpk=blockorg_00.block_org(inst_list_id[a])
-                profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
-                guids=inst_unpk[2]
-                rs.Command("_Show")
-                rs.Command("_Zoom_Extent")
-                rs.DeleteObjects(guids)
-            else:
-                ""
-           
+            # elif "_H" in i and ax== "y":
+            #     print ("woring on {}_ mirrored".format(i))
+            #     block_finder_mirr.block_mover(b,inst_list_id[a],180,"y")
+            #     rs.SelectObject(inst_list_id[a][0])
+            #     rs.ZoomSelected()
+            #     rs.Command("_Isolate")
+            #     inst_unpk=blockorg_00.block_org(inst_list_id[a])
+            #     profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
+            #     guids=inst_unpk[2]
+            #     rs.Command("_Show")
+            #     rs.Command("_Zoom_Extent")
+            #     rs.DeleteObjects(guids)
+            # else:
+            #     ""
 
     def create_profile(self):
         return self.profile_creation(self.path_prof_files,self.sel_blocks,self.detpth,self.fdname,self.fname,self.proftmplpth,self.contour,self.extrloc)
@@ -347,8 +349,6 @@ class Unit():
         #     filedname=(fdname+"{}").format(i)
         #    frameschueco.Schuecoframe(detpth,fname,filedname,i,frametmplpth,contour,extrloc,famwindow)
         
-
-
     def frame_placement(self,famwindow,window,frame_name):
         frame_files=frame_name
         window.placefrhor(famwindow,frame_files[1],"Bottom")
@@ -360,14 +360,13 @@ class Unit():
 
         for i,j in enumerate(frame_files):
             if "H" in j:
-        #print j
-                window.placefrhor(famwindow,j,frplaces[i])
+        #
             else:
                 window.placefrvert(famwindow,j,frplaces[i])"""
 
-
     def ventpanel_creation(self,path_vent_files,ventname,detpth,fdname,fname,venttempath,contour,extrloc,famwindow,contournmvoid):
         path = (path_vent_files+"{}").format(ventname)
+        window.placefrhor(famwindow,j,frplaces[i])
         rs.DocumentModified(False)
         rs.Command("! _-New None")
         rs.Command('-Open "{}" _Enter'.format(path))
@@ -429,9 +428,7 @@ class Unit():
         
         #### Frame Creation Functions 
 
-
     ##### Family Functions ####
-
 
     def create_family(self):
 
@@ -510,8 +507,6 @@ class Unit():
 
         for i,j in enumerate(lckkeyip):
             self.faminstance.panelplacement(doc,"IntPanel",thckip[i],j,heightip[i],widthip[i],matnameip[i])
-
-
 
     def family_window_placement(self):
         

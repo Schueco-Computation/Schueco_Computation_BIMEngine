@@ -7,7 +7,10 @@ import block_exploder
 
 def block_org(bl):
     """
-    input: objects ID (First level profile block e.g Sch_V_00...) 
+    
+    input: objects ID (First level profile block e.g Sch_V_00...)
+    output: articles_area,fil_names_list,objs_guids 
+
     """
     block_ob=rs.ExplodeBlockInstance(bl)
 
