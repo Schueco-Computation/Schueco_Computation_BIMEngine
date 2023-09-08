@@ -1,7 +1,7 @@
 import sys
-sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\objects")
-sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Modules")
-sys.path.append("C:\\Users\\menatj\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Revit_Modules")
+sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\objects")
+sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Modules")
+sys.path.append("C:\\Users\\ramijc\\AppData\\Roaming\\McNeel\\Rhinoceros\\7.0\\Plug-ins\\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\\settings\\lib\\Schueco_Computation_BIMEngine\\functions\\Rhino_Revit_Modules")
 import rhinoscriptsyntax as rs
 import profileschueco
 import frameschueco
@@ -248,7 +248,7 @@ class Unit():
             #i= (str(b)+ "_" + str(a))  
             i=b
             if "_V" in i and ax!= "y":
-                print ("woring on {} V_mirrored".format(i))
+                print ("working on {} V_mirrored".format(i))
                 ins = block_finder_ref_mirr.block_mover(b,270,"a_ref-line2")
                 rs.SelectObject(ins)
                 rs.ZoomSelected()
@@ -261,7 +261,7 @@ class Unit():
                 rs.DeleteObjects(guids)
 
             elif "_V" in i and ax== "y":
-                print ("woring on {} V_mirrored".format(i))
+                print ("working on {} V_mirrored".format(i))
                 ins = block_finder_ref_mirr.block_mover(b,270,"y")
                 rs.SelectObject(ins)
                 rs.ZoomSelected()
@@ -275,33 +275,33 @@ class Unit():
             else:
                 ""
             
-            # if "_H" in i and ax!= "y":
-            #     print ("woring on {}_ mirrored".format(i))
-            #     block_finder_mirr.block_mover(b,inst_list_id[a],180,"a_ref-line2")
-            #     rs.SelectObject(inst_list_id[a][0])
-            #     rs.ZoomSelected()
-            #     rs.Command("_Isolate")
-            #     inst_unpk=blockorg_00.block_org(inst_list_id[a])
-            #     profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
-            #     guids=inst_unpk[2]
-            #     rs.Command("_Show")
-            #     rs.Command("_Zoom_Extent")
-            #     rs.DeleteObjects(guids)
+            if "_H" in i and ax!= "y":
+                print ("working on {}_ mirrored".format(i))
+                block_finder_mirr.block_mover(b,inst_list_id[a],180,"a_ref-line2")
+                rs.SelectObject(inst_list_id[a][0])
+                rs.ZoomSelected()
+                rs.Command("_Isolate")
+                inst_unpk=blockorg_00.block_org(inst_list_id[a])
+                profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
+                guids=inst_unpk[2]
+                rs.Command("_Show")
+                rs.Command("_Zoom_Extent")
+                rs.DeleteObjects(guids)
 
-            # elif "_H" in i and ax== "y":
-            #     print ("woring on {}_ mirrored".format(i))
-            #     block_finder_mirr.block_mover(b,inst_list_id[a],180,"y")
-            #     rs.SelectObject(inst_list_id[a][0])
-            #     rs.ZoomSelected()
-            #     rs.Command("_Isolate")
-            #     inst_unpk=blockorg_00.block_org(inst_list_id[a])
-            #     profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
-            #     guids=inst_unpk[2]
-            #     rs.Command("_Show")
-            #     rs.Command("_Zoom_Extent")
-            #     rs.DeleteObjects(guids)
-            # else:
-            #     ""
+            elif "_H" in i and ax== "y":
+                print ("working on {}_ mirrored".format(i))
+                block_finder_mirr.block_mover(b,inst_list_id[a],180,"y")
+                rs.SelectObject(inst_list_id[a][0])
+                rs.ZoomSelected()
+                rs.Command("_Isolate")
+                inst_unpk=blockorg_00.block_org(inst_list_id[a])
+                profileschueco.Schuecoprofile(detpth,fname,fdname,inst_unpk,i,proftmplpth,contour,extrloc)
+                guids=inst_unpk[2]
+                rs.Command("_Show")
+                rs.Command("_Zoom_Extent")
+                rs.DeleteObjects(guids)
+            else:
+                ""
 
     def create_profile(self):
         return self.profile_creation(self.path_prof_files,self.sel_blocks,self.detpth,self.fdname,self.fname,self.proftmplpth,self.contour,self.extrloc)
