@@ -329,9 +329,9 @@ layer= rs.ObjectsByLayer("0S-Alu contour")
 layer.extend(rs.ObjectsByLayer("0S-Plastic contour"))
 layer.extend(rs.ObjectsByLayer("0S-EPDM contour"))
 layer.extend(rs.ObjectsByLayer("0S-Plastic contour"))
-print layer
-print len(layer)
-print len((set(layer)))
+#print layer
+#print len(layer)
+#print len((set(layer)))
 objs = []
 for x in layer:
     obj = rs.coercerhinoobject(x)
