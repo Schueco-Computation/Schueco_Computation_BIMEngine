@@ -1,0 +1,402 @@
+import rhinoscriptsyntax as rs
+import Rhino.Geometry as rg
+import collections
+import Rhino
+import math
+
+layerglass = rs.ObjectsByLayer("0S-Glass contour")
+"""
+exp = []
+for x in layerglass:
+    exp.append(rs.ExplodeBlockInstance(x))
+
+rs.UnselectObjects(rs.AllObjects())
+"""
+def select_lines_by_linetype(target_linetype):
+    # Get all line objects in the scene
+    line_objects = rs.ObjectsByType(rs.filter.curve)
+
+    if line_objects:
+        rs.EnableRedraw(False)  # Turn off redraw to improve performance
+
+        for line_obj in line_objects:
+            # Check the line type of the current line object
+            line_type = rs.ObjectLinetype(line_obj)
+            
+            # Compare line types (case-insensitive)
+            if line_type and line_type.lower() == target_linetype.lower():
+                # Select the line object
+                rs.SelectObject(line_obj)
+                        
+        rs.EnableRedraw(True)  # Turn redraw back on
+
+target_linetype = "ACAD_ISO10W100"
+test = select_lines_by_linetype(target_linetype)
+selected_objects = rs.SelectedObjects()
+
+curves = []
+for x in selected_objects:
+    curves.append(rs.coercecurve(x))
+
+thelines = []
+for i,j in enumerate(curves):
+    points = j.PointAtStart, j.PointAtEnd
+    for x in points:
+        if x.Y < 0:
+            thelines.append(i)
+
+element_count = collections.Counter(thelines)
+
+# Find the values that repeat (have a count of 2 or more)
+repeated_values = [value for value, count in element_count.items() if count >= 2]
+
+# Create a new list with only the repeated values
+new_list = [value for value in thelines if value in repeated_values]
+
+unique= list(set(new_list))
+
+rs.UnselectObjects(rs.AllObjects())
+
+#Separator of profile sections
+verglasslines = []
+for x in unique:
+    verglasslines.append(curves[x])
+
+#Defining sections
+
+pts = []
+for x in verglasslines:
+    start = x.PointAtStart#, x.PointAtEnd.Y
+    pts.append(start)
+
+def group_points_by_y_distance(points, max_distance):
+    groups = []
+    current_group = [points[0]]
+    
+    for i in range(1, len(points)):
+        y_dist = abs(points[i].Y - points[i - 1].Y)
+        
+        if y_dist <= max_distance:
+            current_group.append(points[i])
+        else:
+            groups.append(current_group)
+            current_group = [points[i]]
+    
+    if current_group:
+        groups.append(current_group)
+    
+    return groups
+
+grouped_sections = group_points_by_y_distance(pts, 318) #210 - 426
+
+if len(grouped_sections) <= 1:
+    grouped_sections.append([])
+
+#Separator of profile sections point
+
+sepapoint = []
+for x in grouped_sections:
+    processed_group = []
+    try:
+        for y in x:
+            processed_group.append(y.X)
+    except AttributeError:
+        pass
+    sepapoint.append(processed_group)
+
+number = []
+for x in sepapoint:
+    processed_group = []
+    try:
+        for y in x:
+            processed_group.append(int(y))
+    except AtributeError:
+        pass
+    number.append(processed_group)
+
+indexed_numbers = []
+for x in number:
+    indexed_numbers.append(list(enumerate(x)))  # Create a list of (index, number) pairs
+
+# Sort the indexed_numbers list based on the numbers
+sorted_numbers = []
+for x in indexed_numbers:
+    sorted_numbers.append(sorted(x, key=lambda x: x[1]))
+
+# Extract the sorted numbers and their original indices
+sorted_values = []
+for x in sorted_numbers:
+    sorted_values.append([item[1] for item in x])
+
+sorted_indices = []
+for x in sorted_numbers:
+    sorted_indices.append([item[0] for item in x])
+
+pointsorder = [] #linesorder #ppstart
+for i,j in enumerate(sorted_indices):
+    processed_group = []
+    try:
+        for y in j:
+            processed_group.append(grouped_sections[i][y])
+    except AttributeError:
+        pass
+    pointsorder.append(processed_group)
+
+index_original = []
+for x in pointsorder:
+    processed_group = []
+    try:
+        for y in x:
+            processed_group.append(pts.index(y))
+    except AttributeError:
+        pass
+    index_original.append(processed_group)
+
+lines_order = []
+for x in index_original:
+    processed_group = []
+    try:
+        for y in x:
+            processed_group.append(verglasslines[y])
+    except AttributeError:
+        pass
+    lines_order.append(processed_group)
+
+# Fixing the orientation
+def angle_between_vectors(vector1, vector2):
+    dot_product = vector1 * vector2
+    length1 = vector1.Length
+    length2 = vector2.Length
+    return math.acos(dot_product / (length1 * length2))
+
+def fix_line_orientation(lines):
+    start_point = lines.PointAtStart
+    end_point = lines.PointAtEnd
+    
+    # Calculate the vector from start to end point
+    desired_direction = rs.VectorCreate((0,-1,0),(0,0,0))
+    
+    line_direction = end_point - start_point
+    #print ("line direction:", line_direction)
+    angle = angle_between_vectors(line_direction, desired_direction)
+    # Compare the angle to determine if it's close to 180 degrees (opposite direction)
+    if angle > 0:
+        lines.Reverse()
+
+lines_oriented = []
+for x in lines_order:
+    processed_group = []
+    try:
+        for y in x:
+            processed_group.append(fix_line_orientation(y))
+    except AttributeError:
+        pass
+    lines_oriented.append(processed_group)
+
+ppend = []
+for x in lines_order:
+    processed_group = []
+    try:
+        for y in x:
+            processed_group.append(y.PointAtEnd)
+    except AttributeError:
+        pass
+    ppend.append(processed_group)
+
+ppstart = []
+for x in lines_order:
+    processed_group = []
+    try:
+        for y in x:
+            processed_group.append(y.PointAtStart)
+    except AttributeError:
+        pass
+    ppstart.append(processed_group)
+
+newpoint = []
+for i,sublist_start in enumerate(ppstart):
+    processed_group = []
+    try:
+        sublist_end = ppend[i]
+        for start_point, end_point in zip(sublist_start, sublist_end):
+            dist = end_point.Y - start_point.Y
+            half = dist/2
+            total = end_point.Y + half
+            processed_group.append(rg.Point3d(start_point.X,total,start_point.Z))
+        newpoint.append(processed_group)
+    except AttributeError:
+        pass
+
+middist = ppstart[0][2].X-ppstart[0][1].X
+
+firststart_point = []
+for x in ppstart:
+    if x:
+        try:
+            processed_group = rg.Point3d((x[0].X-middist),x[0].Y, 10)#ppstart[0].Z)
+        except AttributeError:
+            pass
+        firststart_point.append(processed_group)
+
+firstend_point = []
+for i,j in enumerate(ppend):
+    if j:
+        try:
+            new = newpoint[i]
+            processed_group = rg.Point3d((j[0].X-middist),new[0].Y, -10)#ppstart[0].Z)
+        except AttributeError:
+            pass
+        firstend_point.append(processed_group)
+"""    else:
+        # If the nested list is empty, append None or some other default value
+        firstend_point.append([])"""
+
+laststart_point = []
+for x in ppstart:
+    if x:
+        try:
+            processed_group = rg.Point3d((x[-1].X+middist),x[-1].Y, 10)#ppstart[0].Z)
+        except AttributeError:
+            pass
+        laststart_point.append(processed_group)
+
+lastend_point = []
+for i,j in enumerate(ppend):
+    if j:
+        try:
+            new = newpoint[i]
+            processed_group = rg.Point3d((j[-1].X-middist),new[-1].Y, -10)#ppstart[0].Z)
+        except AttributeError:
+            pass
+        lastend_point.append(processed_group)
+
+pprectanglepart = []
+for i,j in enumerate(ppstart):
+    processed_group = []
+    try:
+        new = newpoint[i]
+        for start, end in zip(j, new):
+            processed_group.append(start)
+            processed_group.append(end)
+        pprectanglepart.append(processed_group)
+    except AttributeError:
+        pass
+
+lst_repeat = [10, -10]
+repeated = []
+for x in pprectanglepart:
+    longitud = len(x)/2
+    repeated.append(lst_repeat * int(longitud))
+
+newpprectanglepart = []
+for i,j in enumerate(pprectanglepart):
+    processed_group = []
+    try:
+        new = repeated[i]
+        for x, y in zip(j, new):
+            processed_group.append(rg.Point3d(x.X, x.Y, y))
+        newpprectanglepart.append(processed_group)
+    except AttributeError:
+        pass
+
+pprectangle = []
+for i, sublist in enumerate(newpprectanglepart):
+    if i < len(firststart_point):
+        pprectangle.append([firststart_point[i], firstend_point[i]]+ sublist + [laststart_point[i], lastend_point[i]])
+    else:
+        pprectangle.append(sublist)
+
+chunks = []
+for sublist in pprectangle:
+    start = 0
+    end = len(sublist)
+    step = 4
+    lst = []
+    for i in range(start, end, step):
+        lst.append(sublist[i:i+step])
+    chunks.append(lst)
+
+chunkspop = []
+for x in chunks:
+    if x:
+        for y in x:
+            chunkspop.append(y.pop(0))
+            chunkspop.append(y.pop(-1))
+
+####################################################
+
+layer= rs.ObjectsByLayer("0S-Alu contour")
+layer.extend(rs.ObjectsByLayer("0S-Plastic contour"))
+layer.extend(rs.ObjectsByLayer("0S-EPDM contour"))
+layer.extend(rs.ObjectsByLayer("0S-Plastic contour"))
+#print layer
+#print len(layer)
+#print len((set(layer)))
+objs = []
+for x in layer:
+    obj = rs.coercerhinoobject(x)
+    objs.append(obj)
+
+positions = []
+for x in objs:
+    positions.append(x.InsertionPoint)
+
+horizontalsectionindex = []
+horizontalsectionpos = []
+verticalsectionindex = []
+verticalsectionpos = []
+
+for i,j in enumerate(positions):
+    if j.Y < 0:
+        horizontalsectionindex.append(i)
+        horizontalsectionpos.append(j)
+    else:
+        verticalsectionindex.append(i)
+        verticalsectionpos.append(j)
+
+#####################################################
+
+def points_inside_rectangle(rectangle, points):
+    # Create a bounding box from the rectangle's corner points
+
+    # Create a bounding box from the rectangle
+    bounding_box = rg.BoundingBox(rectangle)
+    
+    # Initialize a list to store points inside the rectangle
+    points_inside = []
+    
+    for point in points:
+        if bounding_box.Contains(point):
+            points_inside.append(point)
+    
+    return points_inside
+
+
+contains = []
+for x in chunks:
+    if x:
+        lst = []
+        for y in x:
+            lst.append(points_inside_rectangle(y, horizontalsectionpos))
+    contains.append(lst)
+
+# Only to show
+
+#unique = set(contains[0][0])
+
+ndx = []
+for x in contains[0][0]:
+    ndx.append(positions.index(x))
+
+def has_duplicates(lst):
+    return len(lst) != len(set(lst))
+    
+horizontalsectionguid = []
+for x in ndx:
+    horizontalsectionguid.append(layer[x])
+
+#show = []
+#for x in horizontalsectionguid:
+#    show.append(Rhino.RhinoDoc.ActiveDoc.Objects.Select(x))
+
+#print (horizontalsectionguid)

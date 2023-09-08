@@ -258,8 +258,8 @@ def NewVerticalFrameInstance(Document, TypeName, Position, MirrorBoolean):
     
     centerref = instance[0].GetReferenceByName("Center (Left/Right)")
     hcenterref = instance[0].GetReferenceByName("Center (Front/Back)")
-    heightref = instance[0].GetReferenceByName("top")
-    baseref = instance[0].GetReferenceByName("bottom")
+    heightref = instance[0].GetReferenceByName("Lock top")
+    baseref = instance[0].GetReferenceByName("Lock bottom")
     
     firstref = refplanedi[txt[0]].GetReference()
     scnref = refplanedi[txt[1]].GetReference()
@@ -271,8 +271,8 @@ def NewVerticalFrameInstance(Document, TypeName, Position, MirrorBoolean):
     
     align = Document.FamilyCreate.NewAlignment(reflevel, firstref, centerref)
     align2 = Document.FamilyCreate.NewAlignment(reflevel, scnref, hcenterref)
-    #    align3 = Document.FamilyCreate.NewAlignment(interior, thirdref, heightref)
-    #    align4 = Document.FamilyCreate.NewAlignment(interior, fourthref, baseref)
+    align3 = Document.FamilyCreate.NewAlignment(interior, thirdref, heightref)
+    align4 = Document.FamilyCreate.NewAlignment(interior, fourthref, baseref)
     #End Transaction
     TransactionManager.ForceCloseTransaction(t2)
     
@@ -414,8 +414,8 @@ def NewHorizontalFrameInstance(Document, TypeName, Position, MirrorBoolean):
     
     horref = instance[0].GetReferenceByName("Center (Left/Right)")
     vertref = instance[0].GetReferenceByName("Center (Front/Back)")
-    lengthref = instance[0].GetReferenceByName("top")
-    baseref = instance[0].GetReferenceByName("bottom")
+    lengthref = instance[0].GetReferenceByName("Lock top")
+    baseref = instance[0].GetReferenceByName("Lock bottom")
 
     firstref = refplanedi[txt[2]].GetReference()
     scnref = refplanedi[txt[1]].GetReference()
@@ -427,8 +427,8 @@ def NewHorizontalFrameInstance(Document, TypeName, Position, MirrorBoolean):
 
     align = Document.FamilyCreate.NewAlignment(interior, firstref, horref)
     align2 = Document.FamilyCreate.NewAlignment(reflevel, scnref, vertref)
-    #align3 = Document.FamilyCreate.NewAlignment(reflevel, thirdref, lengthref)
-    #align4 = Document.FamilyCreate.NewAlignment(reflevel, fourthref, baseref)
+    align3 = Document.FamilyCreate.NewAlignment(reflevel, thirdref, lengthref)
+    align4 = Document.FamilyCreate.NewAlignment(reflevel, fourthref, baseref)
     
     #End Transaction
     TransactionManager.ForceCloseTransaction(t2)

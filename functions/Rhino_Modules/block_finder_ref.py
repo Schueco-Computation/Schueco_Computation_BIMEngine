@@ -49,10 +49,10 @@ def block_mover(j,ang,b_ax):
     ins = rs.BlockInstances(j)
     rs.MoveObjects(ins,m_vector)
     rotate=rs.RotateObject(ins,rs.CreatePoint(0,0,0),ang)
-    #rt_bl_inst=rs.MirrorObject(bl_inst[i],rs.CreatePoint(0,0,0),rs.CreatePoint(0,1,0),True)
+    rt_bl_inst=rs.MirrorObject(rotate,rs.CreatePoint(0,0,0),rs.CreatePoint(0,1,0),True)
     
     
-    return ins
+    return rt_bl_inst
 
     
 if __name__ == '__main__':
